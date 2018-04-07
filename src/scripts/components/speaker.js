@@ -88,13 +88,15 @@ export default class Speaker extends React.Component {
 					dataSource={speakerList}
 					pagination = {false}
 				/>
-				<Pagination 
-					size="small" 
-					total={voTotal} 
-					current={currentPage} 
-					onChange={this.onChangePage.bind(this)}
-					showTotal={this.paginationTotalRender.bind(this)}
-				/>
+				<div className='pagination'>
+					<Pagination 
+						size="small" 
+						total={voTotal} 
+						current={currentPage} 
+						onChange={this.onChangePage.bind(this)}
+						showTotal={this.paginationTotalRender.bind(this)}
+					/>
+				</div>
 
 				{speakerModal &&
 					<SpeakerModal
@@ -109,10 +111,10 @@ export default class Speaker extends React.Component {
 }
 const SPEAKER_COLUMNS = [
 	{dataIndex: 'head', title: '头像'},
-	{dataIndex: 'op', title: '操作'},
-	{dataIndex: 'nick', title: '姓名'},
-	{dataIndex: 'company', title: '公司'},
-	{dataIndex: 'title', title: '职位'},
+	{dataIndex: 'op', title: '操作', width: '8%'},
+	{dataIndex: 'nick', title: '姓名', width: '8%'},
+	{dataIndex: 'company', title: '公司', width: '8%'},
+	{dataIndex: 'title', title: '职位', width: '8%'},
 	{dataIndex: 'describe', title: '介绍'},
 	
 ]

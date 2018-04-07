@@ -17,7 +17,9 @@ function NoticeMsg(msg){
 function NoticeError(msg) {
 	message.error(msg, 5);
 }
-
+function isEmptyObject(obj) {
+	return (Object.keys(obj).length === 0 && obj.constructor === Object) 
+}
 export {
-	scrollTop,NoticeMsg,NoticeError
+	scrollTop,NoticeMsg,NoticeError,isEmptyObject
 }

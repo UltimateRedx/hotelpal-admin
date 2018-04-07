@@ -8,18 +8,22 @@ import Login from 'scripts/components/Login'
 import Statistics from 'scripts/components/statistics'
 import Speaker from 'scripts/components/speaker'
 import Course from 'scripts/components/course'
-
+import Lesson from 'scripts/components/lesson'
+const Container = (props) => props.children;
 export default class Routers extends React.Component{
 
 	render(){
 		return (
 			<Router history={hashHistory}>
 				<Route path='/' component={Navigation}>
-					<IndexRedirect to='intro'/>
+					<IndexRedirect to='speaker'/>
 					<Route onEnter={scrollTop} path='statistics' component={Statistics}/>
 					<Route onEnter={scrollTop} path='speaker' component={Speaker}/>
-					<Route onEnter={scrollTop} path='course' component={Course}/>
-					
+					<Route onEnter={scrollTop} path='course' component={Container}>
+						<IndexRedirect to='index'/>
+						<Route onEnter={scrollTop} path='index' component={Course}/>
+						<Route onEnter={scrollTop} path='lesson/:courseId' component={Lesson}/>
+					</Route>
 				</Route>
 			</Router>
 		)

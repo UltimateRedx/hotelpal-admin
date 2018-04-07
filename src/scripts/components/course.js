@@ -1,5 +1,6 @@
 import React from 'react'
-import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider} from 'antd'
+import {Link} from 'react-router'
+import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout} from 'antd'
 import moment from 'moment'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
 import {COURSE} from 'scripts/remotes/index'
@@ -61,30 +62,28 @@ export default class Course extends React.Component {
 	handleUpdateCourse(res) {
 		this.setState({courseModal: true, courseData: res})
 	}
-	handleMapToLesson() {
-
-	}
 	render() {
 		let {courseList, courseModal, voTotal, currentPage, courseData} = this.state;
 		let list = courseList.map(res => {
 			res.op = (
 				<div>
-					<a className="table-href" onClick={this.handleUpdateCourse.bind(this, res)}>编辑课程</a>
+					<a className="table-href" onClick={this.handleUpdateCourse.bind(this, res)}>编辑</a>
 					<Divider type='vertical'/>
-					<a className="table-href" onClick={this.handleMapToLesson.bind(this, res)}>查看课时</a>
+					{/* <a className="table-href" onClick={this.handleMapToLesson.bind(this, res)}>查看课时</a> */}
+					<Link to={`course/lesson/${res.id}`}>查看课时</Link>
 					<Divider type='vertical'/>
 					<Popconfirm title={'确认删除：' + res.title + ' ?'} onConfirm = {this.handleDeleteCourse.bind(this,res)} >
 						<a className="table-href">删除</a>
 					</Popconfirm>
 				</div>
 			)
-			res.createTime = moment(res.createTime).format('YYYY-MM-DD HH:mm')
-			res.openTime = res.openTime && moment(res.openTime).format('YYYY-MM-DD HH:mm')
+			res.createTimeStr = moment(res.createTime).format('YYYY-MM-DD HH:mm')
+			res.openTimeStr = res.openTime && moment(res.openTime).format('YYYY-MM-DD HH:mm')
 			return res;
 		})
 		return (
 			<div className={prefix}>
-				<Row>
+				<Row className='mb-20 pt-10 pl-15'>
 					<Button icon='plus' onClick={this.handleAddCourse.bind(this)}>添加课程</Button>
 				</Row>
 				<Table 
@@ -92,13 +91,15 @@ export default class Course extends React.Component {
 					dataSource={list}
 					pagination = {false}
 				/>
-				<Pagination 
-					size="small" 
-					total={voTotal} 
-					current={currentPage} 
-					onChange={this.onChangePage.bind(this)}
-					showTotal={this.paginationTotalRender.bind(this)}
-				/>
+				<div className='pagination'>
+					<Pagination 
+						size="small" 
+						total={voTotal} 
+						current={currentPage} 
+						onChange={this.onChangePage.bind(this)}
+						showTotal={this.paginationTotalRender.bind(this)}
+					/>
+				</div>
 
 				{courseModal &&
 					<CourseModal
@@ -113,14 +114,14 @@ export default class Course extends React.Component {
 }
 const COURSE_COLUMNS = [
 	{dataIndex: 'title', title: '标题'},
-	{dataIndex: 'op', title: '操作'},
-	{dataIndex: 'createTime', title: '创建时间'},
-	{dataIndex: 'speakerNick', title: '主讲人'},
+	{dataIndex: 'createTimeStr', title: '创建时间'},
+	{dataIndex: 'speaker.nick', title: '主讲人'},
 	{dataIndex: 'publish', title: '上架状态'},
-	{dataIndex: 'openTime', title: '开课时间'},
+	{dataIndex: 'openTimeStr', title: '开课时间'},
 	{dataIndex: 'order', title: '排序'},
 	{dataIndex: 'a', title: '销量'},
 	{dataIndex: 'b', title: '销售额'},
 	{dataIndex: 'c', title: 'PV'},
 	{dataIndex: 'd', title: 'UV'},
+	{dataIndex: 'op', title: '操作'},
 ]
