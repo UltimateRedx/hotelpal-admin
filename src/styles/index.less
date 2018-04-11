@@ -17,6 +17,7 @@
 	.mb-20{
 		margin-bottom: 20px;
 	}
+	.pr-15{padding-right: 15px;}
 	.ml-8{margin-left: 8px;}
 	.fs-14 {font-size: 14px;}
 	.fs-18 {font-size: 18px;}
@@ -24,6 +25,7 @@
 	.mb-15 {margin-bottom: 15px;}
 	.h-20 {height: 20px;}
 	.f-r{float: right;}
+	.w-64{width:64px;}
 	.w-100p{width:100%;}
 	.lh-31{line-height:31px;}
 	.inline{display:inline;}
@@ -34,11 +36,16 @@
 	.text-left{
 		text-align: left;
 	}
+	.white{color: @white;}
+	.text-right{text-align: right;}
 	.ant-btn{
 		background-color: @primary-color;
 		color: @white;
 		&:hover{
 			background-color: @primary-deeper;
+		}
+		.anticon{
+			color:@white;
 		}
 	}
 	.btn-cancel{
@@ -102,6 +109,8 @@
 	.unerline{
 		text-decoration: underline;
 	}
+	.anticon{color: @primary-color}
+	
 }
 .navigation{
 	height: 100vh;
@@ -136,5 +145,15 @@
 .lesson{
 	.title{
 		padding: 10px 0 0 15px;
+	}
+}
+.courseDetail {
+	.ant-avatar{
+		width: 200px;
+	}
+	.ant-modal-footer{
+		.anticon-loading{
+			color: @white;
+		}
 	}
 }

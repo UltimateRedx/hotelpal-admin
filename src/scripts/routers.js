@@ -9,6 +9,7 @@ import Statistics from 'scripts/components/statistics'
 import Speaker from 'scripts/components/speaker'
 import Course from 'scripts/components/course'
 import Lesson from 'scripts/components/lesson'
+import LiveCourse from 'scripts/components/liveCourse/index'
 const Container = (props) => props.children;
 export default class Routers extends React.Component{
 
@@ -24,6 +25,7 @@ export default class Routers extends React.Component{
 						<Route onEnter={scrollTop} path='index' component={Course}/>
 						<Route onEnter={scrollTop} path='lesson/:courseId' component={Lesson}/>
 					</Route>
+					<Route onEnter={scrollTop} path='liveCourse' component={LiveCourse}/>
 				</Route>
 			</Router>
 		)

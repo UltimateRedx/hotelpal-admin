@@ -139,4 +139,13 @@ const CONTENT = {
 		return remoteBase.create({url, body})();
 	}
 }
-export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT}
+const LIVE_COURSE = {
+	updateLiveCourse: (data) => {
+		const url = '/admin/liveCourse/updateLiveCourse'
+		let {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, } = data
+		const body = {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price: price * 100, inviteRequire, inviteImg, introduce: content, relaCourseId, publish}
+		return remoteBase.create({url, body})();
+	}
+}
+export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, 
+	LIVE_COURSE}
