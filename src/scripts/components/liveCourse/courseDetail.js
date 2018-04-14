@@ -23,6 +23,7 @@ const getInitialState = (props) => {
 		inviteImg: course.inviteImg || '',
 		content: course.introduce || '',
 		relaCourseId: course.relaCourseId || '',
+		coupon: course.coupon || '',
 		publish: course.publish || 'N',
 
 		uploading: false,
@@ -64,7 +65,7 @@ export default class CourseDetail extends React.Component {
 	
 	render() {
 		let {...rest} = this.props
-		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish } = this.state
+		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, coupon } = this.state
 		let {uploading, courseList} = this.state
 		courseList = []
 		return (
@@ -140,7 +141,7 @@ export default class CourseDetail extends React.Component {
 						</Row>
 						<Row className="mb-8">
 							<Col span={12} className="form-group-item">
-								<div className="form-group-item-heading">价格</div>
+								<div className="form-group-item-heading">价格(元)</div>
 								<div className="form-group-item-body">
 									<InputNumber
 										value={price}
@@ -169,6 +170,17 @@ export default class CourseDetail extends React.Component {
 									<Select onChange={this.handleSelectChange.bind(this, 'relaCourseId')} value={relaCourseId}>
 										{courseList}
 									</Select>
+								</div>
+							</Col>
+							<Col span={12} className="form-group-item">
+								<div className="form-group-item-heading">优惠(元)</div>
+								<div className="form-group-item-body">
+									<InputNumber
+										value={coupon}
+										min={0}
+										precision={2}
+										onChange={this.handleNumberChange.bind(this, 'coupon')}
+									/>
 								</div>
 							</Col>
 						</Row>

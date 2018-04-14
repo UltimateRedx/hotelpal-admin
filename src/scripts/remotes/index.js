@@ -142,8 +142,8 @@ const CONTENT = {
 const LIVE_COURSE = {
 	updateLiveCourse: (data) => {
 		const url = '/admin/liveCourse/updateLiveCourse'
-		let {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, } = data
-		const body = {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price: price * 100, inviteRequire, inviteImg, introduce: content, relaCourseId, publish}
+		let {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, coupon} = data
+		const body = {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price: price * 100, inviteRequire, inviteImg, introduce: content, relaCourseId, publish, coupon: coupon * 100}
 		return remoteBase.create({url, body})();
 	}
 }
