@@ -145,6 +145,12 @@ const LIVE_COURSE = {
 		let {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, coupon} = data
 		const body = {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price: price * 100, inviteRequire, inviteImg, introduce: content, relaCourseId, publish, coupon: coupon * 100}
 		return remoteBase.create({url, body})();
+	},
+	getLiveCoursePageList: (data) => {
+		const url = '/admin/liveCourse/getLiveCoursePageList'
+		let {currentPage, pageSize} = data
+		const body = {currentPage, pageSize, orderBy: 'createTime', order: 'desc'}
+		return remoteBase.create({url, body})();
 	}
 }
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, 
