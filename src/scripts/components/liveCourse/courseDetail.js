@@ -6,7 +6,7 @@ const RadioGroup = Radio.Group
 const Option = Select.Option
 // const moment = require('moment')
 import {CONTENT, LIVE_COURSE} from 'scripts/remotes/index'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 const prefix = 'courseDetail'
 const getInitialState = (props) => {
 	let { course } = props
@@ -146,7 +146,6 @@ export default class CourseDetail extends React.Component {
 									<InputNumber
 										value={price}
 										min={0}
-										precision={0}
 										onChange={this.handleNumberChange.bind(this, 'price')}
 									/>
 								</div>
@@ -221,7 +220,11 @@ export default class CourseDetail extends React.Component {
 	}
 	handleNumberChange(field, value) {
 		let state = this.state;
-		state[field] = value;
+		if (field === 'price' || field === 'coupon') {
+			state[field] = Utils.getNumericValue(value)
+		} else if (field === 'inviteRequire') {
+			state[field] = Utils.getIntValue(value)
+		}
 		this.setState(state)
 	}
 	handleSelectChange(f, value) {
