@@ -1,14 +1,13 @@
 var path = require( 'path' );
 var webpack = require( 'webpack' );
 var HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 var es3ifyPlugin = require( 'es3ify-webpack-plugin' );
-var baseConfig = require( './webpack.config.base' );
-
 
 module.exports = {
-	context: baseConfig.context,//“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录。
+	context: path.join( __dirname, '../src' ),//“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录。
 
-	entry: baseConfig.entry,
+	entry: './index.js',
 
 	output: {
 		path: path.join( __dirname, 'dist' ),
@@ -18,10 +17,29 @@ module.exports = {
 	},
 
 	module: {
-		rules : baseConfig.getRules()
+		rules: [
+			{ test : /\.jsx?$/, loader : 'babel-loader' , exclude: /(node_modules|bower_components)/ },
+			{ test: /\.(png|jpg|jpeg|gif)$/, use:[ { loader : 'url-loader', options : { limit : 30000 } } ] },
+			{ test: /\.(svg|ttf|eot|woff(\(?2\)?)?)(\?[a-zA-Z_0-9.=&]*)?(#[a-zA-Z_0-9.=&]*)?$/, loader : 'file-loader' },
+			{
+				test: /\.less$/,
+				use: [ 'style-loader' ,'css-loader', {
+					loader: 'postcss-loader',
+					options: {
+						plugins: function() {
+							return [ require( 'autoprefixer' ) ];
+						}
+					}
+				},'less-loader']
+			},
+			{test : /\.css$/, use : ['style-loader','css-loader']}
+		]
 	},
 
-	resolve : baseConfig.getResolve(),
+	resolve : {
+		modules: [ path.join( __dirname, '../src' ), 'node_modules' ],
+		extensions : ['.js', '.jsx', '.json']
+	},
 
 	plugins : [
 		new es3ifyPlugin(),
@@ -51,6 +69,21 @@ module.exports = {
 			names : [ 'commons','manifest' ],
             // filename :  '[name].[hash].bundle.js'
 		} ),
-	].concat( baseConfig.getViews() ).concat(baseConfig.getConmonPlugins())
+		new ExtractTextPlugin( {
+			filename : '[name].[chunkhash].bundle.css',
+			allChunks : true,
+			disable : false,
+			ignoreOrder: true
+		} ),
+		new HtmlWebpackPlugin( {
+			template: path.join( __dirname, '../src/index.html'),
+			inject: true,
+			filename: 'index.html',
+			version: +new Date,
+			entryName: '',
+			title: '酒店邦成长营',
+			// chunks: [ 'manifest', 'commons', options.chunks ]
+		} )
+	]
 
 };

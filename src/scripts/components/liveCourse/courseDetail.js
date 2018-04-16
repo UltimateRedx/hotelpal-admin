@@ -5,7 +5,7 @@ import E from 'wangeditor'
 const RadioGroup = Radio.Group
 const Option = Select.Option
 // const moment = require('moment')
-import {CONTENT, LIVE_COURSE} from 'scripts/remotes/index'
+import {CONTENT, LIVE_COURSE, COURSE} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 const prefix = 'courseDetail'
 const getInitialState = (props) => {
@@ -22,8 +22,8 @@ const getInitialState = (props) => {
 		inviteRequire: course.inviteRequire || '',
 		inviteImg: course.inviteImg || '',
 		content: course.introduce || '',
-		relaCourseId: course.relaCourseId || '',
-		coupon: course.coupon || '',
+		relaCourseId: course.relaCourseId && (course.relaCourseId + '') || '0',
+		coupon: course.coupon / 100 || '',
 		publish: course.publish || 'N',
 
 		uploading: false,
@@ -38,6 +38,7 @@ export default class CourseDetail extends React.Component {
 	}
 	componentDidMount() {
 		//getCourseList
+		this.getCourseList()
 		//init editor
 		let {content} = this.state
 		const e1 = this.refs.content
@@ -48,6 +49,12 @@ export default class CourseDetail extends React.Component {
 		editor1.create()
 		editor1.txt.html(content)
 	}
+	getCourseList() {
+		COURSE.getList({currentPage:1 ,pageSize: 50, orderBy: 'createTime', containsContent: false}).then(res => {
+			if(!res.success) NoticeError(res.messages)
+			this.setState({courseList: res.voList})
+		})
+	}
 	handleClose() {
 		let { onClose } = this.props;
 		this.setState(getInitialState(this.props), () => {
@@ -55,7 +62,6 @@ export default class CourseDetail extends React.Component {
 		});
 	}
 	handleConfirm() {
-		console.log(this.state)
 		let {onClose} = this.props
 		LIVE_COURSE.updateLiveCourse(this.state).then(res => {
 			if (!res.success) NoticeError(res.messages)
@@ -67,7 +73,12 @@ export default class CourseDetail extends React.Component {
 		let {...rest} = this.props
 		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, coupon } = this.state
 		let {uploading, courseList} = this.state
-		courseList = []
+		courseList = [<Option key='0'>无</Option>].concat(courseList.map(course => {
+			return (
+				<Option key={course.id}>{course.title}</Option> 
+			)
+		}))
+		console.log(relaCourseId, typeof relaCourseId, courseList)
 		return (
 			<Modal
 				{...rest}
@@ -250,10 +261,8 @@ export default class CourseDetail extends React.Component {
 					NoticeError(res.messages)
 				}
 				this.refs.fileInput.value = null;
-			})
-			// setTimeout(() => {
 				this.setState({uploading: false})
-			// }, 2000)
+			})
 		}
 	}
 
