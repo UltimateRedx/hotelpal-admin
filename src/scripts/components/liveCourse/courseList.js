@@ -20,6 +20,29 @@ export default class LiveCourseList extends React.Component {
 	}
 	componentDidMount() {
 		this.getPageList()
+		this.testWS()
+	}
+	testWS() {
+		console.log('prepare to open ws...')
+		let ws = new WebSocket("ws://127.0.0.1:8081/hotelpal/live/chat");
+		ws.onopen = (e) => {
+			console.log('open...', e)
+		}
+		ws.onclose= (e) => {
+			console.log('close...', e)
+		}
+		ws.onmessage = (e) => {
+			console.log('onmessage...', e)
+		}
+		let index = 0;
+		let i = setInterval(() => {
+			if (index ++ > 20) {
+				ws.close()
+				clearInterval(i)
+			}
+			ws.send('The ' + index + ' ws msg...')
+		}, 3000)
+
 	}
 	getPageList() {
 		LIVE_COURSE.getLiveCoursePageList(this.state).then(res => {
