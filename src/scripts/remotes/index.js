@@ -148,8 +148,8 @@ const LIVE_COURSE = {
 	},
 	getLiveCoursePageList: (data) => {
 		const url = '/admin/liveCourse/getLiveCoursePageList'
-		let {currentPage, pageSize} = data
-		const body = {currentPage, pageSize, orderBy: 'createTime', order: 'desc'}
+		let {currentPage, pageSize, orderBy = 'createTime', order = 'desc', openTimeFrom=null, openTimeTo=null} = data
+		const body = {currentPage, pageSize, orderBy, order, openTimeFrom, openTimeTo}
 		return remoteBase.create({url, body})();
 	}
 }

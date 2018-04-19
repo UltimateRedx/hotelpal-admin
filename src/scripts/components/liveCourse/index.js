@@ -1,6 +1,7 @@
 import React from 'react'
 import {Tabs} from 'antd'
 import CourseList from './courseList'
+import LiveControl from './liveControl'
 const TabPane = Tabs.TabPane
 
 const prefix = 'liveCourse'
@@ -16,7 +17,7 @@ export default class LiveCourse extends React.Component {
 				className='pl-15 pr-15'
 			>
 				<TabPane key='1' tab='课程'><CourseList/></TabPane>
-				<TabPane key='2' tab='直播控制'></TabPane>
+				<TabPane key='2' tab='直播控制'><LiveControl/></TabPane>
 				<TabPane key='3' tab='会员'></TabPane>
 				
 			</Tabs>
