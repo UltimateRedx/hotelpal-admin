@@ -78,7 +78,6 @@ export default class CourseDetail extends React.Component {
 				<Option key={course.id}>{course.title}</Option> 
 			)
 		}))
-		console.log(relaCourseId, typeof relaCourseId, courseList)
 		return (
 			<Modal
 				{...rest}

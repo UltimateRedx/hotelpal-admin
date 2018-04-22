@@ -148,9 +148,30 @@ const LIVE_COURSE = {
 	},
 	getLiveCoursePageList: (data) => {
 		const url = '/admin/liveCourse/getLiveCoursePageList'
-		let {currentPage, pageSize, orderBy = 'createTime', order = 'desc', openTimeFrom=null, openTimeTo=null} = data
+		let {currentPage=1, pageSize=10, orderBy = 'createTime', order = 'desc', openTimeFrom='', openTimeTo=''} = data
 		const body = {currentPage, pageSize, orderBy, order, openTimeFrom, openTimeTo}
+		return remote.create({url, body})();
+	},
+	startLiveCourse: (courseId) => {
+		const url = '/admin/liveCourse/startLive'
+		const body = {courseId}
 		return remoteBase.create({url, body})();
+	},
+	terminateLiveCourse: (courseId) => {
+		const url = '/admin/liveCourse/terminateLive'
+		const body = {courseId}
+		return remoteBase.create({url, body})();
+	},
+	assistantMessage: (data) => {
+		const url = '/admin/live/assistant/sendMsg'
+		let {courseId, msg} = data
+		const body = {courseId, msg}
+		return remoteBase.create({url, body})()
+	},
+	removeAssistantMsg(id) {
+		const url = '/admin/live/assistant/removeMsg'
+		const body = {msgId: id}
+		return remoteBase.create({url, body})()
 	}
 }
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, 

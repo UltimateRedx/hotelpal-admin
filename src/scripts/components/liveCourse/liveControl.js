@@ -1,8 +1,9 @@
 import React from 'react'
-import {Button, Row, Col, Select} from 'antd'
+import {Button, Row, Col, Select, Switch} from 'antd'
 import {LIVE_COURSE} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
-
+import E from 'wangeditor'
+import moment from 'moment'
 const Option = Select.Option
 
 const prefix = 'liveControl'
@@ -13,7 +14,22 @@ export default class LiveControl extends React.Component {
 			ongoing: false,
 			selectedCourseId: '',
 			courseList:[],
+			preparing: false,
+			currentMsg: '',
+			assistantMsgList: [],
+			editor: '',
 		}
+	}
+	componentDidMount() {
+		this.getCourseList()
+		let {currentMsg} = this.state
+		const e1 = this.refs.content
+		const editor = new E(e1)
+		editor.customConfig.onchange = html => {
+			this.setState({currentMsg: html})
+		}
+		editor.create()
+		this.setState({editor})
 	}
 	getCourseList() {
 		let from = new Date();
@@ -26,6 +42,7 @@ export default class LiveControl extends React.Component {
 			order: 'asc',
 			openTimeFrom: from,
 			openTimeTo: to,
+			pageSize: 50,
 		}
 		LIVE_COURSE.getLiveCoursePageList(data).then(res => {
 			if (!res.success) {
@@ -34,13 +51,20 @@ export default class LiveControl extends React.Component {
 			this.setState({courseList: res.voList})
 		}) 
 	}
-	
-
 	render() {
-		let {ongoing, selectedCourseId, courseList} = this.state
+		let {ongoing, selectedCourseId, courseList, preparing, assistantMsgList} = this.state
 		let  list = courseList.map(c => {
 			return (
 				<Option key={c.id}>{c.title}</Option> 
+			)
+		})
+		assistantMsgList = assistantMsgList.map((msg, index) => {
+			return (
+				<div key={index} className='msgBlock'>
+					<span>{moment(msg.createTime).format('HH:mm:ss')}:</span>
+					<div dangerouslySetInnerHTML={{__html: msg.msg}}></div>
+					<div className='primary-red' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
+				</div>
 			)
 		})
 		return (
@@ -50,9 +74,15 @@ export default class LiveControl extends React.Component {
 						<Select disabled={ongoing} value={selectedCourseId} onChange={this.handleCourseChange.bind(this)}>
 							{list}
 						</Select>
+						<Switch checked={ongoing} loading={preparing} onChange={this.handleStatusChange.bind(this)}></Switch>
+						<h3 className="fs-14 f-bold mb-15 bt-d">助教发言</h3>
+						<div className='box'>
+							{assistantMsgList}
+						</div>
+						<div ref="content" className='editor'></div>
+						<Button onClick={this.handleSendMsg.bind(this)} disabled={!ongoing}>发送</Button>
 					</Col>
 					<Col span={12}>
-						<div style={{backgroundColor: 'blue'}}>345</div>
 					</Col>
 				</Row>
 			</div>
@@ -61,5 +91,55 @@ export default class LiveControl extends React.Component {
 
 	handleCourseChange(value) {
 		this.setState({selectedCourseId: value})
+	}
+	handleStatusChange(checked) {
+		let{selectedCourseId} = this.state
+		if (!selectedCourseId) {
+			NoticeMsg('请先选择课程')
+			return
+		}
+		if(checked) {
+			this.setState({preparing: true})
+			LIVE_COURSE.startLiveCourse(selectedCourseId).then(res => {
+				if (!res.success) {
+					NoticeError(res.messages)
+					this.setState({preparing: false})
+				} else {
+					this.setState({preparing: false, ongoing: true})
+				}
+			})
+		} else {
+			//live end
+			this.setState({preparing: true})
+			LIVE_COURSE.terminateLiveCourse(selectedCourseId).then(res => {
+				if (res.success) {
+					this.setState({preparing: false, ongoing: false})
+				} else {
+					NoticeError(res.messages)
+					this.setState({preparing: false})
+				}
+			})
+		}
+	}
+	handleSendMsg() {
+		let {selectedCourseId,currentMsg} = this.state
+		LIVE_COURSE.assistantMessage({courseId: selectedCourseId, msg: currentMsg}).then(res =>{
+			if (res.success) {
+				let {editor} = this.state
+				editor.txt.html('')
+				this.setState({assistantMsgList: res.voList, editor})
+			} else {
+				NoticeError(res.messages)
+			}
+		})
+	}
+	handleRemoveMsg(msg) {
+		LIVE_COURSE.removeAssistantMsg(msg.id).then(res =>{
+			if (res.success) {
+				this.setState({assistantMsgList: res.voList})
+			} else {
+				NoticeError(res.messages)
+			}
+		})
 	}
 }
