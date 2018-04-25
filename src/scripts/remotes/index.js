@@ -1,6 +1,10 @@
 const { remote, Remote } = require( 'beyond-remote' )
 const apiBasePath = '/hotelpal'
-
+const CONFIG = {
+	WS_ADDR: 'ws://' + location.hostname + ':8081',
+	WS_URL: '/hotelpal/admin/live/chat/',
+	ADMIN_TOKEN: 'guFvC1iN6cnFVV257dwDVbEqttQ40vcJUzvAWvBdw6k0H8Tqblk1xXs2wbO95INF',
+}
 function parseRes( res ) {
 	return typeof res === 'string' ? JSON.parse( res ) : res;
 }
@@ -162,17 +166,22 @@ const LIVE_COURSE = {
 		const body = {courseId}
 		return remoteBase.create({url, body})();
 	},
-	assistantMessage: (data) => {
-		const url = '/admin/live/assistant/sendMsg'
-		let {courseId, msg} = data
-		const body = {courseId, msg}
-		return remoteBase.create({url, body})()
-	},
-	removeAssistantMsg(id) {
+	// assistantMessage: (data) => {
+	// 	const url = '/admin/live/assistant/sendMsg'
+	// 	let {courseId, msg} = data
+	// 	const body = {courseId, msg}
+	// 	return remoteBase.create({url, body})()
+	// },
+	removeAssistantMsg: (id) => {
 		const url = '/admin/live/assistant/removeMsg'
 		const body = {msgId: id}
 		return remoteBase.create({url, body})()
-	}
+	},
+	assistantMsgList: (courseId) => {
+		const url = '/live/assistantMsgList'
+		const body = {courseId}
+		return remoteBase.create({url, body})()
+	} 
 }
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, 
-	LIVE_COURSE}
+	LIVE_COURSE, CONFIG}

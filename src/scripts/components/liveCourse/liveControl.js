@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Row, Col, Select, Switch} from 'antd'
-import {LIVE_COURSE} from 'scripts/remotes/index'
+import {LIVE_COURSE, CONFIG} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
 import E from 'wangeditor'
 import moment from 'moment'
@@ -8,8 +8,8 @@ const Option = Select.Option
 
 const prefix = 'liveControl'
 export default class LiveControl extends React.Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 		this.state = {
 			ongoing: false,
 			selectedCourseId: '',
@@ -17,11 +17,12 @@ export default class LiveControl extends React.Component {
 			preparing: false,
 			currentMsg: '',
 			assistantMsgList: [],
+			userMsgList:[],
 			editor: '',
+			ws: '',
 		}
 	}
 	componentDidMount() {
-		this.getCourseList()
 		let {currentMsg} = this.state
 		const e1 = this.refs.content
 		const editor = new E(e1)
@@ -30,6 +31,11 @@ export default class LiveControl extends React.Component {
 		}
 		editor.create()
 		this.setState({editor})
+		this.getCourseList()
+		// let {active} = this.props
+		// if (active) {
+		// 	this.reAfterMount()
+		// }
 	}
 	getCourseList() {
 		let from = new Date();
@@ -48,11 +54,55 @@ export default class LiveControl extends React.Component {
 			if (!res.success) {
 				NoticeError(res.messages);
 			}
+			res.voList.forEach(course => {
+				if (course.status == 'ONGOING') {
+					this.setState({ongoing: true, selectedCourseId: course.id + ''}, this.joinChat)
+				}
+			})
 			this.setState({courseList: res.voList})
 		}) 
 	}
+	joinChat() {
+		LIVE_COURSE.assistantMsgList(this.state.selectedCourseId).then(res => {
+			if (res.success) {
+				this.setState({assistantMsgList: res.data})
+			} else {
+				NoticeError(res.messages)
+			}
+		})
+		let {ws} = this.state
+		let {WS_ADDR, WS_URL, ADMIN_TOKEN} = CONFIG
+		ws = new WebSocket(WS_ADDR + WS_URL + ADMIN_TOKEN);
+		ws.onmessage = (e) => {
+			let data = JSON.parse(e.data)
+			let {assistantMsgList, userMsgList} = this.state
+			if (data.assistant == 'Y') {
+				assistantMsgList.push(data)
+				this.setState({assistantMsgList})
+			} else {
+				userMsgList.push(data)
+				this.setState({userMsgList})
+			}
+		}
+		ws.onopen = (e) => {
+			NoticeMsg('WebSocket opened...')
+		}
+		ws.onclose = (e) => {
+			NoticeMsg('WebSocket closed...')
+		}
+		ws.onerror = (e) => {
+			console.log(e)
+		}
+		this.setState({ws})
+	}
+	terminateChat() {
+		let {ws} = this.state
+		if (ws.readyState != WebSocket.CLOSED) {
+			ws.close()
+		}
+	}
 	render() {
-		let {ongoing, selectedCourseId, courseList, preparing, assistantMsgList} = this.state
+		let {ongoing, selectedCourseId, courseList, preparing, assistantMsgList, userMsgList} = this.state
 		let  list = courseList.map(c => {
 			return (
 				<Option key={c.id}>{c.title}</Option> 
@@ -63,7 +113,16 @@ export default class LiveControl extends React.Component {
 				<div key={index} className='msgBlock'>
 					<span>{moment(msg.createTime).format('HH:mm:ss')}:</span>
 					<div dangerouslySetInnerHTML={{__html: msg.msg}}></div>
-					<div className='primary-red' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
+					<div className='primary-red unerline' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
+				</div>
+			)
+		})
+		userMsgList = userMsgList.map((msg, index) => {
+			return (
+				<div key={index} className='msgBlock'>
+					<span>{moment(msg.createTime).format('HH:mm:ss')}:</span>
+					<div dangerouslySetInnerHTML={{__html: msg.msg}}></div>
+					<div className='primary-red unerline'>禁言</div>
 				</div>
 			)
 		})
@@ -83,6 +142,9 @@ export default class LiveControl extends React.Component {
 						<Button onClick={this.handleSendMsg.bind(this)} disabled={!ongoing}>发送</Button>
 					</Col>
 					<Col span={12}>
+						<div className='box'>
+							{userMsgList}
+						</div>
 					</Col>
 				</Row>
 			</div>
@@ -105,7 +167,7 @@ export default class LiveControl extends React.Component {
 					NoticeError(res.messages)
 					this.setState({preparing: false})
 				} else {
-					this.setState({preparing: false, ongoing: true})
+					this.setState({preparing: false, ongoing: true}, this.joinChat)
 				}
 			})
 		} else {
@@ -113,7 +175,7 @@ export default class LiveControl extends React.Component {
 			this.setState({preparing: true})
 			LIVE_COURSE.terminateLiveCourse(selectedCourseId).then(res => {
 				if (res.success) {
-					this.setState({preparing: false, ongoing: false})
+					this.setState({preparing: false, ongoing: false}, this.terminateChat)
 				} else {
 					NoticeError(res.messages)
 					this.setState({preparing: false})
@@ -122,16 +184,22 @@ export default class LiveControl extends React.Component {
 		}
 	}
 	handleSendMsg() {
-		let {selectedCourseId,currentMsg} = this.state
-		LIVE_COURSE.assistantMessage({courseId: selectedCourseId, msg: currentMsg}).then(res =>{
-			if (res.success) {
-				let {editor} = this.state
-				editor.txt.html('')
-				this.setState({assistantMsgList: res.voList, editor})
-			} else {
-				NoticeError(res.messages)
-			}
-		})
+		let {ws, currentMsg} = this.state
+		if (ws.readyState != WebSocket.OPEN) {
+			NoticeError("通信连接没有打开")
+			return
+		}
+		ws.send(currentMsg)
+		// let {selectedCourseId,currentMsg} = this.state
+		// LIVE_COURSE.assistantMessage({courseId: selectedCourseId, msg: currentMsg}).then(res =>{
+		// 	if (res.success) {
+		// 		let {editor} = this.state
+		// 		editor.txt.html('')
+		// 		this.setState({assistantMsgList: res.voList, editor})
+		// 	} else {
+		// 		NoticeError(res.messages)
+		// 	}
+		// })
 	}
 	handleRemoveMsg(msg) {
 		LIVE_COURSE.removeAssistantMsg(msg.id).then(res =>{

@@ -8,19 +8,30 @@ const prefix = 'liveCourse'
 export default class LiveCourse extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {}
+		this.state = {
+			activeKey: KEY_COURSE,
+		}
 	}
 	render() {
+		let {activeKey} = this.state
 		return (
 			<Tabs
 				size='large'
 				className='pl-15 pr-15'
+				activeKey={activeKey}
+				onChange={this.handleTabChange.bind(this)}
 			>
-				<TabPane key='1' tab='课程'><CourseList/></TabPane>
-				<TabPane key='2' tab='直播控制'><LiveControl/></TabPane>
-				<TabPane key='3' tab='会员'></TabPane>
+				<TabPane key={KEY_COURSE} tab='课程'><CourseList/></TabPane>
+				<TabPane key={KEY_LIVE_CONTROL} tab='直播控制'><LiveControl active={activeKey == KEY_LIVE_CONTROL}/></TabPane>
+				<TabPane key={KEY_MEMBER} tab='会员'></TabPane>
 				
 			</Tabs>
 		)
 	}
+	handleTabChange(ak) {
+		this.setState({activeKey: ak})
+	}
 }
+const KEY_COURSE = 'COURSE'
+const KEY_LIVE_CONTROL = 'LIVE_CONTROL'
+const KEY_MEMBER = 'MEMBER'
