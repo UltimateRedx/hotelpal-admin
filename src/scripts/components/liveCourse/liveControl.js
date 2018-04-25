@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import {Button, Row, Col, Select, Switch} from 'antd'
 import {LIVE_COURSE, CONFIG} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
@@ -78,10 +79,10 @@ export default class LiveControl extends React.Component {
 			let {assistantMsgList, userMsgList} = this.state
 			if (data.assistant == 'Y') {
 				assistantMsgList.push(data)
-				this.setState({assistantMsgList})
+				this.setState({assistantMsgList}, ()=> {this.refs.assistantMsg.scrollTop = this.refs.assistantMsg.scrollHeight})
 			} else {
 				userMsgList.push(data)
-				this.setState({userMsgList})
+				this.setState({userMsgList}, ()=> {this.refs.userMsg.scrollTop = this.refs.userMsg.scrollHeight})
 			}
 		}
 		ws.onopen = (e) => {
@@ -101,6 +102,16 @@ export default class LiveControl extends React.Component {
 			ws.close()
 		}
 	}
+	handleBlockUser(msg) {
+		console.log(msg)
+		if(!msg.id) return
+		LIVE_COURSE.blockUser(msg.id).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+		})
+	}
 	render() {
 		let {ongoing, selectedCourseId, courseList, preparing, assistantMsgList, userMsgList} = this.state
 		let  list = courseList.map(c => {
@@ -110,19 +121,18 @@ export default class LiveControl extends React.Component {
 		})
 		assistantMsgList = assistantMsgList.map((msg, index) => {
 			return (
-				<div key={index} className='msgBlock'>
-					<span>{moment(msg.createTime).format('HH:mm:ss')}:</span>
-					<div dangerouslySetInnerHTML={{__html: msg.msg}}></div>
-					<div className='primary-red unerline' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
+				<div key={index} className='msgBlock mb-15 p-15 pb-0'>
+					<span className='f-bold '>{moment(msg.createTime).format('HH:mm:ss')}:</span>
+					<div className='primary-red unerline f-r pointer mr-30' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
+					<div className='pl-30' dangerouslySetInnerHTML={{__html: msg.msg}}></div>
 				</div>
 			)
 		})
 		userMsgList = userMsgList.map((msg, index) => {
 			return (
-				<div key={index} className='msgBlock'>
-					<span>{moment(msg.createTime).format('HH:mm:ss')}:</span>
-					<div dangerouslySetInnerHTML={{__html: msg.msg}}></div>
-					<div className='primary-red unerline'>禁言</div>
+				<div key={index} className={classNames('msgBlock', msg.blocked == 'Y' && 'blocked')}>
+					<span className='f-bold ' className='pointer' onClick={this.handleBlockUser.bind(this, msg)}><img className='h-20' src={msg.headImg} /> {msg.nick}</span>
+					<div className='pl-30' dangerouslySetInnerHTML={{__html: msg.msg}}></div>
 				</div>
 			)
 		})
@@ -130,19 +140,21 @@ export default class LiveControl extends React.Component {
 			<div className={prefix}>
 				<Row gutter={50}>
 					<Col span={12}>
-						<Select disabled={ongoing} value={selectedCourseId} onChange={this.handleCourseChange.bind(this)}>
+						<Select className='w-50p' disabled={ongoing} value={selectedCourseId} onChange={this.handleCourseChange.bind(this)}>
 							{list}
 						</Select>
-						<Switch checked={ongoing} loading={preparing} onChange={this.handleStatusChange.bind(this)}></Switch>
-						<h3 className="fs-14 f-bold mb-15 bt-d">助教发言</h3>
-						<div className='box'>
-							{assistantMsgList}
+						<Switch className='f-r' checked={ongoing} loading={preparing} onChange={this.handleStatusChange.bind(this)} checkedChildren='直播中' unCheckedChildren='未直播'></Switch>
+						<div className='assistant-msg mt-15'>
+							<h3 className="fs-14 f-bold bt-d mb-0">助教发言</h3>
+							<div ref='assistantMsg' className='box default-box mb-30'>
+								{assistantMsgList}
+							</div>
+							<div ref="content" className='editor'></div>
+							<Button className='f-r' onClick={this.handleSendMsg.bind(this)} disabled={!ongoing}>发送</Button>
 						</div>
-						<div ref="content" className='editor'></div>
-						<Button onClick={this.handleSendMsg.bind(this)} disabled={!ongoing}>发送</Button>
 					</Col>
 					<Col span={12}>
-						<div className='box'>
+						<div ref='userMsg' className='box default-box'>
 							{userMsgList}
 						</div>
 					</Col>

@@ -181,7 +181,12 @@ const LIVE_COURSE = {
 		const url = '/live/assistantMsgList'
 		const body = {courseId}
 		return remoteBase.create({url, body})()
-	} 
+	},
+	blockUser: (msgId) => {
+		const url = '/admin/live/assistant/blockUser'
+		const body = {msgId}
+		return remoteBase.create({url, body})()
+	}
 }
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, 
 	LIVE_COURSE, CONFIG}

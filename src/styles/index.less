@@ -5,32 +5,35 @@
 @grey:#F0F4F7;
 @light-dark: #e8e8e8;
 #root, .ant-modal-content{
-	.pt-10{
-		padding-top: 10px;
-	}
-	.pl-15{
-		padding-left: 15px;
-	}
-	.mb-8{
-		margin-bottom: 8px;
-	}
-	.mb-20{
-		margin-bottom: 20px;
-	}
+	.p-15{padding:15px;}
+	.pt-10{padding-top: 10px;}
+	.pl-15{padding-left: 15px;}
+	.pl-30{padding-left: 30px;}
 	.pr-15{padding-right: 15px;}
+	.pb-0{padding-bottom: 0}
+
+	.mt-15{margin-top:15px;}
+	.mb-0{margin-bottom: 0}
+	.mb-8{margin-bottom: 8px;}
+	.mb-15 {margin-bottom: 15px;}
+	.mb-20{margin-bottom: 20px;}
+	.mb-30 {margin-bottom: 30px;}
 	.ml-8{margin-left: 8px;}
+	.mr-30{margin-right:30px;}
 	.fs-14 {font-size: 14px;}
 	.fs-18 {font-size: 18px;}
 	.f-bold {font-weight: bold;}
-	.mb-15 {margin-bottom: 15px;}
 	.h-20 {height: 20px;}
-	.f-r{float: right;}
+	.h-350{height:350px;}
 	.w-64{width:64px;}
 	.w-100p{width:100%;}
+	.w-50p{width:50% !important;}
 	.lh-31{line-height:31px;}
 	.inline{display:inline;}
-	.mr-30{margin-right:30px;}
+	.f-r{float: right;}
 	.primary-red {color: @primary-color}
+	.default-box{box-shadow:0 0 20px 0 #F4F5F5 inset}
+	.pointer{cursor: pointer;}
 	.bt-d{
 		border-top: 1px dotted @light-dark;
 	}
@@ -156,5 +159,24 @@
 		.anticon-loading{
 			color: @white;
 		}
+	}
+}
+.liveControl{
+	.assistant-msg{
+		.box{
+			height: 350px;
+			overflow-y: auto;
+		}
+		.editor{
+			padding: 0 !important;
+			padding-bottom: 15px !important;
+		}
+	}
+	.box{
+		height: 780px;
+		overflow-y: auto;
+	}
+	.blocked{
+		background-color: @light-dark;
 	}
 }
