@@ -4,6 +4,7 @@
 @black:#000;
 @grey:#F0F4F7;
 @light-dark: #e8e8e8;
+@primary-blue: #1890ff;
 #root, .ant-modal-content{
 	.p-15{padding:15px;}
 	.pt-10{padding-top: 10px;}
@@ -32,6 +33,7 @@
 	.inline{display:inline;}
 	.f-r{float: right;}
 	.primary-red {color: @primary-color}
+	.primary-blue{color: @primary-blue}
 	.default-box{box-shadow:0 0 20px 0 #F4F5F5 inset}
 	.pointer{cursor: pointer;}
 	.bt-d{
@@ -178,5 +180,22 @@
 	}
 	.blocked{
 		background-color: @light-dark;
+	}
+}
+.newMemberModal{
+	.edit-row{
+		.plus{
+			font-size: 30px;
+			color: @primary-blue !important;
+		}
+		.form-group-item{
+			.form-group-item-heading{
+				width: 80px;
+				text-align: left;
+			}
+			.form-group-item-body{
+				margin-left: 80px;
+			}
+		}
 	}
 }

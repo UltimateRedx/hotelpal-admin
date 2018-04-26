@@ -186,7 +186,25 @@ const LIVE_COURSE = {
 		const url = '/admin/live/assistant/blockUser'
 		const body = {msgId}
 		return remoteBase.create({url, body})()
+	},
+	changeCouponShowStatus: (show = 'N') => {
+		const url = '/admin/live/assistant/changeCouponShowStatus'
+		const body = {show}
+		return remoteBase.create({url, body})()
 	}
 }
-export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, 
-	LIVE_COURSE, CONFIG}
+const USER = {
+	getVipMemberList: (data) => {
+		const url = '/admin/live/vip/getVipList'
+		let {currentPage=1, pageSize=10, phone = ''} = data
+		const body = {currentPage, pageSize, phone}
+		return remoteBase.create({url, body})()
+	},
+	addLiveVip: (phone, validity) => {
+		const url = '/admin/live/vip/addLiveVip'
+		const body = {phone, validity}
+		return remoteBase.create({url, body})()
+	}
+}
+export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
+	LIVE_COURSE, CONFIG, }

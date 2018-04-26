@@ -21,6 +21,7 @@ export default class LiveControl extends React.Component {
 			userMsgList:[],
 			editor: '',
 			ws: '',
+			couponShow: false,
 		}
 	}
 	componentDidMount() {
@@ -57,7 +58,7 @@ export default class LiveControl extends React.Component {
 			}
 			res.voList.forEach(course => {
 				if (course.status == 'ONGOING') {
-					this.setState({ongoing: true, selectedCourseId: course.id + ''}, this.joinChat)
+					this.setState({ongoing: true, selectedCourseId: course.id + '', couponShow: 'Y' == course.couponShow}, this.joinChat)
 				}
 			})
 			this.setState({courseList: res.voList})
@@ -113,7 +114,7 @@ export default class LiveControl extends React.Component {
 		})
 	}
 	render() {
-		let {ongoing, selectedCourseId, courseList, preparing, assistantMsgList, userMsgList} = this.state
+		let {ongoing, selectedCourseId, courseList, preparing, assistantMsgList, userMsgList, couponShow} = this.state
 		let  list = courseList.map(c => {
 			return (
 				<Option key={c.id}>{c.title}</Option> 
@@ -143,7 +144,12 @@ export default class LiveControl extends React.Component {
 						<Select className='w-50p' disabled={ongoing} value={selectedCourseId} onChange={this.handleCourseChange.bind(this)}>
 							{list}
 						</Select>
-						<Switch className='f-r' checked={ongoing} loading={preparing} onChange={this.handleStatusChange.bind(this)} checkedChildren='直播中' unCheckedChildren='未直播'></Switch>
+						<div className='f-r'>
+							<Switch checked={ongoing} loading={preparing} 
+								onChange={this.handleStatusChange.bind(this)} checkedChildren='直播中' unCheckedChildren='未直播'/>
+							<Switch checked={couponShow}
+								onChange={this.handleChangeCouponShow.bind(this)} checkedChildren='优惠显示中' unCheckedChildren='优惠未显示'/>
+						</div>
 						<div className='assistant-msg mt-15'>
 							<h3 className="fs-14 f-bold bt-d mb-0">助教发言</h3>
 							<div ref='assistantMsg' className='box default-box mb-30'>
@@ -165,6 +171,20 @@ export default class LiveControl extends React.Component {
 
 	handleCourseChange(value) {
 		this.setState({selectedCourseId: value})
+	}
+	handleChangeCouponShow(checked) {
+		let{selectedCourseId} = this.state
+		if (!selectedCourseId) {
+			NoticeMsg('请先选择课程')
+			return
+		}
+		LIVE_COURSE.changeCouponShowStatus(checked ? 'Y' : 'N').then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return;
+			}
+			this.setState({couponShow: checked})
+		})
 	}
 	handleStatusChange(checked) {
 		let{selectedCourseId} = this.state
