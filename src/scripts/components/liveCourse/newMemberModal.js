@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button, Row, Col, Input, InputNumber, Icon} from 'antd'
+import { Modal, Button, Row, Col, Input, InputNumber, Icon, Popconfirm} from 'antd'
 import {USER} from 'scripts/remotes/index'
 import {NoticeMsg, NoticeError, Utils} from 'scripts/utils/index'
 
@@ -22,7 +22,11 @@ export default class NewMemberModal extends React.Component {
 		onClose()
 	}
 	handleAddOne() {
-		let{phone, validity} = this.state
+		let{phone, phoneList, validity} = this.state
+		if (phoneList.indexOf(phone)>=0) {
+			NoticeMsg('该手机号码已经添加')
+			return
+		}
 		USER.addLiveVip(phone, validity).then(res => {
 			if(!res.success) {
 				NoticeError(res.messages)
@@ -32,6 +36,11 @@ export default class NewMemberModal extends React.Component {
 			phoneList.push(phone)
 			this.setState({phoneList})
 		})
+	}
+	
+	handleRemovePhone(phone) {
+		let {removePhone} = this.props
+		removePhone(phone)
 	}
 	render() {
 		let {...rest} = this.props
@@ -87,12 +96,18 @@ export default class NewMemberModal extends React.Component {
 				<Col span={8}>
 					<div className="form-group-item-body">{phone}</div>
 				</Col>
+				<Col span={8}></Col>
 				<Col span={8} className='text-left'>
-					<div className="form-group-item-body"><Icon type="close-circle-o" className='primary-red f-bold'/></div>
+					<div className="form-group-item-body">
+						<Popconfirm title={`确认移除` + phone + `?`} onConfirm={this.handleRemovePhone.bind(this, phone)}>
+							<Icon type="close-circle-o" className='primary-red f-bold'/>
+						</Popconfirm>
+					</div>
 				</Col>
 			</Row>
 		)
 	}
+	
 	handleInputChange(e) {
 		this.setState({phone: e.target.value})
 	}

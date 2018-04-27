@@ -196,13 +196,18 @@ const LIVE_COURSE = {
 const USER = {
 	getVipMemberList: (data) => {
 		const url = '/admin/live/vip/getVipList'
-		let {currentPage=1, pageSize=10, phone = ''} = data
-		const body = {currentPage, pageSize, phone}
+		let {currentPage=1, pageSize=10, searchValue = ''} = data
+		const body = {currentPage, pageSize, phone: searchValue}
 		return remoteBase.create({url, body})()
 	},
 	addLiveVip: (phone, validity) => {
 		const url = '/admin/live/vip/addLiveVip'
 		const body = {phone, validity}
+		return remoteBase.create({url, body})()
+	},
+	removeLiveVip: (phone) => {
+		const url = '/admin/live/vip/removeLiveVip'
+		const body = {phone}
 		return remoteBase.create({url, body})()
 	}
 }

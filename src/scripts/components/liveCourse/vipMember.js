@@ -1,10 +1,10 @@
 import React from 'react'
-import {Modal, Button, Table, Pagination, Row} from 'antd'
+import {Modal, Button, Table, Pagination, Row, Popconfirm, Input} from 'antd'
 import {USER} from 'scripts/remotes/index'
 import {NoticeMsg, NoticeError} from 'scripts/utils/index'
 import moment from 'moment'
 import NewMemberModal from './newMemberModal'
-
+const Search = Input.Search
 const prefix = 'vipMember'
 export default class VipMember extends React.Component {
 	constructor(props) {
@@ -15,6 +15,7 @@ export default class VipMember extends React.Component {
 			pageSize: 10,
 			memberList: [],
 			newMemberModal: false,
+			searchValue: '',
 		}
 	}
 	componentDidMount() {
@@ -34,17 +35,42 @@ export default class VipMember extends React.Component {
 			<span>{range[0]}-{range[1]}条，共{total}条</span>
 		)
 	}
+	removeOnePhone(phone) {
+		USER.removeLiveVip(phone).then(res => {
+			if(!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			this.getPageList()
+		})
+	}
+	handleSearchPhone(value) {
+		if (!value) return
+		this.setState({searchValue: value}, this.getPageList)
+	}
+	
 	render() {
-		let {currentPage, voTotal, newMemberModal, memberList} = this.state
+		let {currentPage, voTotal, newMemberModal, memberList, searchValue} = this.state
 		memberList = memberList.map(u => {
-			u.liveVipStartTimeStr = u.liveVipStartTime ? moment(u.liveVipStartTime) : ''
-			u.validTo = u.liveVipStartTime && u.validity ? moment(liveVipStartTime.setDate(liveVipStartTime.getDate() + u.validity)) : ''
+			u.liveVipStartTimeStr = u.liveVipStartTime ? moment(u.liveVipStartTime).format('YYYY-MM-DD HH:mm:ss') : ''
+			let vipStartTime = new Date(u.liveVipStartTime)
+			u.validTo = u.liveVipStartTime && u.validity ? moment(vipStartTime.setDate(vipStartTime.getDate() + u.validity)).format('YYYY-MM-DD HH:mm:ss') : ''
+			u.op = (
+				<div>
+					<Popconfirm title={`确认收回` + u.phone + `?`} onConfirm={this.removeOnePhone.bind(this, u.phone)}>
+						<a className=''>收回</a>
+					</Popconfirm>
+				</div>
+			)
 			return u
 		})
 		return (
 			<div>
 				<Row className='mb-20 pt-10 pl-15'>
 					<Button icon='plus' onClick={this.handleShowModal.bind(this)}>添加会员</Button>
+					<Search className='f-r w-20p' placeholder='手机号搜索' 
+						onSearch={this.handleSearchPhone.bind(this)} value={searchValue}
+						onChange={this.handleSearchChange.bind(this)}/>
 				</Row>
 				<Table 
 					columns={VIP_MEMBER_COLUMNS}
@@ -64,10 +90,14 @@ export default class VipMember extends React.Component {
 					<NewMemberModal
 						visible={newMemberModal}
 						onClose={this.handleCloseModal.bind(this)}
+						removePhone={this.removeOnePhone.bind(this)}
 					/>
 				}
 			</div>
 		)
+	}
+	handleSearchChange(e) {
+		this.setState({searchValue: e.target.value})
 	}
 	onChangePage(page, pageSize) {
 		this.setState({currentPage: page}, this.getPageList)
