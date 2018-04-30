@@ -124,7 +124,7 @@ export default class LiveControl extends React.Component {
 			return (
 				<div key={index} className='msgBlock mb-15 p-15 pb-0'>
 					<span className='f-bold '>{moment(msg.createTime).format('HH:mm:ss')}:</span>
-					<div className='primary-red unerline f-r pointer mr-30' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
+					<div className='primary-red underline f-r pointer mr-30' onClick={this.handleRemoveMsg.bind(this, msg)}>删除</div>
 					<div className='pl-30' dangerouslySetInnerHTML={{__html: msg.msg}}></div>
 				</div>
 			)

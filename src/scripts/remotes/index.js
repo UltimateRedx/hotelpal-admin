@@ -191,7 +191,13 @@ const LIVE_COURSE = {
 		const url = '/admin/live/assistant/changeCouponShowStatus'
 		const body = {show}
 		return remoteBase.create({url, body})()
+	},
+	getCourseStatistics(courseId) {
+		const url = '/admin/liveCourse/getCourseStatistics'
+		const body = {courseId}
+		return remoteBase.create({url, body})()
 	}
+	
 }
 const USER = {
 	getVipMemberList: (data) => {

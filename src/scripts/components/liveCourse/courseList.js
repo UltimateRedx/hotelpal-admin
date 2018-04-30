@@ -1,6 +1,7 @@
 import React from 'react'
-import {Modal, Button, Table, Pagination, Row} from 'antd'
+import {Modal, Button, Table, Pagination, Row, Divider} from 'antd'
 import CourseDetail from './courseDetail'
+import LiveStatistics from './liveStatistics'
 import {LIVE_COURSE} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
 import moment from 'moment'
@@ -16,6 +17,8 @@ export default class LiveCourseList extends React.Component {
 			liveCourseList: [],
 			detailModal: false,
 			courseData: {},
+			statisticsModal: false,
+			statisticsId: '',
 		}
 	}
 	componentDidMount() {
@@ -30,7 +33,9 @@ export default class LiveCourseList extends React.Component {
 				course.openTimeStr = moment(res.openTime).format('YYYY-MM-DD HH:mm')
 				course.op = (
 					<div>
-						<a onClick={this.handleUpdateCourse.bind(this, course)}>编辑</a>
+						<a className='underline' onClick={this.handleUpdateCourse.bind(this, course)}>编辑</a>
+						<Divider type='vertical'/>
+						<a className='underline' onClick={this.handleShowStatistics.bind(this, course.id)}>统计数据</a>
 					</div>
 				)
 				return course;
@@ -40,6 +45,9 @@ export default class LiveCourseList extends React.Component {
 	}
 	handleUpdateCourse(res) {
 		this.setState({detailModal: true, courseData: res})
+	}
+	handleShowStatistics(courseId) {
+		this.setState({statisticsModal: true, statisticsId: courseId})
 	}
 	handleCloseModal(modal, refresh) {
 		this.setState({[modal]: false})
@@ -56,8 +64,7 @@ export default class LiveCourseList extends React.Component {
 		)
 	}
 	render() {
-		let {liveCourseList, currentPage, voTotal, detailModal, courseData} = this.state
-		
+		let {liveCourseList, currentPage, voTotal, detailModal, courseData, statisticsModal, statisticsId} = this.state
 		return (
 			<div>
 				<Row className='mb-20 pt-10 pl-15'>
@@ -82,6 +89,13 @@ export default class LiveCourseList extends React.Component {
 						visible={detailModal}
 						onClose={this.handleCloseModal.bind(this, 'detailModal')}
 						course={courseData}
+					/>
+				}
+				{statisticsModal &&
+					<LiveStatistics
+						visible={statisticsModal}
+						onClose={this.handleCloseModal.bind(this, 'statisticsModal')}
+						courseId={statisticsId}
 					/>
 				}
 			</div>

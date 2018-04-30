@@ -1,0 +1,123 @@
+@white: #FFF;
+@primary-color:#F04A4C;
+@primary-deeper:#CC3333;
+@black:#000;
+@grey:#F0F4F7;
+@light-dark: #e8e8e8;
+@primary-blue: #1890ff;
+
+#root, .ant-modal-content{
+	
+.p-15{padding:15px;}
+.pt-10{padding-top: 10px;}
+.pl-15{padding-left: 15px;}
+.pl-30{padding-left: 30px;}
+.pr-15{padding-right: 15px;}
+.pb-0{padding-bottom: 0}
+
+.mt-15{margin-top:15px;}
+.mb-0{margin-bottom: 0}
+.mb-8{margin-bottom: 8px;}
+.mb-15 {margin-bottom: 15px;}
+.mb-20{margin-bottom: 20px;}
+.mb-30 {margin-bottom: 30px;}
+.ml-5{margin-left: 5px;}
+.ml-8{margin-left: 8px;}
+.mr-30{margin-right:30px;}
+.fs-14 {font-size: 14px;}
+.fs-18 {font-size: 18px;}
+.f-bold {font-weight: bold;}
+.h-20 {height: 20px;}
+.h-350{height:350px;}
+.w-64{width:64px;}
+.w-100p{width:100%;}
+.w-20p{width:20%;}
+.w-50p{width:50% !important;}
+.lh-31{line-height:31px;}
+.inline{display:inline;}
+.f-r{float: right;}
+.primary-red {color: @primary-color}
+.primary-blue{color: @primary-blue}
+.default-box{box-shadow:0 0 20px 0 #F4F5F5 inset}
+.pointer{cursor: pointer;}
+.bt-d{
+	border-top: 1px dotted @light-dark;
+}
+.text-left{
+	text-align: left;
+}
+.white{color: @white;}
+.text-right{text-align: right;}
+.ant-btn{
+	background-color: @primary-color;
+	color: @white;
+	&:hover{
+		background-color: @primary-deeper;
+	}
+	.anticon{
+		color:@white;
+	}
+}
+.btn-cancel{
+	background-color: @white;
+	color: @black;
+}
+.form-group-item{
+	padding: 0 5px;
+	text-align: right;
+	&:before, &:after {
+		content: " ";
+		display: table;
+	}
+	.form-group-item-heading{
+		float: left;
+		width: 80px;
+		padding-right: 10px;
+		line-height: 31px;
+	}
+	.form-group-item-body{
+		margin-left: 80px;
+		input,select{
+		border-radius: 2px!important;
+		}
+	}
+	.form-group-item-heading.required{
+		&:before{
+		right: 2px!important;
+		}
+	}
+}
+.input-error-message{
+	color: #f16362;
+	font-size: 12px;
+	white-space: nowrap;
+	letter-spacing: normal;
+}
+.input-error{
+	border-color: #f16362;
+}
+.display-none{
+	display:none;
+}
+.grey{
+	background-color:@grey;
+}
+.ant-avatar{
+	width: 120px;
+	height: 120px;
+	& > *{
+		line-height: 120px;
+	}
+}
+.editor{
+	padding: 35px;
+	padding-top: 0;
+}
+.ant-input-number, .ant-select, .ant-calendar-picker{
+	width: 100%;
+}
+.underline{
+	text-decoration: underline;
+}
+.anticon{color: @primary-color}
+}
