@@ -27,7 +27,7 @@ export default class VipMember extends React.Component {
 				NoticeError(res.messages)
 				return
 			}
-			this.setState({memberList: res.voList})
+			this.setState({memberList: res.voList, currentPage: res.pageNumber, voTotal: res.voTotal})
 		})
 	}
 	paginationTotalRender(total, range) {
@@ -50,6 +50,7 @@ export default class VipMember extends React.Component {
 	}
 	
 	render() {
+		console.log(this.state)
 		let {currentPage, voTotal, newMemberModal, memberList, searchValue} = this.state
 		memberList = memberList.map(u => {
 			u.liveVipStartTimeStr = u.liveVipStartTime ? moment(u.liveVipStartTime).format('YYYY-MM-DD HH:mm:ss') : ''
@@ -111,8 +112,8 @@ export default class VipMember extends React.Component {
 }
 const VIP_MEMBER_COLUMNS = [
 	{dataIndex: 'nick', title: '昵称'},
-	{dataIndex: 'liveVipStartTimeStr', title: '发卡时间'},
 	{dataIndex: 'phone', title: '手机号'},
+	{dataIndex: 'liveVipStartTimeStr', title: '发卡时间'},
 	{dataIndex: 'validTo', title: '有效期至'},
 	{dataIndex: 'op', title: '操作'},
 ]

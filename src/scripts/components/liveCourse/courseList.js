@@ -94,8 +94,8 @@ const COURSE_COLUMNS = [
 	{dataIndex: 'priceY', title: '价格'},
 	{dataIndex: 'publish', title: '上架状态'},
 	{dataIndex: 'openTimeStr', title: '直播时间'},
-	{dataIndex: 'purchaseCount', title: '购买次数'},
-	{dataIndex: 'freeCount', title: '免费预约数'},
-	{dataIndex: 'PV', title: '累计听课人次'},
+	{dataIndex: 'purchasedTimes', title: '购买次数'},
+	{dataIndex: 'freeEnrolledTimes', title: '免费预约数'},
+	{dataIndex: 'totalPeople', title: '累计听课人次'},
 	{dataIndex: 'op', title: '操作'},
 ]

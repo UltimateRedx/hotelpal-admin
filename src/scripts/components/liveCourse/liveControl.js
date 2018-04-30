@@ -78,10 +78,10 @@ export default class LiveControl extends React.Component {
 		ws.onmessage = (e) => {
 			let data = JSON.parse(e.data)
 			let {assistantMsgList, userMsgList} = this.state
-			if (data.assistant == 'Y') {
+			if (data.msgType == TYPE_ASSISTANT_MESSAGE) {
 				assistantMsgList.push(data)
 				this.setState({assistantMsgList}, ()=> {this.refs.assistantMsg.scrollTop = this.refs.assistantMsg.scrollHeight})
-			} else {
+			} else if (data.msgType == TYPE_USER_MESSAGE) {
 				userMsgList.push(data)
 				this.setState({userMsgList}, ()=> {this.refs.userMsg.scrollTop = this.refs.userMsg.scrollHeight})
 			}
@@ -242,4 +242,10 @@ export default class LiveControl extends React.Component {
 			}
 		})
 	}
+}
+const MSG_TYPE = {
+	TYPE_USER_MESSAGE: 'TYPE_USER_MESSAGE',
+	TYPE_ASSISTANT_MESSAGE: "TYPE_ASSISTANT_MESSAGE",
+	TYPE_SHOW_COUPON: "TYPE_SHOW_COUPON",
+	TYPE_HIDE_COUPON: "TYPE_HIDE_COUPON",
 }
