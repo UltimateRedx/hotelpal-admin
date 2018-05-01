@@ -63,7 +63,7 @@ export default class Speaker extends React.Component {
 		let {speakerList, speakerModal, voTotal, currentPage, speakerData} = this.state;
 		speakerList.forEach(res => {
 			res.head = (
-				<Avatar icon={res.headImg ? null : 'question'} shape='square' size='large' src={res.headImg}/>
+				<Avatar icon={res.headImg ? null : 'question'} shape='square' size='large'src={res.headImg}/>
 			)
 			res.op = (
 				<div>

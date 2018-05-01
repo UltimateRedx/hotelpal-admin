@@ -1,7 +1,11 @@
 import React from 'react'
 import {Modal, Button, Row, Col} from 'antd'
+import { Chart, Axis, Geom, Tooltip } from 'bizcharts'
 import {LIVE_COURSE} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import moment from 'moment'
+
+
 const prefix = 'liveStatistics'
 export default class LivecStatistics extends React.Component {
 	constructor(props) {
@@ -11,6 +15,7 @@ export default class LivecStatistics extends React.Component {
 	}
 	componentDidMount() {
 		this.getStatisticsData()
+		this.getStatisticsCurve()
 	}
 	getStatisticsData() {
 		let {courseId} = this.props
@@ -19,7 +24,7 @@ export default class LivecStatistics extends React.Component {
 				NoticeError(res.messages)
 				return
 			}
-			let vo = res.vo;
+			let vo = res.vo
 			this.setState({
 				freeEnrollTimes: vo.freeEnrollTimes,
 				purchaseEnrollTimes: vo.purchaseEnrollTimes,
@@ -29,16 +34,36 @@ export default class LivecStatistics extends React.Component {
 				freeCompleteRate: vo.freeCompleteRate,
 				totalEnrollCount: vo.totalEnrollCount,
 				purchaseEnrollRate: vo.purchaseEnrollRate,
-				
+				enrollOnlineRate: vo.enrollOnlineRate,
+				onlinePurchaseRate: vo.onlinePurchaseRate,
+
 			})
+		})
+	}
+
+	getStatisticsCurve() {
+		let {courseId} = this.props
+		LIVE_COURSE.getCourseStatisticsCurve(courseId).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			let osList = res.vo.onlineSumList
+			if (osList) {
+				osList.forEach(os => {
+					os.time = moment(os.createTime).format('HH:mm')
+				})
+			}
+			this.setState({onlineSum: osList})
 		})
 	}
 	
 	render() {
 		let {...rest} = this.props
 		let {freeEnrollTimes, purchaseEnrollTimes, tryFreeEnrollCount, purchasedFee, totalPeople, 
-			freeCompleteRate, totalEnrollCount, purchaseEnrollRate} = this.state
-			console.log(this.state)
+			freeCompleteRate, totalEnrollCount, purchaseEnrollRate, enrollOnlineRate, onlinePurchaseRate} = this.state
+		let {onlineSum = []} = this.state
+		console.log(onlineSum)
 		return (
 			<Modal
 				{...rest}
@@ -64,7 +89,7 @@ export default class LivecStatistics extends React.Component {
 						</Col>
 						<Col span={8} className="form-group-item">
 							<div className="form-group-item-heading">免费报名完成率:</div>
-							<div className="form-group-item-body">{freeCompleteRate || '-'}%</div>
+							<div className="form-group-item-body">{freeCompleteRate ? freeCompleteRate.toFixed(2) : '-'}%</div>
 						</Col>
 					</Row>
 					<Row className="mb-8">
@@ -74,7 +99,7 @@ export default class LivecStatistics extends React.Component {
 						</Col>
 						<Col span={8} className="form-group-item">
 							<div className="form-group-item-heading">购买/预约:</div>
-							<div className="form-group-item-body">{purchaseEnrollRate || '-'}%</div>
+							<div className="form-group-item-body">{purchaseEnrollRate ? purchaseEnrollRate.toFixed(2) : '-'}%</div>
 						</Col>
 						<Col span={8} className="form-group-item">
 							<div className="form-group-item-heading">付费报名金额:</div>
@@ -96,17 +121,35 @@ export default class LivecStatistics extends React.Component {
 					<Row className="mb-8">
 						<Col span={8} className="form-group-item">
 							<div className="form-group-item-heading">听课/预约:</div>
-							<div className="form-group-item-body">
-								70%
-							</div>
+							<div className="form-group-item-body">{enrollOnlineRate ? enrollOnlineRate.toFixed(2) : '-'}%</div>
 						</Col>
 						<Col span={8} className="form-group-item">
 							<div className="form-group-item-heading">购买/听课:</div>
-							<div className="form-group-item-body">
-								80%
-							</div>
+							<div className="form-group-item-body">{onlinePurchaseRate ? onlinePurchaseRate.toFixed(2) : '-'}%</div>
 						</Col>
 					</Row>
+				</div>
+				<div className='w-100p'>
+					<Chart forceFit height={200}
+						data={onlineSum}
+					>
+						<Axis name="time" />
+						<Axis name="onlineSum"/>
+						<Tooltip crosshairs={{type : "y"}}/>
+						<Geom type='line' position='time*onlineSum' size={2} />
+						<Geom type='point' position="time*onlineSum" size={4} shape={'circle'}/>
+					</Chart>
+				</div>
+				<div className='w-100p'>
+					<Chart forceFit height={200}
+						data={onlineSum}
+					>
+						<Axis name="time" />
+						<Axis name="onlineSum"/>
+						<Tooltip crosshairs={{type : "y"}}/>
+						<Geom type='line' position='time*onlineSum' size={2} />
+						<Geom type='point' position="time*onlineSum" size={4} shape={'circle'}/>
+					</Chart>
 				</div>
 			</Modal>
 		)
@@ -116,3 +159,7 @@ export default class LivecStatistics extends React.Component {
 		onClose()
 	}
 }
+// const ONLINE_SUM_SCALE = {
+// 	'onlineSum': {min: 0},
+// 	'time': {range: [ 0 , 1] }
+// }

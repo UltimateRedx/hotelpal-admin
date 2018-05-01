@@ -17,6 +17,7 @@ export default class Navigation extends React.Component {
 					<Menu selectable={false}><Item><Link to='/statistics'>成长专栏</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/statistics'>用户管理</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/liveCourse'>直播课程</Link></Item></Menu>
+					<Menu selectable={false}><Item><Link to='/ppt'>直播PPT</Link></Item></Menu>
 				</Sider>
 				<Layout>
 					<div className='container'>

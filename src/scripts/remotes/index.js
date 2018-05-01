@@ -192,8 +192,13 @@ const LIVE_COURSE = {
 		const body = {show}
 		return remoteBase.create({url, body})()
 	},
-	getCourseStatistics(courseId) {
+	getCourseStatistics: (courseId) => {
 		const url = '/admin/liveCourse/getCourseStatistics'
+		const body = {courseId}
+		return remoteBase.create({url, body})()
+	},
+	getCourseStatisticsCurve: (courseId) => {
+		const url = '/admin/liveCourse/getCourseStatisticsCurve'
 		const body = {courseId}
 		return remoteBase.create({url, body})()
 	}

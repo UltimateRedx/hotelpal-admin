@@ -23,8 +23,9 @@ import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import App from 'scripts/routers';
 import { AppContainer } from 'react-hot-loader';
+// import BizCharts from 'bizCharts'
 const $root = document.querySelector( '#root' );
-
+// BizCharts.track(false);
 if ( process.env.NODE_ENV !== 'production' ) {
 	console.log( 'this is dev mode' );
 }

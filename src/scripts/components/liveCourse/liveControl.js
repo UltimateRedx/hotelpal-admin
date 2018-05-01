@@ -78,13 +78,14 @@ export default class LiveControl extends React.Component {
 		ws.onmessage = (e) => {
 			let data = JSON.parse(e.data)
 			let {assistantMsgList, userMsgList} = this.state
-			if (data.msgType == TYPE_ASSISTANT_MESSAGE) {
+			if (data.msgType == MSG_TYPE.TYPE_ASSISTANT_MESSAGE) {
 				assistantMsgList.push(data)
 				this.setState({assistantMsgList}, ()=> {this.refs.assistantMsg.scrollTop = this.refs.assistantMsg.scrollHeight})
-			} else if (data.msgType == TYPE_USER_MESSAGE) {
+			} else if (data.msgType == MSG_TYPE.TYPE_USER_MESSAGE) {
 				userMsgList.push(data)
 				this.setState({userMsgList}, ()=> {this.refs.userMsg.scrollTop = this.refs.userMsg.scrollHeight})
 			}
+			console.log(data, userMsgList)
 		}
 		ws.onopen = (e) => {
 			NoticeMsg('WebSocket opened...')
