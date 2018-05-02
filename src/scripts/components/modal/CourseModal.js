@@ -269,7 +269,7 @@ export default class CourseModal extends React.Component{
 								<Col span={8} className="form-group-item">
 									<div className="form-group-item-heading">主讲人</div>
 									<div className="form-group-item-body">
-										<Select onChange={this.handleSelectChange.bind(this, 'speakerId')} value={speakerId}>
+										<Select onChange={this.handleSelectChange.bind(this, 'speakerId')} value={speakerId + ''}>
 											{speakerOpt}
 										</Select>
 									</div>

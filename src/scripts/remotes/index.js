@@ -4,6 +4,7 @@ const CONFIG = {
 	WS_ADDR: 'ws://' + location.hostname + ':8081',
 	WS_URL: '/hotelpal/admin/live/chat/',
 	ADMIN_TOKEN: 'guFvC1iN6cnFVV257dwDVbEqttQ40vcJUzvAWvBdw6k0H8Tqblk1xXs2wbO95INF',
+	WS_PPT: '/hotelpal/live/op',
 }
 function parseRes( res ) {
 	return typeof res === 'string' ? JSON.parse( res ) : res;
@@ -111,13 +112,13 @@ const COMMENT = {
 		const url = '/admin/comment/getCommentPageList'
 		let {lesson, currentPage,pageSize} = data;
 		const body = {lessonId: lesson.id, currentPage,pageSize}
-		return remoteBase.create({url, body})();
+		return remote.create({url, body})();
 	},
 	updateElite: (data) => {
 		const url = '/admin/comment/updateElite'
 		let {id, elite} = data;
 		const body = {id, elite}
-		return remoteBase.create({url, body})();
+		return remote.create({url, body})();
 	},
 	deleteComment: (id) => {
 		const url = '/admin/comment/deleteComment'
@@ -205,6 +206,11 @@ const LIVE_COURSE = {
 	updateCourseImage: (courseId, imgList) => {
 		const url = '/admin/liveCourse/updateCourseImage'
 		const body = {courseId, imgList}
+		return remoteBase.create({url, body})()
+	},
+	getLiveImgList: (courseId) => {
+		const url = '/admin/liveCourse/getLiveImgList'
+		const body = {courseId}
 		return remoteBase.create({url, body})()
 	}
 	

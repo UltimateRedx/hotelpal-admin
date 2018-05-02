@@ -115,36 +115,6 @@ export default class Lesson extends React.Component {
 					<Link className='fs-18 f-bold mb-15 underline' to='/course'>课程&nbsp;</Link>
 					<span>&nbsp; &gt; 课时</span>
 				</div>
-				{/* <Row className='info'>
-					<h3 className="fs-14 f-bold mb-15">{courseData.title || ''}</h3>
-				</Row>
-				<Row>
-					<Col span={4}>
-						<div className='form-group-item'>
-							<div className='form-group-item-heading'>主讲人: </div>
-							<div className="form-group-item-body text-left lh-31">{courseData.speaker ? courseData.speaker.nick : 'NONE'}</div>
-						</div>
-					</Col>
-					<Col span={20}></Col>
-				</Row>
-				<Row>
-					<Col span={4}>
-						<div className='form-group-item'>
-							<div className='form-group-item-heading'>开课时间: </div>
-							<div className="form-group-item-body text-left lh-31">{courseData.openTime ? moment(courseData.openTime).format('YYYY-MM-DD') : 'NONE'}</div>
-						</div>
-					</Col>
-					<Col span={20}></Col>
-				</Row>
-				<Row>
-					<Col span={4}>
-						<div className='form-group-item'>
-							<div className='form-group-item-heading'>价格: </div>
-							<div className="form-group-item-body text-left lh-31">{courseData.price}</div>
-						</div>
-					</Col>
-					<Col span={20}></Col>
-				</Row> */}
 				<Row className='mb-20 pt-10 pl-15'>
 					<div className="fs-14 f-bold inline mr-30">课程：{courseData.title || ''}</div>
 					<Button icon='plus' onClick={this.handleAddLesson.bind(this)}>添加课时</Button>

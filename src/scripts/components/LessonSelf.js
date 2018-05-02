@@ -6,13 +6,12 @@ import {NoticeMsg,NoticeError} from 'scripts/utils/index'
 import {COURSE} from 'scripts/remotes/index'
 import CourseModal from 'scripts/components/modal/CourseModal'
 
-const prefix = 'course'
+const prefix = 'lesson-self'
 export default class Course extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state={
-			courseList:[],
+			lessonList:[],
 			courseModal: false,
 			currentPage: 1,
 			pageSize: 10,

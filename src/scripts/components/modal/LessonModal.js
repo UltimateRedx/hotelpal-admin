@@ -105,7 +105,7 @@ export default class LessonModal extends React.Component{
 	}
 	render() {
 		let {...rest} = this.props
-		let {title = '', publishDate, order = '', no = '', free = 'N', audioUrl, onSale = 'N'} = this.state
+		let {title = '', publishDate, lessonOrder = '', no = '', free = 'N', audioUrl, onSale = 'N'} = this.state
 		return (
 			<Modal
 				{...rest}
@@ -137,9 +137,9 @@ export default class LessonModal extends React.Component{
 							<div className="form-group-item-heading">序号</div>
 							<div className="form-group-item-body">
 								<InputNumber
-									value={order}
+									value={lessonOrder}
 									min={0}
-									onChange={this.handleNumberChange.bind(this,'order')}
+									onChange={this.handleNumberChange.bind(this,'lessonOrder')}
 								/>
 							</div>
 						</Col>

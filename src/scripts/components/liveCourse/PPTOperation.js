@@ -5,7 +5,7 @@ import {CONTENT, LIVE_COURSE} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 const {Option} = Select
 
-const prefix = 'ppt'
+const prefix = 'pptop'
 export default class PPTOperation extends React.Component {
 	constructor(props) {
 		super(props)
@@ -28,6 +28,16 @@ export default class PPTOperation extends React.Component {
 				return
 			}
 			this.setState({courseList: res.voList})
+		})
+	}
+	getLiveImgList() {
+		let {selectedCourseId} = this.state
+		LIVE_COURSE.getLiveImgList(selectedCourseId).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			this.setState({imgList: res.voList, opLink: res.vo})
 		})
 	}
 	handleSave() {
@@ -67,6 +77,7 @@ export default class PPTOperation extends React.Component {
 	}
 	render() {
 		let {imgList, opLink, courseList, selectedCourseId} = this.state
+		console.log(this.state)
 		courseList = courseList.map(course => {
 			return (
 				<Option key={course.id}>{course.title}</Option> 
@@ -93,8 +104,8 @@ export default class PPTOperation extends React.Component {
 						{courseList}
 					</Select>
 					<Button onClick={this.handleSave.bind(this)}>{opLink ? '保存' : '保存并生成链接'}</Button>
-					{opLink &&
-						<div>操作链接：{opLink}</div>
+					{!!opLink &&
+						<div className='inline-block ml-30'>操作链接：{opLink}</div>
 					}
 				</div>
 				<input type='file' className='display-none' ref='fileInput' accept='image/jpeg,image/png'
@@ -104,10 +115,15 @@ export default class PPTOperation extends React.Component {
 	}
 
 	handleSelectImg(f) {
+		let {selectedCourseId} = this.state
+		if (!selectedCourseId) {
+			NoticeMsg("请先选择课程")
+			return
+		}
 		this.refs.fileInput.click(f)
 	}
 	handleSelectChange(value) {
-		this.setState({selectedCourseId: value})
+		this.setState({selectedCourseId: value}, this.getLiveImgList)
 	}
 	handleFileChange(e) {
 		let files = this.refs.fileInput.files;

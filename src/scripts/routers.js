@@ -11,6 +11,7 @@ import Course from 'scripts/components/course'
 import Lesson from 'scripts/components/lesson'
 import LiveCourse from 'scripts/components/liveCourse/index'
 import PPTOperation from 'scripts/components/liveCourse/PPTOperation'
+import PPT from 'scripts/components/liveCourse/ppt'
 
 const Container = (props) => props.children;
 export default class Routers extends React.Component{
@@ -19,6 +20,9 @@ export default class Routers extends React.Component{
 		return (
 			<Router history={hashHistory}>
 				<Route path='/' component={Navigation}>
+					<IndexRedirect to='/hotelpal/speaker'/>
+				</Route>
+				<Route path='/hotelpal' component={Navigation}>
 					<IndexRedirect to='speaker'/>
 					<Route onEnter={scrollTop} path='statistics' component={Statistics}/>
 					<Route onEnter={scrollTop} path='speaker' component={Speaker}/>
@@ -30,6 +34,7 @@ export default class Routers extends React.Component{
 					<Route onEnter={scrollTop} path='liveCourse' component={LiveCourse}/>
 					<Route onEnter={scrollTop} path='ppt' component={PPTOperation}/>
 				</Route>
+				<Route onEnter={scrollTop} path='/live/img/:token' component={PPT}/>
 			</Router>
 		)
 	}
