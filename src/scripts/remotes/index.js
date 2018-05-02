@@ -201,6 +201,11 @@ const LIVE_COURSE = {
 		const url = '/admin/liveCourse/getCourseStatisticsCurve'
 		const body = {courseId}
 		return remoteBase.create({url, body})()
+	},
+	updateCourseImage: (courseId, imgList) => {
+		const url = '/admin/liveCourse/updateCourseImage'
+		const body = {courseId, imgList}
+		return remoteBase.create({url, body})()
 	}
 	
 }

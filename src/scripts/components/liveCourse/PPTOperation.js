@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button, Row, Col, Avatar } from 'antd'
+import { Button, Row, Col, Avatar, Select} from 'antd'
 import {CONTENT, LIVE_COURSE} from 'scripts/remotes/index'
 
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
-
+const {Option} = Select
 
 const prefix = 'ppt'
 export default class PPTOperation extends React.Component {
@@ -13,10 +13,33 @@ export default class PPTOperation extends React.Component {
 			uploading: false,
 			draggingImg: '',
 			draggingOverIndex: '',
+			opLink: '',
+			courseList: [],
+			selectedCourseId:'',
 			imgList: [
 			
 			]
 		}
+	}
+	componentDidMount() {
+		LIVE_COURSE.getLiveCoursePageList({pageSize: 50}).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			this.setState({courseList: res.voList})
+		})
+	}
+	handleSave() {
+		let {imgList,selectedCourseId} = this.state
+		if (!imgList || imgList.length == 0 || !selectedCourseId) return
+		LIVE_COURSE.updateCourseImage(selectedCourseId, imgList).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			this.setState({opLink: res.vo})
+		})
 	}
 	handleDragStart(img, index, proxy, e) {
 		let {imgList} = this.state
@@ -43,7 +66,12 @@ export default class PPTOperation extends React.Component {
 		this.setState({imgList, draggingOverIndex: ''}, ()=>{console.log(this.state)})
 	}
 	render() {
-		let {imgList} = this.state
+		let {imgList, opLink, courseList, selectedCourseId} = this.state
+		courseList = courseList.map(course => {
+			return (
+				<Option key={course.id}>{course.title}</Option> 
+			)
+		})
 		let list = imgList.map((img, index) => {
 			return (
 				<Avatar key={index} className='avatars p-15 pl-30 pr-0' shape='square' size='large' src={img} 
@@ -60,6 +88,15 @@ export default class PPTOperation extends React.Component {
 				<div>
 					{list}
 				</div>
+				<div className='footer w-100p'>
+					<Select onChange={this.handleSelectChange.bind(this)} value={selectedCourseId}>
+						{courseList}
+					</Select>
+					<Button onClick={this.handleSave.bind(this)}>{opLink ? '保存' : '保存并生成链接'}</Button>
+					{opLink &&
+						<div>操作链接：{opLink}</div>
+					}
+				</div>
 				<input type='file' className='display-none' ref='fileInput' accept='image/jpeg,image/png'
 							onChange={this.handleFileChange.bind(this)}/>
 			</div>
@@ -68,6 +105,9 @@ export default class PPTOperation extends React.Component {
 
 	handleSelectImg(f) {
 		this.refs.fileInput.click(f)
+	}
+	handleSelectChange(value) {
+		this.setState({selectedCourseId: value})
 	}
 	handleFileChange(e) {
 		let files = this.refs.fileInput.files;
