@@ -14,23 +14,6 @@ const getInitialState = (props) => {
 	let d = data || {}
 	Object.assign(d, {openTime: data.openTime ? new moment(data.openTime) : new moment()})
 	return d
-	// return {
-	// 	id: data.id ||'',
-	// 	title: data.title || '',
-	// 	subTitle: data.subTitle || '',
-	// 	courseOrder: data ? data.courseOrder : '',
-	// 	status: data.status || 'NORMAL',
-	// 	tagList: data.tagList || [],
-	// 	bannerImg: data.bannerImg || '',
-	// 	openTime: data.openTime && new moment(data.openTime) || new moment(),
-	// 	lessonNum: data.lessonNum || '',
-	// 	speakerId: data.speaker && data.speaker.id + '' || '',
-	// 	price:  data.price && data.price / 100 || '',
-	// 	publish: data.publish || 'N',
-	// 	speakerList:[],
-
-	// 	courseContent: data.courseContent || {},
-	// }
 }
 export default class CourseModal extends React.Component{
 	constructor(props) {

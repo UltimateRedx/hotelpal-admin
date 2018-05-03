@@ -91,8 +91,8 @@ const COURSE = {
 const LESSON = {
 	getLessonList: (data) => {
 		const url = '/admin/lesson/getPageList'
-		let {courseId, currentPage,pageSize, orderBy} = data;
-		const body = {courseId, currentPage,pageSize, orderBy}
+		let {courseId = '', currentPage = '1',pageSize = '10', orderBy='lessonOrder', order = 'asc',type = 'NORMAL'} = data;
+		const body = {courseId, currentPage,pageSize, orderBy, type, order}
 		return remoteBase.create({url, body})();
 	},
 	updateLesson: (data) => {
@@ -231,6 +231,13 @@ const USER = {
 		const url = '/admin/live/vip/removeLiveVip'
 		const body = {phone}
 		return remoteBase.create({url, body})()
+	},
+	getUserList: (data) => {
+		const url = '/admin/user/getUserList'
+		let {currentPage = 1, pageSize = 10, phoneRegTimeFrom = '', phoneRegTimeTo = '', searchValue = '', 
+			orderBy = 'createTime', order = 'desc'} = data
+		const body = {currentPage, pageSize, order, orderBy, phoneRegTimeFrom, phoneRegTimeTo, searchValue}
+		return remote.create({url, body})()
 	}
 }
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,

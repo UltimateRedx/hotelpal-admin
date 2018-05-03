@@ -3,54 +3,44 @@ import {Link} from 'react-router'
 import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout} from 'antd'
 import moment from 'moment'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
-import {COURSE} from 'scripts/remotes/index'
-import CourseModal from 'scripts/components/modal/CourseModal'
+import {LESSON} from 'scripts/remotes/index'
+import LessonSelfModal from 'scripts/components/modal/LessonSelfModal'
 
 const prefix = 'lesson-self'
-export default class Course extends React.Component {
+export default class LessonSelf extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state={
+			type: 'SELF',
 			lessonList:[],
-			courseModal: false,
+			editModal: false,
 			currentPage: 1,
 			pageSize: 10,
 			voTotal: 0,
-			courseData: {},
-			orderBy:''
+			lessonData: {},
+			order: 'desc'
 		}
 	}
 	componentDidMount() {
 		this.getPageList();
 	}
 	getPageList() {
-		COURSE.getList(this.state).then(res => {
-			if (res.success) {
-				this.setState({courseList: res.voList, currentPage: res.pageNumber, voTotal: res.voTotal});
-			} else{
+		LESSON.getLessonList(this.state).then(res => {
+			if (!res.success) {
 				NoticeError(res.messages)
+				return
 			}
+			this.setState({lessonList: res.voList, currentPage: res.pageNumber, voTotal: res.voTotal})
 		})
 	}
-	handleAddCourse() {
-		this.setState({courseModal: true, courseData:{}})
-	}
-	onChangePage(page, pageSize) {
-		this.setState({currentPage: page, pageSize}, this.getPageList);
-	}
+	
 	paginationTotalRender(total, range) {
 		return (
 			<span>{range[0]}-{range[1]}条，共{total}条</span>
 		)
 	}
-	handleCloseModal(refresh) {
-		this.setState({courseModal: false})
-		if (refresh) {
-			this.getPageList()
-		}
-	}
-	handleDeleteCourse(data) {
-		COURSE.deleteCourse(data).then(res => {
+	handleDeleteLesson(data) {
+		LESSON.deleteLesson(data).then(res => {
 			if (res.success) {
 				this.getPageList();
 			} else {
@@ -58,35 +48,31 @@ export default class Course extends React.Component {
 			}
 		})
 	}
-	handleUpdateCourse(res) {
-		this.setState({courseModal: true, courseData: res})
-	}
+	
 	render() {
-		let {courseList, courseModal, voTotal, currentPage, courseData} = this.state;
-		let list = courseList.map(res => {
+		let {lessonList, editModal, voTotal, currentPage, lessonData} = this.state;
+		let list = lessonList.map(res => {
 			res.op = (
 				<div>
-					<a className="table-href" onClick={this.handleUpdateCourse.bind(this, res)}>编辑</a>
+					<a className="table-href" onClick={this.handleUpdateLesson.bind(this, res)}>编辑</a>
 					<Divider type='vertical'/>
-					{/* <a className="table-href" onClick={this.handleMapToLesson.bind(this, res)}>查看课时</a> */}
-					<Link to={`/hotelpal/course/lesson/${res.id}`}>查看课时</Link>
-					<Divider type='vertical'/>
-					<Popconfirm title={'确认删除：' + res.title + ' ?'} onConfirm = {this.handleDeleteCourse.bind(this,res)} >
+					
+					<Popconfirm title={'确认删除：' + res.title + ' ?'} onConfirm = {this.handleDeleteLesson.bind(this,res)} >
 						<a className="table-href">删除</a>
 					</Popconfirm>
 				</div>
 			)
 			res.createTimeStr = moment(res.createTime).format('YYYY-MM-DD HH:mm')
-			res.openTimeStr = res.openTime && moment(res.openTime).format('YYYY-MM-DD HH:mm')
+			res.publishDateStr = res.publishDate && moment(res.publishDate).format('YYYY-MM-DD')
 			return res;
 		})
 		return (
 			<div className={prefix}>
 				<Row className='mb-20 pt-10 pl-15'>
-					<Button icon='plus' onClick={this.handleAddCourse.bind(this)}>添加课程</Button>
+					<Button icon='plus' onClick={this.handleAddLesson.bind(this)}>添加课时</Button>
 				</Row>
 				<Table 
-					columns={COURSE_COLUMNS}
+					columns={LESSON_COLUMNS}
 					dataSource={list}
 					pagination = {false}
 				/>
@@ -100,27 +86,39 @@ export default class Course extends React.Component {
 					/>
 				</div>
 
-				{courseModal &&
-					<CourseModal
-						visible={courseModal}
+				{editModal &&
+					<LessonSelfModal
+						visible={editModal}
 						onClose={this.handleCloseModal.bind(this)}
-						data = {courseData}
+						data = {lessonData}
 					/>
 				}
 			</div>
 		)
 	}
+	handleUpdateLesson(res) {
+		this.setState({editModal: true, lessonData: res})
+	}
+	handleAddLesson() {
+		this.setState({editModal: true, lessonData:{}})
+	}
+	onChangePage(page, pageSize) {
+		this.setState({currentPage: page, pageSize}, this.getPageList);
+	}
+	handleCloseModal(refresh) {
+		this.setState({editModal: false})
+		if (refresh) {
+			this.getPageList()
+		}
+	}
 }
-const COURSE_COLUMNS = [
+const LESSON_COLUMNS = [
+	{dataIndex: 'lessonOrder', title: '序号'},
 	{dataIndex: 'title', title: '标题'},
 	{dataIndex: 'createTimeStr', title: '创建时间'},
-	{dataIndex: 'speaker.nick', title: '主讲人'},
-	{dataIndex: 'publish', title: '上架状态'},
-	{dataIndex: 'openTimeStr', title: '开课时间'},
-	{dataIndex: 'order', title: '排序'},
-	{dataIndex: 'a', title: '销量'},
-	{dataIndex: 'b', title: '销售额'},
-	{dataIndex: 'c', title: 'PV'},
-	{dataIndex: 'd', title: 'UV'},
+	{dataIndex: 'publishDateStr', title: '发布时间'},
+	{dataIndex: 'onSale', title: '上架状态'},
+	{dataIndex: 'pv', title: 'PV'},
+	{dataIndex: 'uv', title: 'UV'},
 	{dataIndex: 'op', title: '操作'},
 ]
