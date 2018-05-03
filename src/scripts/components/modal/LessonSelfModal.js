@@ -57,7 +57,7 @@ export default class LessonSelfModal extends React.Component{
 	
 	render() {
 		let {...rest} = this.props
-		let {title = '', publishDate, lessonOrder = '', no = '', audioUrl, onSale = 'N', bannerImg = ''} = this.state
+		let {title = '', publishDate, lessonOrder = '', no = '', audioUrl, onSale = 'N', coverImg = ''} = this.state
 		return (
 			<Modal
 				{...rest}
@@ -112,10 +112,10 @@ export default class LessonSelfModal extends React.Component{
 						<Col span={6}>
 							<div className="form-group-item-heading">封面</div>
 							<div className="form-group-item-body">
-								<Avatar className='w-200' icon={bannerImg ? null : 'plus-square-o'} 
+								<Avatar className='w-200' icon={coverImg ? null : 'plus-square-o'} 
 									shape='square' 
 									size='large' 
-									src={bannerImg ? bannerImg : null} 
+									src={coverImg ? coverImg : null} 
 									onClick={this.handleSelectImg.bind(this)}/>
 							</div>
 						</Col>
@@ -193,7 +193,7 @@ export default class LessonSelfModal extends React.Component{
 			formData.append('imgFile', file);
 			CONTENT.uploadImg(formData).then(res => {
 				if (res.success) {
-					this.setState({bannerImg: res.vo})
+					this.setState({coverImg: res.vo})
 				} else {
 					NoticeError(res.messages)
 				}

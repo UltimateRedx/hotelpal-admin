@@ -142,6 +142,12 @@ const CONTENT = {
 		const url = '/audio/uploadAudio'
 		const body = file
 		return remoteBase.create({url, body})();
+	},
+	getOrderList: (data) => {
+		const url = '/admin/content/getOrderList'
+		let {currentPage = '1',pageSize = '10', orderBy='createTime', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = ''} = data;
+		const body = {currentPage,pageSize, orderBy, courseType, order, purchaseDateFrom, purchaseDateTo, searchValue}
+		return remote.create({url, body})();
 	}
 }
 const LIVE_COURSE = {

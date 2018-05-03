@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import {Table, Pagination, Divider, Modal, Button, Popconfirm, Row, Col, Select, Input} from 'antd'
 import moment from 'moment'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
@@ -105,7 +106,6 @@ export default class CommentModal extends React.Component {
 		this.setState(state)
 	}
 	renderReplyModal() {
-		let {course} = this.props;
 		let {speakerList, comment, replyModal, speakerId, content} = this.state;
 		let speakerOpt = speakerList.map(s => {
 			return (
@@ -153,14 +153,14 @@ export default class CommentModal extends React.Component {
 	}
 	render() {
 		let {lesson = {}, ...rest} = this.props
-		let {commentList, voTotal, currentPage, replyModal} = this.state
+		let {commentList, voTotal, currentPage, replyModal, speakerId} = this.state
 		commentList.forEach((c) => {
 			c.createTime = moment(c.createTime).format('YYYY-MM-DD HH:mm')
 			c.op = (
 				<div>
 					<a className="table-href" onClick={this.handleReverseElite.bind(this, commentList, c)}>{c.elite === 'Y' ? '取消精选' : '设为精选'}</a>
-					<Divider type='vertical'/>
-					<a className="table-href" onClick={this.handleReplyModal.bind(this, c)}>回复</a>
+					<Divider className={classNames(!speakerId && 'display-none')} type='vertical'/>
+					<a className="table-href" className={classNames(!speakerId && 'display-none')} onClick={this.handleReplyModal.bind(this, c)}>回复</a>
 					<Divider type='vertical'/>
 					{
 						c.deleted ==='N' &&

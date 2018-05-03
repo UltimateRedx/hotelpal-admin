@@ -14,6 +14,8 @@ import PPTOperation from 'scripts/components/liveCourse/PPTOperation'
 import PPT from 'scripts/components/liveCourse/ppt'
 import LessonSelf from 'scripts/components/lessonSelf'
 import Users from 'scripts/components/users'
+import Orders from 'scripts/components/order'
+import Settings from 'scripts/components/settings'
 const Container = (props) => props.children;
 export default class Routers extends React.Component{
 
@@ -36,6 +38,8 @@ export default class Routers extends React.Component{
 					<Route onEnter={scrollTop} path='liveCourse' component={LiveCourse}/>
 					<Route onEnter={scrollTop} path='ppt' component={PPTOperation}/>
 					<Route onEnter={scrollTop} path='user' component={Users}/>
+					<Route onEnter={scrollTop} path='order' component={Orders}/>
+					<Route onEnter={scrollTop} path='settings' component={Settings}/>
 				</Route>
 				<Route onEnter={scrollTop} path='/live/img/:token' component={PPT}/>
 			</Router>

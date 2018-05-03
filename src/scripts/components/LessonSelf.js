@@ -5,6 +5,7 @@ import moment from 'moment'
 import {NoticeMsg,NoticeError} from 'scripts/utils/index'
 import {LESSON} from 'scripts/remotes/index'
 import LessonSelfModal from 'scripts/components/modal/LessonSelfModal'
+import CommentModal from 'scripts/components/modal/CommentModal'
 
 const prefix = 'lesson-self'
 export default class LessonSelf extends React.Component {
@@ -17,8 +18,9 @@ export default class LessonSelf extends React.Component {
 			currentPage: 1,
 			pageSize: 10,
 			voTotal: 0,
-			lessonData: {},
-			order: 'desc'
+			lesssonData: {},
+			order: 'desc',
+			commentModal: false,
 		}
 	}
 	componentDidMount() {
@@ -50,13 +52,14 @@ export default class LessonSelf extends React.Component {
 	}
 	
 	render() {
-		let {lessonList, editModal, voTotal, currentPage, lessonData} = this.state;
+		let {lessonList, editModal, voTotal, currentPage, lessonData, commentModal} = this.state;
 		let list = lessonList.map(res => {
 			res.op = (
 				<div>
 					<a className="table-href" onClick={this.handleUpdateLesson.bind(this, res)}>编辑</a>
 					<Divider type='vertical'/>
-					
+					<a onClick={this.handleShowCommentModal.bind(this, res)}>查看评论</a>
+					<Divider type='vertical'/>
 					<Popconfirm title={'确认删除：' + res.title + ' ?'} onConfirm = {this.handleDeleteLesson.bind(this,res)} >
 						<a className="table-href">删除</a>
 					</Popconfirm>
@@ -89,8 +92,15 @@ export default class LessonSelf extends React.Component {
 				{editModal &&
 					<LessonSelfModal
 						visible={editModal}
-						onClose={this.handleCloseModal.bind(this)}
+						onClose={this.handleCloseModal.bind(this, 'editModal')}
 						data = {lessonData}
+					/>
+				}
+				{commentModal &&
+					<CommentModal
+						visible={commentModal}
+						onClose={this.handleCloseModal.bind(this, 'commentModal')}
+						lesson = {lessonData}
 					/>
 				}
 			</div>
@@ -105,11 +115,14 @@ export default class LessonSelf extends React.Component {
 	onChangePage(page, pageSize) {
 		this.setState({currentPage: page, pageSize}, this.getPageList);
 	}
-	handleCloseModal(refresh) {
-		this.setState({editModal: false})
+	handleCloseModal(f, refresh) {
+		this.setState({[f]: false})
 		if (refresh) {
 			this.getPageList()
 		}
+	}
+	handleShowCommentModal(res) {
+		this.setState({commentModal: true, lessonData: res})
 	}
 }
 const LESSON_COLUMNS = [

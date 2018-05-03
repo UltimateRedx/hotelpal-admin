@@ -12,10 +12,13 @@ export default class Navigation extends React.Component {
 			<Layout className={prefix}>
 				<Sider collapsible={true} className='sider'>
 					<Menu selectable={false}><Item><Link to='/hotelpal/statistics'>数据统计</Link></Item></Menu>
+					<Menu selectable={false}><Item><Link to='/hotelpal/settings'>订单管理</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/speaker'>主讲人</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/course'>订阅专栏</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/lessonSelf'>成长专栏</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/user'>用户管理</Link></Item></Menu>
+					<Menu selectable={false}><Item><Link to='/hotelpal/order'>订单管理</Link></Item></Menu>
+					
 					<Menu selectable={false}><Item><Link to='/hotelpal/liveCourse'>直播课程</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/ppt'>直播PPT</Link></Item></Menu>
 				</Sider>
