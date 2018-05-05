@@ -77,7 +77,6 @@ export default class PPTOperation extends React.Component {
 	}
 	render() {
 		let {imgList, opLink, courseList, selectedCourseId} = this.state
-		console.log(this.state)
 		courseList = courseList.map(course => {
 			return (
 				<Option key={course.id}>{course.title}</Option> 

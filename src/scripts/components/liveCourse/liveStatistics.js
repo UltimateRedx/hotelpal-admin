@@ -63,7 +63,6 @@ export default class LivecStatistics extends React.Component {
 		let {freeEnrollTimes, purchaseEnrollTimes, tryFreeEnrollCount, purchasedFee, totalPeople, 
 			freeCompleteRate, totalEnrollCount, purchaseEnrollRate, enrollOnlineRate, onlinePurchaseRate} = this.state
 		let {onlineSum = []} = this.state
-		console.log(onlineSum)
 		return (
 			<Modal
 				{...rest}

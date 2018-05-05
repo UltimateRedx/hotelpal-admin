@@ -85,7 +85,6 @@ export default class LiveControl extends React.Component {
 				userMsgList.push(data)
 				this.setState({userMsgList}, ()=> {this.refs.userMsg.scrollTop = this.refs.userMsg.scrollHeight})
 			}
-			console.log(data, userMsgList)
 		}
 		ws.onopen = (e) => {
 			NoticeMsg('WebSocket opened...')
