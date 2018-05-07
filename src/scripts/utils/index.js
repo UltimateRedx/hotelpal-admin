@@ -1,5 +1,8 @@
 
 import {message} from 'antd'
+import moment from 'moment'
+import E from 'wangeditor'
+import {CONTENT} from 'scripts/remotes/index'
 function scrollTop(value) {
 	if (typeof document !== 'undefined') {
 		value = value || 0;
@@ -39,6 +42,38 @@ const Utils = {
 			properValue = obj[0]
 		}
 		return  properValue
+	},
+	formatDate: (str) => {
+		if (!str) return '-';
+		return moment(str).format('YYYY-MM-DD')
+	},
+	formatDateTime: (str) => {
+		if (!str) return '-'
+		return moment(str).format('YYYY-MM-DD HH:mm:ss')
+	},
+	formatHS: (str) => {
+		if (!str) return '-'
+		return moment(str).format('HH:mm')
+	},
+	createEditor: (selector) => {
+		const editor = new E(selector)
+		editor.customConfig.showLinkImg = false
+		editor.customConfig.menus = ['bold', 'image']
+		editor.customConfig.customUploadImg = (files, insert) => {
+			if (files && files.length > 0) {
+				let file = files[0];
+				let formData = new FormData();
+				formData.append('imgFile', file);
+				CONTENT.uploadImg(formData).then(res => {
+					if (!res.success) {
+						NoticeError(res.messages)
+						return
+					}
+					insert(res.vo)
+				})
+			}
+		}
+		return editor;
 	}
 }
 export {

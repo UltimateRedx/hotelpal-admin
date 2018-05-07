@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import {Button, Row, Col, Select, Switch} from 'antd'
 import {LIVE_COURSE, CONFIG} from 'scripts/remotes/index'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 import E from 'wangeditor'
 import moment from 'moment'
 const Option = Select.Option
@@ -27,17 +27,14 @@ export default class LiveControl extends React.Component {
 	componentDidMount() {
 		let {currentMsg} = this.state
 		const e1 = this.refs.content
-		const editor = new E(e1)
+		const editor = Utils.createEditor(e1)
 		editor.customConfig.onchange = html => {
 			this.setState({currentMsg: html})
 		}
+		editor.customConfig.menus.push('link')
 		editor.create()
 		this.setState({editor})
 		this.getCourseList()
-		// let {active} = this.props
-		// if (active) {
-		// 	this.reAfterMount()
-		// }
 	}
 	getCourseList() {
 		let from = new Date();
