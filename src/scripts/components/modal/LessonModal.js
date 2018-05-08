@@ -26,7 +26,7 @@ export default class LessonModal extends React.Component{
 	componentDidMount() {
 		let {content = ''} = this.state
 		const e1 = this.refs.content
-		const editor1 = new E(e1)
+		const editor1 = Utils.createEditor(e1)
 		editor1.customConfig.onchange = html => {
 			this.setState({content: html})
 		}

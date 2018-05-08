@@ -22,8 +22,9 @@ export default class Routers extends React.Component{
 	render(){
 		return (
 			<Router history={hashHistory}>
-				<Route path='/' component={Navigation}>
-					<IndexRedirect to='/hotelpal/speaker'/>
+				<Route path='/'>
+					<IndexRedirect to='/login'/>
+					<Route onEnter={scrollTop} path='login' component={Login}/>
 				</Route>
 				<Route path='/hotelpal' component={Navigation}>
 					<IndexRedirect to='speaker'/>

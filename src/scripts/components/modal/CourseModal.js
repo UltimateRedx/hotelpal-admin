@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import {Modal, Row, Col, Button, Icon, Input, Avatar, InputNumber, Select, Radio, DatePicker} from 'antd'
 import E from 'wangeditor'
 import moment from 'moment'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 import {SPEAKER, CONTENT, COURSE} from 'scripts/remotes/index'
 const RadioGroup = Radio.Group
 const Option = Select.Option
@@ -30,7 +30,7 @@ export default class CourseModal extends React.Component{
 		})
 		let {courseContent = {}} = this.state
 		const e1 = this.refs.introduce
-		const editor1 = new E(e1)
+		const editor1 = Utils.createEditor(e1)
 		editor1.customConfig.onchange = html => {
 			courseContent.introduce = html
 			this.setState({courseContent})
@@ -39,7 +39,7 @@ export default class CourseModal extends React.Component{
 		editor1.txt.html(courseContent.introduce)
 		//2
 		const e2 = this.refs.crowd
-		const editor2 = new E(e2)
+		const editor2 = Utils.createEditor(e1)
 		editor2.customConfig.onchange = html => {
 			courseContent.crowd = html
 			this.setState({courseContent})
@@ -48,7 +48,7 @@ export default class CourseModal extends React.Component{
 		editor2.txt.html(courseContent.crowd)
 		//3
 		const e3 = this.refs.gain
-		const editor3 = new E(e3)
+		const editor3 = Utils.createEditor(e1)
 		editor3.customConfig.onchange = html => {
 			courseContent.gain = html
 			this.setState({courseContent})
@@ -57,7 +57,7 @@ export default class CourseModal extends React.Component{
 		editor3.txt.html(courseContent.gain)
 		//4
 		const e4 = this.refs.subscribe
-		const editor4 = new E(e4)
+		const editor4 = Utils.createEditor(e1)
 		editor4.customConfig.onchange = html => {
 			courseContent.subscribe = html
 			this.setState({courseContent})
