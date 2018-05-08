@@ -202,6 +202,8 @@ export default class LiveControl extends React.Component {
 		} else {
 			//live end
 			this.setState({preparing: true})
+			let {ws} = this.state
+			ws.close()
 			LIVE_COURSE.terminateLiveCourse(selectedCourseId).then(res => {
 				if (res.success) {
 					this.setState({preparing: false, ongoing: false}, this.terminateChat)
