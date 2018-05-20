@@ -265,5 +265,14 @@ const USER = {
 		return remote.create({url, body})()
 	}
 }
+const COUPON = {
+	getSysCoupon: (data) => {
+		const url = '/admin/coupon/getSysCoupon'
+		let {currentPage = 1, pageSize = 10, 
+			orderBy = 'createTime', order = 'desc'} = data
+		const body = {currentPage, pageSize, order, orderBy}
+		return remote.create({url, body})()
+	}
+}
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
-	LIVE_COURSE, CONFIG, }
+	LIVE_COURSE, CONFIG, COUPON}
