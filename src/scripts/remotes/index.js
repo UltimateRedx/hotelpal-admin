@@ -272,6 +272,17 @@ const COUPON = {
 			orderBy = 'createTime', order = 'desc'} = data
 		const body = {currentPage, pageSize, order, orderBy}
 		return remote.create({url, body})()
+	},
+	updateSysCoupon: (data) => {
+		const url = '/admin/coupon/updateSysCoupon'
+		let {name, value, total, validityType, validity, validityDays, apply, applyToPrice, applyToCourse} = data
+		const body = {name, value, total, validityType, validity, validityDays, apply, applyToPrice, applyToCourse}
+		return remote.create({url, body})()
+	},
+	deleteSysCoupon: (id = '') => {
+		const url = '/admin/coupon/deleteSysCoupon'
+		const body = {id}
+		return remoteBase.create({url, body})()
 	}
 }
 export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,

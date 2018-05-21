@@ -4,12 +4,23 @@ import moment from 'moment'
 import {NoticeMsg,NoticeError, Utils,} from 'scripts/utils/index'
 import {COUPON,COURSE} from 'scripts/remotes/index'
 const RadioGroup = Radio.Group
-
+const Option = Select.Option
 const prefix = 'couponModal'
 const getInitialState = (props) => {
 	let {data} = props
-	let d = data || {}
-	d.courseList = []
+	let d = {
+		edit: !!data.edit,
+		courseList: [],
+		name: data.name || '', 
+		total: data.total || '0', 
+		value: data.value || '', 
+		validityType: data.validityType || VALIDITY_TYPE.FIXED, 
+		validity: data.validity && moment(data.validity) || new moment(), 
+		validityDays: data.validityDays || '', 
+		apply: data.apply || APPLY_TYPE.ALL, 
+		applyToPrice: data.applyToPrice || '',
+		applyToCourse: data.applyToCourse || [],
+	}
 	return d
 }
 export default class CourseModal extends React.Component{
@@ -21,7 +32,7 @@ export default class CourseModal extends React.Component{
 		
 	}
 	getCourseList() {
-		COURSE.getList(1, 20, 'courseOrder').then(res => {
+		COURSE.getList({currentPage: 1, pageSize: 20, orderBy: 'courseOrder', containsContent: false}).then(res => {
 			if (!res.success) {
 				NoticeError(res.messages)
 				return
@@ -30,16 +41,24 @@ export default class CourseModal extends React.Component{
 		})
 	}
 	handleConfirm() {
-		
+		COUPON.updateSysCoupon(this.state).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			let {onClose} = this.props
+			onClose(true)
+		})
 	}
 	
 	render() {
 		let {...rest} = this.props
-		let {name = '', total = '0', value = '', validityType = '', validity = '', validity_days = '', apply = '', applyTo = '',
-			courseList = []} = this.state
+		let {name, total, value, validityType, validity, validityDays, apply, applyToPrice, edit,
+			courseList} = this.state
 		let courseOptions = courseList.map(c => {
-			
+			return (<Option key={c.id} title={c.title}>{c.title}</Option>)
 		})
+		console.log(this.state)
 		return (
 			<Modal
 				{...rest}
@@ -84,7 +103,7 @@ export default class CourseModal extends React.Component{
 							<div className="form-group-item-body">
 								<Input value={value}
 									prefix={<Icon type="pay-circle-o" />}
-									onChange={(e) => {this.setState({value: Utils.getIntValue(e.target.value)})}}/>
+									onChange={(e) => {this.setState({value: Utils.getNumericValue(e.target.value, 2)})}}/>
 							</div>
 						</Col>
 					</Row>
@@ -99,18 +118,18 @@ export default class CourseModal extends React.Component{
 											className='ml-8'
 											showToday={false}
 											disabled={validityType != VALIDITY_TYPE.FIXED}
-											value={validityType === (VALIDITY_TYPE.FIXED && validity) ? validity : new moment()}
+											value={(validityType === VALIDITY_TYPE.FIXED && validity) ? validity : new moment()}
 											onChange={this.handleDateChange.bind(this)}
 										/>
 									</Radio>
 									<Radio className='mb-8 block-i' value={VALIDITY_TYPE.FIXED_DAYS}>
 										<span>固定天数</span>
-										<InputNumber value={validity_days}
+										<InputNumber value={validityDays}
 											className='ml-8'
 											min={0}
 											precision={0}
 											disabled={validityType != VALIDITY_TYPE.FIXED_DAYS}
-											onChange={this.handleNumberChange.bind(this, 'validity_days')}/>
+											onChange={this.handleNumberChange.bind(this, 'validityDays')}/>
 									</Radio>
 									<Radio className='block-i' value={VALIDITY_TYPE.FIXED_DAY}>
 										<span>当天有效</span>
@@ -123,21 +142,23 @@ export default class CourseModal extends React.Component{
 						<Col span={24} className="form-group-item">
 							<div className="form-group-item-heading">使用产品</div>
 							<div className="form-group-item-body text-left">
-								<RadioGroup value={apply} onChange={this.handleRadioChange.bind(this, 'apply')}>
+								<RadioGroup value={apply} onChange={this.handleRadioChange.bind(this, 'apply')} disabled={edit}>
 									<Radio className='mb-8 block-i' value={APPLY_TYPE.ALL}>
 										<span>所有订阅专栏，需满金额</span>
-										<Input className='auto-width ml-8' value={applyTo}
+										<Input className='auto-width ml-8' value={applyToPrice}
 											prefix={<Icon type="pay-circle-o" />}
 											disabled={apply != APPLY_TYPE.ALL}
-											onChange={(e) => {this.setState({applyTo: Utils.getIntValue(e.target.value)})}}/>
+											onChange={(e) => {this.setState({applyToPrice: Utils.getNumericValue(e.target.value, 2)})}}/>
 									</Radio>
 									<Radio className='mb-8 block-i' value={APPLY_TYPE.PARTICULAR}>
 										<span>指定订阅专栏</span>
-										<Select 
-											disabled={apply != APPLY_TYPE.ALL}
+										<Select className='ml-8 course'
+											disabled={apply != APPLY_TYPE.PARTICULAR}
 											mode='multiple'
 											onChange={this.handleCourseChange.bind(this)}
-										/>
+										>
+											{courseOptions}
+										</Select>
 									</Radio>
 								</RadioGroup>
 							</div>
@@ -162,6 +183,7 @@ export default class CourseModal extends React.Component{
 	}
 	
 	handleRadioChange(f, e) {
+		console.log(f, e.target.value)
 		let {courseList} = this.state
 		this.setState({[f]: e.target.value}, () => {
 			if(f === APPLY_TYPE.PARTICULAR && courseList.length == 0)
@@ -172,7 +194,7 @@ export default class CourseModal extends React.Component{
 		this.setState({validity: date})
 	}
 	handleCourseChange(value) {
-		console.log(value)
+		this.setState({applyToCourse: value})
 	}
 }
 const VALIDITY_TYPE = {
@@ -184,3 +206,4 @@ const APPLY_TYPE = {
 	ALL: 'ALL',
 	PARTICULAR: 'PARTICULAR'
 }
+export {VALIDITY_TYPE, APPLY_TYPE}

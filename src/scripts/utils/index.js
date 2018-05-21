@@ -26,7 +26,7 @@ function isEmptyObject(obj) {
 const Utils = {
 	getIntValue: (value) => {
 		value = value + ''
-		let obj = value.trim().match(/([1-9]\d*)|0/)
+		let obj = value.trim().match(/([1-9]\d*)/) || value.trim().match(/0/)
 		let properValue = '0'
 		if (obj) {
 			properValue = obj[0]
