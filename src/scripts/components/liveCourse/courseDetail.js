@@ -5,7 +5,7 @@ import E from 'wangeditor'
 const RadioGroup = Radio.Group
 const Option = Select.Option
 // const moment = require('moment')
-import {CONTENT, LIVE_COURSE, COURSE} from 'scripts/remotes/index'
+import {CONTENT, LIVE_COURSE, COURSE, COUPON} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 const prefix = 'courseDetail'
 const getInitialState = (props) => {
@@ -23,8 +23,9 @@ const getInitialState = (props) => {
 		inviteImg: course.inviteImg || '',
 		content: course.introduce || '',
 		relaCourseId: course.relaCourseId && (course.relaCourseId + '') || '0',
-		coupon: course.coupon / 100 || '',
 		publish: course.publish || 'N',
+		sysCouponList:[],
+		sysCouponId: course.sysCouponId && (course.sysCouponId + '') || '0',
 
 		uploading: false,
 		uploadingFor: '',
@@ -39,6 +40,7 @@ export default class CourseDetail extends React.Component {
 	componentDidMount() {
 		//getCourseList
 		this.getCourseList()
+		this.getSysCouponList()
 		//init editor
 		let {content} = this.state
 		const e1 = this.refs.content
@@ -53,6 +55,15 @@ export default class CourseDetail extends React.Component {
 		COURSE.getList({currentPage:1 ,pageSize: 50, orderBy: 'createTime', containsContent: false}).then(res => {
 			if(!res.success) NoticeError(res.messages)
 			this.setState({courseList: res.voList})
+		})
+	}
+	getSysCouponList() {
+		COUPON.getSysCoupon({pageSize: 50}).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			this.setState({sysCouponList: res.voList})
 		})
 	}
 	handleClose() {
@@ -71,11 +82,16 @@ export default class CourseDetail extends React.Component {
 	
 	render() {
 		let {...rest} = this.props
-		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, coupon } = this.state
+		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, sysCouponList, sysCouponId } = this.state
 		let {uploading, courseList} = this.state
 		courseList = [<Option key='0'>无</Option>].concat(courseList.map(course => {
 			return (
 				<Option key={course.id}>{course.title}</Option> 
+			)
+		}))
+		let couponList = [<Option key='0'>无</Option>].concat(sysCouponList.map(coupon => {
+			return (
+				<Option key={coupon.id}>{coupon.name}</Option> 
 			)
 		}))
 		return (
@@ -182,14 +198,11 @@ export default class CourseDetail extends React.Component {
 								</div>
 							</Col>
 							<Col span={12} className="form-group-item">
-								<div className="form-group-item-heading">优惠(元)</div>
+								<div className="form-group-item-heading">优惠</div>
 								<div className="form-group-item-body">
-									<InputNumber
-										value={coupon}
-										min={0}
-										precision={2}
-										onChange={this.handleNumberChange.bind(this, 'coupon')}
-									/>
+									<Select onChange={this.handleSelectChange.bind(this, 'sysCouponId')} value={sysCouponId}>
+										{couponList}
+									</Select>
 								</div>
 							</Col>
 						</Row>

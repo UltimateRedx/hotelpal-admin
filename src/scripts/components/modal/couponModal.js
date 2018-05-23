@@ -58,7 +58,6 @@ export default class CourseModal extends React.Component{
 		let courseOptions = courseList.map(c => {
 			return (<Option key={c.id} title={c.title}>{c.title}</Option>)
 		})
-		console.log(this.state)
 		return (
 			<Modal
 				{...rest}
@@ -183,7 +182,6 @@ export default class CourseModal extends React.Component{
 	}
 	
 	handleRadioChange(f, e) {
-		console.log(f, e.target.value)
 		let {courseList} = this.state
 		this.setState({[f]: e.target.value}, () => {
 			if(f === APPLY_TYPE.PARTICULAR && courseList.length == 0)
