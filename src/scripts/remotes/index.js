@@ -215,9 +215,9 @@ const LIVE_COURSE = {
 		const body = {msgId}
 		return remoteBase.create({url, body})()
 	},
-	changeCouponShowStatus: (show = 'N') => {
+	changeCouponShowStatus: (courseId = '', show = 'N') => {
 		const url = '/admin/live/assistant/changeCouponShowStatus'
-		const body = {show}
+		const body = {courseId, show}
 		return remoteBase.create({url, body})()
 	},
 	getCourseStatistics: (courseId) => {
