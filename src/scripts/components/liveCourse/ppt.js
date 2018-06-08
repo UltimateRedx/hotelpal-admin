@@ -24,7 +24,7 @@ export default class PPT extends React.Component {
 		this.joinChat()
 	}
 	joinChat() {
-		let {WS_ADDR, WS_PPT} = CONFIG
+		let {ws, WS_ADDR, WS_PPT} = CONFIG
 		ws = new WebSocket(WS_ADDR + WS_PPT);
 		ws.onopen = (e) => {
 			NoticeMsg('WebSocket opened...')

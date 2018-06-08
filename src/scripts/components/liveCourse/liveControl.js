@@ -14,27 +14,11 @@ export default class LiveControl extends React.Component {
 		this.state = {
 			editor: '',
 			courseEnv: {},
-			// ongoing: false,
 			selectedCourseId: '',
 			courseList:[],
-			// preparing: false,
-			// currentMsg: '',
-			// assistantMsgList: [],
-			// userMsgList:[],
-			// editor: '',
-			// ws: '',
-			// couponShow: false,
 		}
 	}
 	componentDidMount() {
-		// const e1 = this.refs.content
-		// const editor = Utils.createEditor(e1)
-		// // editor.customConfig.onchange = html => {
-		// // 	this.setState({currentMsg: html})
-		// // }
-		// editor.customConfig.menus.push('link')
-		// editor.create()
-		// this.setState({editor})
 		this.getCourseList()
 	}
 	getCourseList() {
@@ -63,7 +47,6 @@ export default class LiveControl extends React.Component {
 					currentMsg: '',
 					assistantMsgList: [],
 					userMsgList:[],
-					editor: '',
 					ws: '',
 					couponShow: 'Y' == course.couponShow,
 				}
@@ -110,11 +93,12 @@ export default class LiveControl extends React.Component {
 		this.setState({courseEnv})
 	}
 	terminateChat() {
-		let {selectedCourseId, courseEnv} = this.state
-		let {ws} = courseEnv[selectedCourseId]
-		if (ws.readyState != WebSocket.CLOSED) {
-			ws.close()
-		}
+		//服务器会关闭ws，关闭之前有消息发送出来
+		// let {selectedCourseId, courseEnv} = this.state
+		// let {ws} = courseEnv[selectedCourseId]
+		// if (ws.readyState != WebSocket.CLOSED) {
+		// 	ws.close()
+		//}
 	}
 	handleBlockUser(msg) {
 		if(!msg.id) return
@@ -133,7 +117,6 @@ export default class LiveControl extends React.Component {
 				<Option key={c.id}>{c.title}</Option>
 			)
 		})
-		console.log(assistantMsgList)
 		assistantMsgList = assistantMsgList.map((msg, index) => {
 			return (
 				<div key={index} className='msgBlock mb-15 p-15 pb-0'>
@@ -184,12 +167,12 @@ export default class LiveControl extends React.Component {
 	}
 
 	handleCourseChange(value) {
-		let {courseEnv} = this.state
+		let {courseEnv, editor} = this.state
 		let {ongoing, ws} = courseEnv[value]
-		let editor
 		if (ongoing) {
+			this.removeEditor()
 			const e1 = this.refs.content
-			const editor = Utils.createEditor(e1)
+			editor = Utils.createEditor(e1)
 			editor.customConfig.onchange = html => {
 				courseEnv[value].currentMsg = html
 				this.setState({courseEnv})
@@ -241,6 +224,7 @@ export default class LiveControl extends React.Component {
 				} else {
 					courseEnv[selectedCourseId].preparing = false
 					courseEnv[selectedCourseId].ongoing = true
+					this.removeEditor()
 					const e1 = this.refs.content
 					const editor = Utils.createEditor(e1)
 					editor.customConfig.onchange = html => {
@@ -249,15 +233,13 @@ export default class LiveControl extends React.Component {
 					}
 					editor.customConfig.menus.push('link')
 					editor.create()
-					this.setState({courseEnv}, this.joinChat)
+					this.setState({courseEnv, editor}, this.joinChat)
 				}
 			})
 		} else {
 			//live end
 			courseEnv[selectedCourseId].preparing = true
 			this.setState({courseEnv})
-			let {ws} = courseEnv[selectedCourseId]
-			ws.close()
 			LIVE_COURSE.terminateLiveCourse(selectedCourseId).then(res => {
 				if (res.success) {
 					courseEnv[selectedCourseId].preparing = false
@@ -272,13 +254,14 @@ export default class LiveControl extends React.Component {
 		}
 	}
 	handleSendMsg() {
-		let {selectedCourseId, courseEnv} = this.state
+		let {selectedCourseId, courseEnv, editor} = this.state
 		let {ws, currentMsg} = courseEnv[selectedCourseId]
 		if (ws.readyState != WebSocket.OPEN) {
 			NoticeError("通信连接没有打开")
 			return
 		}
 		ws.send(currentMsg)
+		editor.txt.html('')
 	}
 	handleRemoveMsg(msg) {
 		LIVE_COURSE.removeAssistantMsg(msg.id).then(res =>{
@@ -288,6 +271,12 @@ export default class LiveControl extends React.Component {
 				NoticeError(res.messages)
 			}
 		})
+	}
+	removeEditor() {
+		let editor = this.refs.content
+		while (editor.firstChild) {
+			editor.removeChild(editor.firstChild);
+		}
 	}
 }
 const MSG_TYPE = {

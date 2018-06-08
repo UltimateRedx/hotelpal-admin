@@ -26,6 +26,7 @@ new WebpackDevServer( webpack( config ), {
 	proxy: {
 		'/hotelpal/*': {
 			target: 'http://127.0.0.1:8081'
+			// target: 't.hotelpal.cn:8080',
 		}
 	},
 } ).listen( port, function ( err ) {
