@@ -239,6 +239,12 @@ const LIVE_COURSE = {
 		const url = '/admin/liveCourse/getLiveImgList'
 		const body = {courseId}
 		return remoteBase.create({url, body})()
+	},
+
+	mockUserMsg: (courseId, msg) => {
+		const url = '/admin/live/assistant/mockUserMsg'
+		const body = {courseId, msg}
+		return remoteBase.create({url, body})()
 	}
 	
 }

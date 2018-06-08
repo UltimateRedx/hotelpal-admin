@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import {Button, Row, Col, Select, Switch} from 'antd'
+import {Button, Row, Col, Select, Switch, Input} from 'antd'
 import {LIVE_COURSE, CONFIG} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 import E from 'wangeditor'
@@ -49,6 +49,7 @@ export default class LiveControl extends React.Component {
 					userMsgList:[],
 					ws: '',
 					couponShow: 'Y' == course.couponShow,
+					mockUserMsg: '',
 				}
 				courseEnv[course.id] = env
 			})
@@ -111,7 +112,7 @@ export default class LiveControl extends React.Component {
 	}
 	render() {
 		let {courseEnv, courseList, selectedCourseId = ''} = this.state
-		let {ongoing = false, preparing = false, assistantMsgList = [], userMsgList = [], couponShow = false} = (courseEnv[selectedCourseId] || {})
+		let {ongoing = false, preparing = false, assistantMsgList = [], userMsgList = [], couponShow = false, mockUserMsg = ''} = (courseEnv[selectedCourseId] || {})
 		let  list = courseList.map(c => {
 			return (
 				<Option key={c.id}>{c.title}</Option>
@@ -160,6 +161,9 @@ export default class LiveControl extends React.Component {
 						<div ref='userMsg' className='box default-box'>
 							{userMsgList}
 						</div>
+						<h3 className="fs-14 f-bold bt-d mb-0">随机用户发言</h3>
+						<Input className='w-80p' value={mockUserMsg} onChange={this.handleMockUserMsgChange.bind(this)} />
+						<Button className='f-r' onClick={this.handleSendMockUserMsg.bind(this)} disabled={!ongoing}>发送</Button>
 					</Col>
 				</Row>
 			</div>
@@ -266,7 +270,9 @@ export default class LiveControl extends React.Component {
 	handleRemoveMsg(msg) {
 		LIVE_COURSE.removeAssistantMsg(msg.id).then(res =>{
 			if (res.success) {
-				this.setState({assistantMsgList: res.voList})
+				let {selectedCourseId, courseEnv} = this.state
+				courseEnv[selectedCourseId].assistantMsgList = res.voList
+				this.setState({courseEnv})
 			} else {
 				NoticeError(res.messages)
 			}
@@ -277,6 +283,24 @@ export default class LiveControl extends React.Component {
 		while (editor.firstChild) {
 			editor.removeChild(editor.firstChild);
 		}
+	}
+
+	handleMockUserMsgChange(e) {
+		let {selectedCourseId, courseEnv} = this.state
+		courseEnv[selectedCourseId].mockUserMsg = e.target.value
+		this.setState(courseEnv)
+	}
+	handleSendMockUserMsg() {
+		let {selectedCourseId, courseEnv} = this.state
+		console.log(courseEnv[selectedCourseId].mockUserMsg)
+		LIVE_COURSE.mockUserMsg(selectedCourseId, courseEnv[selectedCourseId].mockUserMsg).then(res => {
+			if (!res.success) {
+				NoticeMsg(res.messages)
+				return
+			}
+			courseEnv[selectedCourseId].mockUserMsg = ''
+			this.setState(courseEnv)
+		})
 	}
 }
 const MSG_TYPE = {
