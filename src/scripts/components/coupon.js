@@ -109,6 +109,7 @@ export default class Coupon extends React.Component{
 		this.setState({currentPage: page, pageSize}, this.getPageList);
 	}
 	paginationTotalRender(total, range) {
+		console.log(total, range)
 		return (
 			<span>{range[0]}-{range[1]}条，共{total}条</span>
 		)

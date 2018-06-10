@@ -66,6 +66,23 @@ export default class LiveControl extends React.Component {
 				NoticeError(res.messages)
 			}
 		})
+		LIVE_COURSE.userChatList(this.state.selectedCourseId).then(res => {
+			if (res.success) {
+				res.voList.forEach(vo => {
+					let user = vo.user
+					vo.company = user.company
+					vo.headImg = user.headImg
+					vo.nick = user.nick
+					vo.title = user.title
+					vo.user = null;
+				})
+				let {courseEnv} = this.state
+				courseEnv[selectedCourseId].userMsgList = res.voList
+				this.setState({courseEnv})
+			} else {
+				NoticeError(res.messages)
+			}
+		})
 		let {courseEnv, selectedCourseId} = this.state
 		let {ws} = courseEnv[selectedCourseId]
 		let {WS_ADDR, WS_URL, ADMIN_TOKEN} = CONFIG
@@ -79,6 +96,10 @@ export default class LiveControl extends React.Component {
 			} else if (data.msgType == MSG_TYPE.TYPE_USER_MESSAGE) {
 				userMsgList.push(data)
 				this.setState({courseEnv}, ()=> {this.refs.userMsg.scrollTop = this.refs.userMsg.scrollHeight})
+			} else if (data.msgType === MSG_TYPE.TYPE_LIVE_TERMINATE) {
+				let {courseEnv, selectedCourseId} = this.state
+				courseEnv[selectedCourseId].ongoing = false
+				this.setState({courseEnv})
 			}
 		}
 		ws.onopen = (e) => {
@@ -162,8 +183,8 @@ export default class LiveControl extends React.Component {
 							{userMsgList}
 						</div>
 						<h3 className="fs-14 f-bold bt-d mb-0">随机用户发言</h3>
-						<Input className='w-80p' value={mockUserMsg} onChange={this.handleMockUserMsgChange.bind(this)} />
-						<Button className='f-r' onClick={this.handleSendMockUserMsg.bind(this)} disabled={!ongoing}>发送</Button>
+						<Input className='w-80p' disabled={!ongoing} value={mockUserMsg} onChange={this.handleMockUserMsgChange.bind(this)} onPressEnter={this.handleSendMockUserMsg.bind(this)}/>
+						{/* <Button className='f-r' onClick={this.handleSendMockUserMsg.bind(this)} disabled={!ongoing}>发送</Button> */}
 					</Col>
 				</Row>
 			</div>
@@ -292,7 +313,6 @@ export default class LiveControl extends React.Component {
 	}
 	handleSendMockUserMsg() {
 		let {selectedCourseId, courseEnv} = this.state
-		console.log(courseEnv[selectedCourseId].mockUserMsg)
 		LIVE_COURSE.mockUserMsg(selectedCourseId, courseEnv[selectedCourseId].mockUserMsg).then(res => {
 			if (!res.success) {
 				NoticeMsg(res.messages)
@@ -308,4 +328,5 @@ const MSG_TYPE = {
 	TYPE_ASSISTANT_MESSAGE: "TYPE_ASSISTANT_MESSAGE",
 	TYPE_SHOW_COUPON: "TYPE_SHOW_COUPON",
 	TYPE_HIDE_COUPON: "TYPE_HIDE_COUPON",
+	TYPE_LIVE_TERMINATE: 'TYPE_LIVE_TERMINATE',
 }

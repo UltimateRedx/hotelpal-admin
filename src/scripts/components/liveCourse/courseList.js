@@ -1,5 +1,5 @@
 import React from 'react'
-import {Modal, Button, Table, Pagination, Row, Divider} from 'antd'
+import {Modal, Button, Table, Pagination, Row, Divider, Popconfirm} from 'antd'
 import CourseDetail from './courseDetail'
 import LiveStatistics from './liveStatistics'
 import {LIVE_COURSE} from 'scripts/remotes/index'
@@ -36,6 +36,10 @@ export default class LiveCourseList extends React.Component {
 						<a className='underline' onClick={this.handleUpdateCourse.bind(this, course)}>编辑</a>
 						<Divider type='vertical'/>
 						<a className='underline' onClick={this.handleShowStatistics.bind(this, course.id)}>统计数据</a>
+						<Divider type='vertical'/>
+						<Popconfirm title={`确认删除` + course.title + `?`} onConfirm={this.handleRemoveCourse.bind(this, course.id)}>
+							<a className='underline'>删除</a>
+						</Popconfirm>
 					</div>
 				)
 				return course;
@@ -100,6 +104,16 @@ export default class LiveCourseList extends React.Component {
 				}
 			</div>
 		)
+	}
+	
+	handleRemoveCourse(id = '') {
+		LIVE_COURSE.removeLiveCourse(id).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			this.getPageList()
+		})
 	}
 }
 const COURSE_COLUMNS = [

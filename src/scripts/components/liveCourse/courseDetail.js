@@ -151,6 +151,8 @@ export default class CourseDetail extends React.Component {
 								<div className="form-group-item-body">
 									<DatePicker
 										value={openTime}
+										showTime={true}
+										format='YYYY-MM-DD HH:mm'
 										onChange={this.handleDateChange.bind(this)}
 									/>
 								</div>

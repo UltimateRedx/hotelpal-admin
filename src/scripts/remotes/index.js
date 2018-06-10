@@ -210,6 +210,12 @@ const LIVE_COURSE = {
 		const body = {courseId}
 		return remoteBase.create({url, body})()
 	},
+	userChatList: (courseId) => {
+		const url = '/admin/live/assistant/userChatList'
+		const body = {courseId}
+		return remoteBase.create({url, body})()
+	},
+	
 	blockUser: (msgId) => {
 		const url = '/admin/live/assistant/blockUser'
 		const body = {msgId}
@@ -244,6 +250,11 @@ const LIVE_COURSE = {
 	mockUserMsg: (courseId, msg) => {
 		const url = '/admin/live/assistant/mockUserMsg'
 		const body = {courseId, msg}
+		return remoteBase.create({url, body})()
+	},
+	removeLiveCourse: (id) => {
+		const url = '/admin/liveCourse/removeLiveCourse'
+		const body = {id}
 		return remoteBase.create({url, body})()
 	}
 	

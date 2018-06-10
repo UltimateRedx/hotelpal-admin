@@ -21,11 +21,11 @@ export default class PPT extends React.Component {
 		url = url.substring(url.lastIndexOf('/'))
 		let courseId = url.substring(1, url.indexOf('@'))
 		this.getLiveImgList(courseId)
-		this.joinChat()
+		this.joinChat(courseId)
 	}
-	joinChat() {
+	joinChat(courseId) {
 		let {ws, WS_ADDR, WS_PPT} = CONFIG
-		ws = new WebSocket(WS_ADDR + WS_PPT);
+		ws = new WebSocket(WS_ADDR + WS_PPT + "/" + courseId);
 		ws.onopen = (e) => {
 			NoticeMsg('WebSocket opened...')
 		}
