@@ -1,5 +1,4 @@
 const { remote, Remote } = require( 'beyond-remote' )
-import {Link,browserHistory } from 'react-router'
 
 const apiBasePath = '/hotelpal'
 const CONFIG = {
@@ -36,7 +35,6 @@ const remoteBaseOpts = {
 const remoteBase = new Remote();
 remote.base( remoteOpts );
 remoteBase.base( remoteBaseOpts );
-const AUTH_NEEDED = ['ADMIN_NO_SESSION_EXISTS', 'ADMIN_USER_NO_INFO']
 remoteBase.on('success', (e) => {
 	e.data.clone().text().then((res)=> {
 		postProcessXHR(res)
@@ -49,10 +47,16 @@ remote.on('success', (e) => {
 })
 function postProcessXHR(res) {
 	res = JSON.parse(res)
-		// if (AUTH_NEEDED.indexOf(res.messages[0]) >= 0) {
-		// 	console.log("push")
-		// 	browserHistory.push('/#/')
-		// }
+		if (res.code == 401) {
+			window.location.href='/#/login'
+		}
+}
+const LOGIN = {
+	login: (auth) => {
+		const url = 'admin/login'
+		const body = {auth}
+		return remoteBase.create({url, body})()
+	}
 }
 const SPEAKER = {
 	getList: (data) => {
@@ -304,5 +308,5 @@ const COUPON = {
 		return remoteBase.create({url, body})()
 	}
 }
-export {SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
+export {LOGIN,SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
 	LIVE_COURSE, CONFIG, COUPON}

@@ -26,9 +26,6 @@ import { AppContainer } from 'react-hot-loader';
 // import BizCharts from 'bizCharts'
 const $root = document.querySelector( '#root' );
 // BizCharts.track(false);
-if ( process.env.NODE_ENV !== 'production' ) {
-	console.log( 'this is dev mode' );
-}
 
 const render = () => {
 	ReactDOM.render(<AppContainer>

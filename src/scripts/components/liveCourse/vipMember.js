@@ -50,7 +50,6 @@ export default class VipMember extends React.Component {
 	}
 	
 	render() {
-		console.log(this.state)
 		let {currentPage, voTotal, newMemberModal, memberList, searchValue} = this.state
 		memberList = memberList.map(u => {
 			u.liveVipStartTimeStr = u.liveVipStartTime ? moment(u.liveVipStartTime).format('YYYY-MM-DD HH:mm:ss') : ''
