@@ -48,13 +48,36 @@ remote.on('success', (e) => {
 function postProcessXHR(res) {
 	res = JSON.parse(res)
 		if (res.code == 401) {
-			window.location.href='/#/login'
+			window.localStorage.setItem("loggedIn", 'N')
+			window.location.href='#/login'
 		}
 }
 const LOGIN = {
 	login: (auth) => {
 		const url = 'admin/login'
 		const body = {auth}
+		return remoteBase.create({url, body})()
+	}
+}
+const SETTINGS = {
+	getBannerList: () => {
+		const url = '/admin/content/getBannerList'
+		return remoteBase.create({url})()
+	},
+	updateBanner: (data)=> {
+		let {id, link, bannerOrder, bannerImg, name} = data
+		const url = '/admin/content/updateBanner'
+		const body = {id, link, bannerOrder, bannerImg, name}
+		return remote.create({url, body})()
+	},
+	removeBanner: (id) => {
+		const url = '/admin/content/removeBanner'
+		const body = {id}
+		return remoteBase.create({url, body})()
+	},
+	createFreeCourseLink: (courseNum, validity) => {
+		const url = '/admin/content/createFreeCourseLink'
+		const body = {courseNum, validity}
 		return remoteBase.create({url, body})()
 	}
 }
@@ -308,5 +331,5 @@ const COUPON = {
 		return remoteBase.create({url, body})()
 	}
 }
-export {LOGIN,SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
+export {LOGIN, SETTINGS, SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
 	LIVE_COURSE, CONFIG, COUPON}

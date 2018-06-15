@@ -109,7 +109,6 @@ export default class Coupon extends React.Component{
 		this.setState({currentPage: page, pageSize}, this.getPageList);
 	}
 	paginationTotalRender(total, range) {
-		console.log(total, range)
 		return (
 			<span>{range[0]}-{range[1]}条，共{total}条</span>
 		)
@@ -127,5 +126,6 @@ const COUPON_COLUMN = [
 	{dataIndex: 'total', title: '数量'},
 	{dataIndex: 'createTimeStr', title: '创建时间'},
 	{dataIndex: 'validityStr', title: '有效期至'},
+	{dataIndex: 'link', title: '链接'},
 	{dataIndex: 'op', title: '操作'},
 ]

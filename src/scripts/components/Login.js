@@ -14,8 +14,8 @@ export default class Login extends React.Component {
 	}
 	componentDidMount() {
 		let loggedIn = window.localStorage.getItem("loggedIn")
-		if (loggedIn) {
-			window.location.href = '/#/hotelpal'
+		if ('Y' === loggedIn) {
+			window.location.href = '#/hotelpal'
 		}
 	}
 	render() {
@@ -41,6 +41,7 @@ export default class Login extends React.Component {
 						</div> */}
 						<div className='form-group-item mb-15'>
 							<Input
+								type='password'
 								value={auth}
 								placeholder='请输入密码'
 								onChange={this.handleInputChange.bind(this,'auth')}
@@ -69,8 +70,8 @@ export default class Login extends React.Component {
 				NoticeError(res.messages)
 				return
 			}
-			window.localStorage.setItem("loggedIn", true)
-			window.location.href = '/#/hotelpal'
+			window.localStorage.setItem("loggedIn", 'Y')
+			window.location.href = '#/hotelpal'
 		})
 	}
 }
