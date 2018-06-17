@@ -175,7 +175,7 @@ export default class LiveControl extends React.Component {
 								{assistantMsgList}
 							</div>
 							<div ref="content" className='editor'></div>
-							<Button className='f-r' onClick={this.handleSendMsg.bind(this)} disabled={!ongoing}>发送</Button>
+							<Button className='f-r' onClick={this.handleSendMsg.bind(this)}>发送</Button>
 						</div>
 					</Col>
 					<Col span={12}>
@@ -183,8 +183,7 @@ export default class LiveControl extends React.Component {
 							{userMsgList}
 						</div>
 						<h3 className="fs-14 f-bold bt-d mb-0">随机用户发言</h3>
-						<Input className='w-80p' disabled={!ongoing} value={mockUserMsg} onChange={this.handleMockUserMsgChange.bind(this)} onPressEnter={this.handleSendMockUserMsg.bind(this)}/>
-						{/* <Button className='f-r' onClick={this.handleSendMockUserMsg.bind(this)} disabled={!ongoing}>发送</Button> */}
+						<Input className='' value={mockUserMsg} onChange={this.handleMockUserMsgChange.bind(this)} onPressEnter={this.handleSendMockUserMsg.bind(this)}/>
 					</Col>
 				</Row>
 			</div>
@@ -192,23 +191,28 @@ export default class LiveControl extends React.Component {
 	}
 
 	handleCourseChange(value) {
-		let {courseEnv, editor} = this.state
-		let {ongoing, ws} = courseEnv[value]
-		if (ongoing) {
-			this.removeEditor()
-			const e1 = this.refs.content
-			editor = Utils.createEditor(e1)
-			editor.customConfig.onchange = html => {
-				courseEnv[value].currentMsg = html
-				this.setState({courseEnv})
+		let {courseEnv, editor, selectedCourseId} = this.state
+		this.removeEditor()
+		const e1 = this.refs.content
+		editor = Utils.createEditor(e1)
+		editor.customConfig.onchange = html => {
+			courseEnv[value].currentMsg = html
+			this.setState({courseEnv})
+		}
+		editor.customConfig.menus.push('link')
+		editor.create()
+		
+		try {
+			let {ws} = courseEnv[selectedCourseId]
+			if (selectedCourseId != value && ws && ws.readyState == WebSocket.OPEN) {
+				ws.close()
 			}
-			editor.customConfig.menus.push('link')
-			editor.create()
+		} catch(e) {
 		}
 		this.setState({selectedCourseId: value, editor}, () => {
 			let {courseEnv, selectedCourseId} = this.state
-			let {ongoing, ws} = courseEnv[selectedCourseId]
-			if (ongoing && (!ws || ws.readyState != WebSocket.OPEN)) {
+			let {ws} = courseEnv[selectedCourseId]
+			if (!ws || ws.readyState != WebSocket.OPEN) {
 				this.joinChat()
 			}
 		})
@@ -219,10 +223,10 @@ export default class LiveControl extends React.Component {
 			NoticeMsg('请先选择课程')
 			return
 		}
-		if (courseEnv[selectedCourseId].ws.readyState != WebSocket.OPEN) {
-			NoticeMsg('没有进行直播')
-			return
-		}
+		// if (courseEnv[selectedCourseId].ws.readyState != WebSocket.OPEN) {
+		// 	NoticeMsg('没有进行直播')
+		// 	return
+		// }
 		LIVE_COURSE.changeCouponShowStatus(selectedCourseId, checked ? 'Y' : 'N').then(res => {
 			if (!res.success) {
 				NoticeError(res.messages)
@@ -249,16 +253,7 @@ export default class LiveControl extends React.Component {
 				} else {
 					courseEnv[selectedCourseId].preparing = false
 					courseEnv[selectedCourseId].ongoing = true
-					this.removeEditor()
-					const e1 = this.refs.content
-					const editor = Utils.createEditor(e1)
-					editor.customConfig.onchange = html => {
-						courseEnv[selectedCourseId].currentMsg = html
-						this.setState({courseEnv})
-					}
-					editor.customConfig.menus.push('link')
-					editor.create()
-					this.setState({courseEnv, editor}, this.joinChat)
+					this.setState({courseEnv})
 				}
 			})
 		} else {
