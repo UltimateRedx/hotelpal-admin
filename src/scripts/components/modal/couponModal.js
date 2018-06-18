@@ -9,11 +9,12 @@ const prefix = 'couponModal'
 const getInitialState = (props) => {
 	let {data} = props
 	let d = {
+		id: data.id || '',
 		edit: !!data.edit,
 		courseList: [],
 		name: data.name || '', 
 		total: data.total || '0', 
-		value: data.value || '', 
+		value: data.value || '0', 
 		validityType: data.validityType || VALIDITY_TYPE.FIXED, 
 		validity: data.validity && moment(data.validity) || new moment(), 
 		validityDays: data.validityDays || '', 

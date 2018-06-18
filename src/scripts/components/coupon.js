@@ -54,7 +54,7 @@ export default class Coupon extends React.Component{
 		let dataList = couponList.map(coupon => {
 			coupon.createTimeStr = Utils.formatDateTime(coupon.createTime)
 			if (VALIDITY_TYPE.FIXED === coupon.validityType) {
-				coupon.validityStr = Utils.formatDateTime(coupon.validity)
+				coupon.validityStr = Utils.formatDate(coupon.validity)
 			} else if (VALIDITY_TYPE.FIXED_DAYS === coupon.validityType) {
 				coupon.validityStr = '固定' + coupon.validityDays + '天'
 			} else if (VALIDITY_TYPE.FIXED_DAY === coupon.validityType) {

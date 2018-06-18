@@ -321,8 +321,8 @@ const COUPON = {
 	},
 	updateSysCoupon: (data) => {
 		const url = '/admin/coupon/updateSysCoupon'
-		let {name, value, total, validityType, validity, validityDays, apply, applyToPrice, applyToCourse} = data
-		const body = {name, value, total, validityType, validity, validityDays, apply, applyToPrice, applyToCourse}
+		let {id = '', name, value = '0', total, validityType, validity, validityDays, apply, applyToPrice = '0', applyToCourse} = data
+		const body = {id, name, value: parseInt(value * 100), total, validityType, validity, validityDays, apply, applyToPrice: parseInt(applyToPrice * 100), applyToCourse}
 		return remote.create({url, body})()
 	},
 	deleteSysCoupon: (id = '') => {

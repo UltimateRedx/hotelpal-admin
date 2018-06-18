@@ -221,7 +221,7 @@ export default class CourseDetail extends React.Component {
 						</div>
 						<div className="form-group-item-heading">邀请图片</div>
 						<div className="form-group-item-body">
-							<Avatar icon={inviteImg ? null : 'plus-square-o'} shape='square' size='large' src={inviteImg ? inviteImg : null} onClick={this.handleSelectImg.bind(this, 'inviteImg')}/>
+							<Avatar className='invite-poster' icon={inviteImg ? null : 'plus-square-o'} shape='square' size='large' src={inviteImg ? inviteImg : null} onClick={this.handleSelectImg.bind(this, 'inviteImg')}/>
 						</div>
 					</Col>
 				</Row>
