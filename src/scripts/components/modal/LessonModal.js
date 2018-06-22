@@ -3,10 +3,9 @@ import classNames from 'classnames'
 import {Modal, Row, Col, Button, Icon, Input, Avatar, InputNumber, Select, Radio, DatePicker} from 'antd'
 import E from 'wangeditor'
 import moment from 'moment'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 import {CONTENT, LESSON} from 'scripts/remotes/index'
 const RadioGroup = Radio.Group
-const Option = Select.Option
 
 const prefix = 'lessonModal'
 const getInitialState = (props) => {

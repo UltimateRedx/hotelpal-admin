@@ -115,7 +115,7 @@ const COURSE = {
 	updateCourse: (data) => {
 		const url = '/admin/course/updateCourse'
 		let {id,status, speakerId, lessonNum, title, openTime, publish, price, courseOrder, subTitle, bannerImg, tag, courseContent} = data
-		const body = {id,status, speakerId, lessonNum, title, openTime, publish, price, courseOrder, subTitle, bannerImg, tag, 
+		const body = {id,status, speakerId, lessonNum, title, openTime, publish, price: price ? price * 100 : 0, courseOrder, subTitle, bannerImg, tag, 
 			introduce:courseContent.introduce,
 			crowd:courseContent.crowd,
 			gain:courseContent.gain,
@@ -143,8 +143,8 @@ const LESSON = {
 	},
 	updateLesson: (data) => {
 		const url = '/admin/lesson/updateLesson'
-		let {id,courseId,publishDate,free,onSale,order,title,audioUrl,audioLen,audioSize,content} = data
-		const body = {id,courseId,publishDate,free,onSale,order,title,audioUrl,audioLen,audioSize,content}
+		let {id,courseId,publishDate,free,onSale,lessonOrder,title,audioUrl,audioLen,audioSize,content} = data
+		const body = {id,courseId,publishDate,free,onSale,lessonOrder,title,audioUrl,audioLen,audioSize,content}
 		return remote.create({url, body})();
 	},
 	deleteLesson: ({id}) => {

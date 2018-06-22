@@ -12,7 +12,7 @@ const prefix = 'courseModal'
 const getInitialState = (props) => {
 	let {data} = props
 	let d = data || {}
-	Object.assign(d, {openTime: data.openTime ? new moment(data.openTime) : new moment()})
+	Object.assign(d, {openTime: data.openTime ? new moment(data.openTime) : new moment(), price: data.price ? data.price / 100 : '0'})
 	return d
 }
 export default class CourseModal extends React.Component{
@@ -39,7 +39,7 @@ export default class CourseModal extends React.Component{
 		editor1.txt.html(courseContent.introduce)
 		//2
 		const e2 = this.refs.crowd
-		const editor2 = Utils.createEditor(e1)
+		const editor2 = Utils.createEditor(e2)
 		editor2.customConfig.onchange = html => {
 			courseContent.crowd = html
 			this.setState({courseContent})
@@ -48,7 +48,7 @@ export default class CourseModal extends React.Component{
 		editor2.txt.html(courseContent.crowd)
 		//3
 		const e3 = this.refs.gain
-		const editor3 = Utils.createEditor(e1)
+		const editor3 = Utils.createEditor(e3)
 		editor3.customConfig.onchange = html => {
 			courseContent.gain = html
 			this.setState({courseContent})
@@ -57,7 +57,7 @@ export default class CourseModal extends React.Component{
 		editor3.txt.html(courseContent.gain)
 		//4
 		const e4 = this.refs.subscribe
-		const editor4 = Utils.createEditor(e1)
+		const editor4 = Utils.createEditor(e4)
 		editor4.customConfig.onchange = html => {
 			courseContent.subscribe = html
 			this.setState({courseContent})
