@@ -1,6 +1,6 @@
 import React from 'react'
 import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider} from 'antd'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeError} from 'scripts/utils/index'
 import {SPEAKER} from 'scripts/remotes/index'
 import SpeakerModal from 'scripts/components/modal/SpeakerModal'
 

@@ -2,7 +2,7 @@ const { remote, Remote } = require( 'beyond-remote' )
 
 const apiBasePath = '/hotelpal'
 const CONFIG = {
-	WS_ADDR: 'ws://' + location.hostname + ':8081',
+	WS_ADDR: 'ws://' + location.hostname + ':8080',
 	WS_URL: '/hotelpal/admin/live/chat/',
 	ADMIN_TOKEN: 'guFvC1iN6cnFVV257dwDVbEqttQ40vcJUzvAWvBdw6k0H8Tqblk1xXs2wbO95INF',
 	WS_PPT: '/hotelpal/live/op',

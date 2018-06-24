@@ -1,8 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
-import {Table, Pagination, Row, Col, Button, Icon, Modal, Input, Avatar} from 'antd'
-import E from 'wangeditor'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {Row, Col, Button, Modal, Input, Avatar} from 'antd'
+import {NoticeError, Utils} from 'scripts/utils/index'
 import {SPEAKER, CONTENT} from 'scripts/remotes/index'
 
 const prefix = 'speakerModal'

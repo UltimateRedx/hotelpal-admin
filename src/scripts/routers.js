@@ -28,7 +28,7 @@ export default class Routers extends React.Component{
 					<Route onEnter={scrollTop} path='login' component={Login}/>
 				</Route>
 				<Route path='/hotelpal' component={Navigation}>
-					<IndexRedirect to='speaker'/>
+					<IndexRedirect to='course'/>
 					<Route onEnter={scrollTop} path='statistics' component={Statistics}/>
 					<Route onEnter={scrollTop} path='speaker' component={Speaker}/>
 					<Route onEnter={scrollTop} path='course' component={Container}>

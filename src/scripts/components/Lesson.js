@@ -1,6 +1,5 @@
 import React from 'react'
-import {Link,browserHistory } from 'react-router'
-import  { Redirect } from 'react-router-dom'
+import {Link} from 'react-router'
 import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout, Col} from 'antd'
 import moment from 'moment'
 import {NoticeMsg,NoticeError,isEmptyObject} from 'scripts/utils/index'
@@ -28,7 +27,7 @@ export default class Lesson extends React.Component {
 	componentDidMount() {
 		let courseId = this.props.params.courseId;
 		if(!courseId) {
-			browserHistory.push('/#/course')
+			window.location.href = '#/hotelpal/course'
 			return
 		}
 		this.getCourseData(courseId)
@@ -112,7 +111,7 @@ export default class Lesson extends React.Component {
 		return (
 			<div className={prefix}>
 				<div className='title'>
-					<Link className='fs-18 f-bold mb-15 underline' to='/course'>课程&nbsp;</Link>
+					<Link className='fs-18 f-bold mb-15 underline' to='/hotelpal/course'>课程&nbsp;</Link>
 					<span>&nbsp; &gt; 课时</span>
 				</div>
 				<Row className='mb-20 pt-10 pl-15'>

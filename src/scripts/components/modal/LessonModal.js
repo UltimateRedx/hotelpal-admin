@@ -1,7 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
-import {Modal, Row, Col, Button, Icon, Input, Avatar, InputNumber, Select, Radio, DatePicker} from 'antd'
-import E from 'wangeditor'
+import {Modal, Row, Col, Button, Icon, Input, InputNumber, Radio, DatePicker, notification } from 'antd'
 import moment from 'moment'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 import {CONTENT, LESSON} from 'scripts/remotes/index'
@@ -72,7 +70,7 @@ export default class LessonModal extends React.Component{
 			let file = files[0];
 			let formData = new FormData();
 			formData.append('audioFile', file);
-			this.setState({audioUploading: true})
+			this.setState({audioUploading: true}, this.handleUploadingAudio)
 			CONTENT.uploadAudio(formData).then(res => {
 				if (res.success) {
 					let {audioUrl, audioLen, audioSize} = res.vo;
@@ -80,7 +78,7 @@ export default class LessonModal extends React.Component{
 				} else {
 					NoticeError(res.messages)
 				}
-				this.setState({audioUploading: false})
+				this.setState({audioUploading: false}, () => {notification.close('audioUploading'); this.handleCompleteAudio()})
 				this.refs.fileInput.value = null;
 			})
 		}
@@ -101,6 +99,24 @@ export default class LessonModal extends React.Component{
 	handleTagChange(value, opt) {
 		let tag = value.join(',');
 		this.setState({tag})
+	}
+	handleUploadingAudio() {
+		notification.info({
+			key:'audioUploading',
+			duration: null,
+			icon: <Icon type="arrow-up" spin={true}/>,
+			message: '音频正在上传',
+			description: '',
+		})
+	}
+	handleCompleteAudio() {
+		notification.info({
+			key:'audioUploadComplete',
+			duration: 3,
+			icon: <Icon type="check-circle" />,
+			message: '音频上传完成',
+			description: '',
+		})
 	}
 	render() {
 		let {...rest} = this.props
@@ -189,6 +205,5 @@ export default class LessonModal extends React.Component{
 							onChange={this.handleFileChange.bind(this)}/>
 			</Modal>
 		)
-
 	}
 }
