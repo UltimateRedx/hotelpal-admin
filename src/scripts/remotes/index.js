@@ -18,7 +18,7 @@ const remoteOpts = {
 	method: 'POST',
 	requestJSON: false,
 	responseJSON: false,
-	timeout: 20,
+	timeout: 90,
 	headers,
 	dataType: 'json'
 };
@@ -28,7 +28,7 @@ const remoteBaseOpts = {
 	method: 'POST',
 	requestJSON: false,
 	responseJSON: false,
-	timeout: 20,
+	timeout: 90,
 	headers: {},
 	dataType: 'json'
 };

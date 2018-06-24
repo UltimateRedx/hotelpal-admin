@@ -104,7 +104,7 @@ export default class LessonModal extends React.Component{
 		notification.info({
 			key:'audioUploading',
 			duration: null,
-			icon: <Icon type="arrow-up" spin={true}/>,
+			icon: <Icon type="loading" />,
 			message: '音频正在上传',
 			description: '',
 		})
