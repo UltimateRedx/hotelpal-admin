@@ -143,8 +143,8 @@ const LESSON = {
 	},
 	updateLesson: (data) => {
 		const url = '/admin/lesson/updateLesson'
-		let {id,courseId,publishDate,free,onSale,lessonOrder,title,audioUrl,audioLen,audioSize,content} = data
-		const body = {id,courseId,publishDate,free,onSale,lessonOrder,title,audioUrl,audioLen,audioSize,content}
+		let {id,courseId,publishDate,free,onSale,lessonOrder,title,audioUrl,audioLen,audioSize,content, type, coverImg} = data
+		const body = {id,courseId,publishDate,free,onSale,lessonOrder,title,audioUrl,audioLen,audioSize,content, type, coverImg}
 		return remote.create({url, body})();
 	},
 	deleteLesson: ({id}) => {

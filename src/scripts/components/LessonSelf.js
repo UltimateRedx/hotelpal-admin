@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout} from 'antd'
 import moment from 'moment'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeError} from 'scripts/utils/index'
 import {LESSON} from 'scripts/remotes/index'
 import LessonSelfModal from 'scripts/components/modal/LessonSelfModal'
 import CommentModal from 'scripts/components/modal/CommentModal'
@@ -130,7 +130,6 @@ const LESSON_COLUMNS = [
 	{dataIndex: 'title', title: '标题'},
 	{dataIndex: 'createTimeStr', title: '创建时间'},
 	{dataIndex: 'publishDateStr', title: '发布时间'},
-	{dataIndex: 'onSale', title: '上架状态'},
 	{dataIndex: 'pv', title: 'PV'},
 	{dataIndex: 'uv', title: 'UV'},
 	{dataIndex: 'op', title: '操作'},
