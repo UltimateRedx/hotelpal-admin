@@ -113,12 +113,12 @@ export default class Course extends React.Component {
 	}
 }
 const COURSE_COLUMNS = [
+	{dataIndex: 'courseOrder', title: '序号'},
 	{dataIndex: 'title', title: '标题'},
 	{dataIndex: 'createTimeStr', title: '创建时间'},
 	{dataIndex: 'speaker.nick', title: '主讲人'},
 	{dataIndex: 'publish', title: '上架状态'},
 	{dataIndex: 'openTimeStr', title: '开课时间'},
-	{dataIndex: 'order', title: '排序'},
 	{dataIndex: 'a', title: '销量'},
 	{dataIndex: 'b', title: '销售额'},
 	{dataIndex: 'c', title: 'PV'},

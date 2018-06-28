@@ -20,6 +20,7 @@ export default class LessonSelf extends React.Component {
 			voTotal: 0,
 			lesssonData: {},
 			order: 'desc',
+			orderBy: 'publishDate',
 			commentModal: false,
 		}
 	}

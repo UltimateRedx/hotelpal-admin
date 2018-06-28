@@ -185,7 +185,7 @@ export default class CourseModal extends React.Component{
 	handleRadioChange(f, e) {
 		let {courseList} = this.state
 		this.setState({[f]: e.target.value}, () => {
-			if(f === APPLY_TYPE.PARTICULAR && courseList.length == 0)
+			if(f === 'apply' && e.target.value === APPLY_TYPE.PARTICULAR && courseList.length == 0)
 				this.getCourseList()
 		})
 	}
