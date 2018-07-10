@@ -2,7 +2,7 @@ import React from 'react'
 import {Table, Row, Col, Pagination, DatePicker, Input } from 'antd'
 import moment from 'moment'
 import {USER} from 'scripts/remotes'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeError} from 'scripts/utils/index'
 
 const {RangePicker} = DatePicker
 const {Search} = Input

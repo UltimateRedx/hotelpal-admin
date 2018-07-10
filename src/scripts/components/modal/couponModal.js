@@ -30,7 +30,7 @@ export default class CourseModal extends React.Component{
 		this.state = getInitialState(props)
 	}
 	componentDidMount() {
-		
+		this.getCourseList()
 	}
 	getCourseList() {
 		COURSE.getList({currentPage: 1, pageSize: 20, orderBy: 'courseOrder', containsContent: false}).then(res => {
@@ -55,7 +55,7 @@ export default class CourseModal extends React.Component{
 	render() {
 		let {...rest} = this.props
 		let {name, total, value, validityType, validity, validityDays, apply, applyToPrice, edit,
-			courseList} = this.state
+			courseList, applyToCourse} = this.state
 		let courseOptions = courseList.map(c => {
 			return (<Option key={c.id} title={c.title}>{c.title}</Option>)
 		})
@@ -152,7 +152,7 @@ export default class CourseModal extends React.Component{
 									</Radio>
 									<Radio className='mb-8 block-i' value={APPLY_TYPE.PARTICULAR}>
 										<span>指定订阅专栏</span>
-										<Select className='ml-8 course'
+										<Select className='ml-8 course' value={applyToCourse}
 											disabled={apply != APPLY_TYPE.PARTICULAR}
 											mode='multiple'
 											onChange={this.handleCourseChange.bind(this)}
@@ -184,10 +184,7 @@ export default class CourseModal extends React.Component{
 	
 	handleRadioChange(f, e) {
 		let {courseList} = this.state
-		this.setState({[f]: e.target.value}, () => {
-			if(f === 'apply' && e.target.value === APPLY_TYPE.PARTICULAR && courseList.length == 0)
-				this.getCourseList()
-		})
+		this.setState({[f]: e.target.value})
 	}
 	handleDateChange(date, dateString) {
 		this.setState({validity: date})

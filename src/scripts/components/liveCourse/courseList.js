@@ -28,9 +28,9 @@ export default class LiveCourseList extends React.Component {
 		LIVE_COURSE.getLiveCoursePageList(this.state).then(res => {
 			if(!res.success) NoticeError(res.messages)
 			let liveCourseList = res.voList.map(course => {
-				course.createTimeStr = moment(res.createTime).format('YYYY-MM-DD HH:mm')
+				course.createTimeStr = moment(course.createTime).format('YYYY-MM-DD HH:mm')
 				course.priceY = course.price/100;
-				course.openTimeStr = moment(res.openTime).format('YYYY-MM-DD HH:mm')
+				course.openTimeStr = moment(course.openTime).format('YYYY-MM-DD HH:mm')
 				course.op = (
 					<div>
 						<a className='underline' onClick={this.handleUpdateCourse.bind(this, course)}>编辑</a>

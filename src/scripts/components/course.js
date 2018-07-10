@@ -119,9 +119,9 @@ const COURSE_COLUMNS = [
 	{dataIndex: 'speaker.nick', title: '主讲人'},
 	{dataIndex: 'publish', title: '上架状态'},
 	{dataIndex: 'openTimeStr', title: '开课时间'},
-	{dataIndex: 'a', title: '销量'},
-	{dataIndex: 'b', title: '销售额'},
-	{dataIndex: 'c', title: 'PV'},
-	{dataIndex: 'd', title: 'UV'},
+	{dataIndex: 'sold', title: '销量'},
+	{dataIndex: 'sales', title: '销售额'},
+	{dataIndex: 'pv', title: 'PV'},
+	{dataIndex: 'uv', title: 'UV'},
 	{dataIndex: 'op', title: '操作'},
 ]

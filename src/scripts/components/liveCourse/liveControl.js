@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import {Button, Row, Col, Select, Switch, Input} from 'antd'
 import {LIVE_COURSE, CONFIG} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
-import E from 'wangeditor'
 import moment from 'moment'
 const Option = Select.Option
 
@@ -24,14 +23,10 @@ export default class LiveControl extends React.Component {
 	getCourseList() {
 		let from = new Date();
 		from.setHours(0);from.setMinutes(0);from.setSeconds(0);from.setMilliseconds(0);
-		let to = new Date();
-		to.setDate(to.getDate() + 1)
-		to.setHours(0);to.setMinutes(0);to.setSeconds(0);to.setMilliseconds(0);
 		let data = {
 			orderBy: 'openTime',
 			order: 'asc',
 			openTimeFrom: from,
-			openTimeTo: to,
 			pageSize: 50,
 		}
 		LIVE_COURSE.getLiveCoursePageList(data).then(res => {

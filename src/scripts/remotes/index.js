@@ -2,7 +2,7 @@ const { remote, Remote } = require( 'beyond-remote' )
 
 const apiBasePath = '/hotelpal'
 const CONFIG = {
-	WS_ADDR: 'ws://' + location.hostname + ':8081',
+	WS_ADDR: 'ws://' + location.hostname + ':8080',
 	WS_URL: '/hotelpal/admin/live/chat/',
 	ADMIN_TOKEN: 'guFvC1iN6cnFVV257dwDVbEqttQ40vcJUzvAWvBdw6k0H8Tqblk1xXs2wbO95INF',
 	WS_PPT: '/hotelpal/live/op',
@@ -194,6 +194,19 @@ const CONTENT = {
 		let {currentPage = '1',pageSize = '10', orderBy='createTime', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = ''} = data;
 		const body = {currentPage,pageSize, orderBy, courseType, order, purchaseDateFrom, purchaseDateTo, searchValue}
 		return remote.create({url, body})();
+	},
+	getStatisticsData: (from, to) => {
+		let data = {ignored: true};
+		if (from) {
+			data.from = from
+		}
+		if (to) {
+			data.to = to
+		}
+		return remoteBase.create({
+			url: '/admin/content/getStatisticsData',
+			body: data
+		})()
 	}
 }
 const LIVE_COURSE = {

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card, Table, Divider, Popconfirm, Modal, Button, Row, Col, Input, Avatar} from 'antd'
 import {SETTINGS, CONTENT} from 'scripts/remotes'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeError} from 'scripts/utils/index'
 
 
 const prefix = 'settings'
@@ -42,13 +42,14 @@ export default class Settings extends React.Component{
 					</Popconfirm>
 				</div>
 			)
+			return b
 		})
 		return (
 			<div className={prefix}>
 				<Card title='首页Banner' extra={(<Button onClick={this.handleShowBannerModal.bind(this, {})}>新增banner</Button>)}>
 					<Table
 						columns={BANNER_COLUMNS}
-						dataSource={bannerList}
+						dataSource={banner_list}
 						pagination = {false}
 					/>
 				</Card>
