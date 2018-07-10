@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router'
 import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout} from 'antd'
 import moment from 'moment'
 import {NoticeError} from 'scripts/utils/index'

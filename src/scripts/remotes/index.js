@@ -108,8 +108,14 @@ const SPEAKER = {
 const COURSE = {
 	getList: (data) => {
 		const url = '/admin/course/getPageList'
-		let {currentPage,pageSize, orderBy, containsContent = true} = data;
-		const body = {currentPage,pageSize, orderBy, containsContent}
+		let {currentPage,pageSize, orderBy, containsContent = true, from, to} = data;
+		let body = {currentPage,pageSize, orderBy, containsContent}
+		if (from) {
+			body.dateFrom = from
+		}
+		if (to) {
+			body.dateTo = to
+		}
 		return remoteBase.create({url, body})();
 	},
 	updateCourse: (data) => {

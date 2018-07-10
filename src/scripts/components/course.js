@@ -1,10 +1,11 @@
 import React from 'react'
 import {Link} from 'react-router'
-import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout} from 'antd'
+import {Table, Pagination, Button, Popconfirm, Divider, Card, DatePicker} from 'antd'
 import moment from 'moment'
-import {NoticeMsg,NoticeError} from 'scripts/utils/index'
+import {NoticeError} from 'scripts/utils/index'
 import {COURSE} from 'scripts/remotes/index'
 import CourseModal from 'scripts/components/modal/CourseModal'
+const {RangePicker} = DatePicker
 
 const prefix = 'course'
 export default class Course extends React.Component {
@@ -18,7 +19,9 @@ export default class Course extends React.Component {
 			pageSize: 10,
 			voTotal: 0,
 			courseData: {},
-			orderBy:''
+			orderBy:'',
+			from: '',
+			to: '',
 		}
 	}
 	componentDidMount() {
@@ -79,27 +82,33 @@ export default class Course extends React.Component {
 			)
 			res.createTimeStr = moment(res.createTime).format('YYYY-MM-DD HH:mm')
 			res.openTimeStr = res.openTime && moment(res.openTime).format('YYYY-MM-DD HH:mm')
+			res.sales = res.sales ? res.sales / 100 : 0
 			return res;
 		})
 		return (
 			<div className={prefix}>
-				<Row className='mb-20 pt-10 pl-15'>
-					<Button icon='plus' onClick={this.handleAddCourse.bind(this)}>添加课程</Button>
-				</Row>
-				<Table 
-					columns={COURSE_COLUMNS}
-					dataSource={list}
-					pagination = {false}
-				/>
-				<div className='pagination'>
-					<Pagination 
-						size="small" 
-						total={voTotal} 
-						current={currentPage} 
-						onChange={this.onChangePage.bind(this)}
-						showTotal={this.paginationTotalRender.bind(this)}
+				<Card 
+				title={<Button icon='plus' onClick={this.handleAddCourse.bind(this)}>添加课程</Button>} 
+				extra={<RangePicker onChange={this.handleRangeChange.bind(this)}/>}>
+					<Table 
+						columns={COURSE_COLUMNS}
+						dataSource={list}
+						pagination = {false}
 					/>
-				</div>
+					<div className='pagination'>
+						<Pagination 
+							size="small" 
+							total={voTotal} 
+							current={currentPage} 
+							onChange={this.onChangePage.bind(this)}
+							showTotal={this.paginationTotalRender.bind(this)}
+						/>
+					</div>
+				</Card>
+				{/* <Row className='mb-20 pt-10 pl-15'>
+					<Button icon='plus' onClick={this.handleAddCourse.bind(this)}>添加课程</Button>
+				</Row> */}
+				
 
 				{courseModal &&
 					<CourseModal
@@ -110,6 +119,9 @@ export default class Course extends React.Component {
 				}
 			</div>
 		)
+	}
+	handleRangeChange(date) {
+		this.setState({from: date[0], to: date[1]}, this.getPageList)
 	}
 }
 const COURSE_COLUMNS = [
