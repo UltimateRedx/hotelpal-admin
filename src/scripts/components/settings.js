@@ -81,7 +81,10 @@ export default class Settings extends React.Component{
 						<Col span = {24}>{freeCourseLink}</Col>
 					</Row>
 				</Card>
-				
+				<div className='h-30 layout-bg'/>
+				<Card title='...'>
+					<Button onClick={this.authorize.bind(this)}>This is a magic button.</Button>
+				</Card>
 
 				{bannerModal &&
 					<Modal
@@ -211,6 +214,13 @@ export default class Settings extends React.Component{
 				return
 			}
 			this.setState({freeCourseLink: res.vo})
+		})
+	}
+	authorize() {
+		SETTINGS.getAuthorizeParams().then(res => {
+			let url = 'https://mp.weixin.qq.com/safe/bindcomponent?action=bindcomponent&auth_type=3&no_scan=1&component_appid='+res.vo.componentAppId+'&pre_auth_code='+res.vo.preAuthCode+
+				'&redirect_uri=http://t.hotelpal.cn/hotelpal/thirdParty/authorizerCallback#wechat_redirect'
+			window.location.href=url
 		})
 	}
 }

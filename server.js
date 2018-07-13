@@ -3,7 +3,7 @@ var webpack = require( 'webpack' );
 var WebpackDevServer = require( 'webpack-dev-server' );
 var config = require( './config/webpack.config.dev' );
 var ip = '0.0.0.0';
-var port = 8080;
+var port = 8000;
 
 if ( typeof config.entry === 'string' ) {
 	config.entry = [ 'react-hot-loader/patch', 'webpack-dev-server/client?http://' + ip + ':' + port, 'webpack/hot/only-dev-server', config.entry ];
@@ -25,7 +25,7 @@ new WebpackDevServer( webpack( config ), {
 	disableHostCheck: true,
 	proxy: {
 		'/hotelpal/*': {
-			target: 'http://127.0.0.1:8081'
+			target: 'http://127.0.0.1:8080'
 			// target: 't.hotelpal.cn:8080',
 		}
 	},
