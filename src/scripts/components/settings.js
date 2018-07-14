@@ -218,8 +218,9 @@ export default class Settings extends React.Component{
 	}
 	authorize() {
 		SETTINGS.getAuthorizeParams().then(res => {
-			let url = 'https://mp.weixin.qq.com/safe/bindcomponent?action=bindcomponent&auth_type=3&no_scan=1&component_appid='+res.vo.componentAppId+'&pre_auth_code='+res.vo.preAuthCode+
-				'&redirect_uri=http://t.hotelpal.cn/hotelpal/thirdParty/authorizerCallback#wechat_redirect'
+			// let url = 'https://mp.weixin.qq.com/safe/bindcomponent?action=bindcomponent&auth_type=3&no_scan=1&component_appid='+res.vo.componentAppId+'&pre_auth_code='+res.vo.preAuthCode+
+			// 	'&redirect_uri=http://t.hotelpal.cn/hotelpal/thirdParty/authorizerCallback#wechat_redirect'
+			let url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid='+res.vo.componentAppId+'&pre_auth_code='+res.vo.preAuthCode+'&redirect_uri=http://hotelpal.cn/t/hotelpal/thirdParty/authorizerCallback&auth_type=3'
 			window.location.href=url
 		})
 	}
