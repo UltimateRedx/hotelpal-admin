@@ -40,6 +40,7 @@ export default class Orders extends React.Component{
 	render(){
 		let {orderList, voTotal, currentPage, pageSize, searchValue, courseType} = this.state
 		orderList = orderList.map((u, index) => {
+			u.payment = u.purchaseLog.payment / 100
 			u.createTimeStr = moment(u.createTime).format('YYYY-MM-DD HH:mm')
 			u.purchaseTimeStr = u.purchaseLog.createTime ? moment(u.purchaseLog.createTime).format('YYYY-MM-DD HH:mm') : '-'
 			return u;
@@ -106,7 +107,7 @@ const ORDER_COLUMNS = [
 	{dataIndex: 'user.nick', title: '用户'},
 	{dataIndex: 'user.phone', title: '手机号码'},
 	{dataIndex: 'courseTitle', title: '课程'},
-	{dataIndex: 'purchaseLog.payment', title: '金额'},
+	{dataIndex: 'payment', title: '金额'},
 	{dataIndex: 'purchaseLog.payMethod', title: '购买方式'},
 	{dataIndex: 'createTimeStr', title: '订单创建时间'},
 	{dataIndex: 'purchaseTimeStr', title: '购买时间'},

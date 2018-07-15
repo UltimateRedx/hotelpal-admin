@@ -1,7 +1,7 @@
 const { remote, Remote } = require( 'beyond-remote' )
 
-// const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + 'hotelpal'
-const apiBasePath = 'http://t.hotelpal.cn/hotelpal'
+const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + '/hotelpal'
+// const apiBasePath = 'http://t.hotelpal.cn/hotelpal'
 const CONFIG = {
 	WS_ADDR: 'ws://' + location.hostname + ':8080',
 	WS_URL: '/hotelpal/admin/live/chat/',

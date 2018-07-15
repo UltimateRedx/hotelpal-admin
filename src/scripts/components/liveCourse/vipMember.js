@@ -52,9 +52,8 @@ export default class VipMember extends React.Component {
 	render() {
 		let {currentPage, voTotal, newMemberModal, memberList, searchValue} = this.state
 		memberList = memberList.map(u => {
-			u.liveVipStartTimeStr = u.liveVipStartTime ? moment(u.liveVipStartTime).format('YYYY-MM-DD HH:mm:ss') : ''
-			let vipStartTime = new Date(u.liveVipStartTime)
-			u.validTo = u.liveVipStartTime && u.validity ? moment(vipStartTime.setDate(vipStartTime.getDate() + u.validity)).format('YYYY-MM-DD HH:mm:ss') : ''
+			u.liveVipStartTimeStr = moment(u.liveVipStartTime).format('YYYY-MM-DD HH:mm:ss')
+			u.validTo = moment(u.validityTo).format('YYYY-MM-DD HH:mm:ss')
 			u.op = (
 				<div>
 					<Popconfirm title={`确认收回` + u.phone + `?`} onConfirm={this.removeOnePhone.bind(this, u.phone)}>
