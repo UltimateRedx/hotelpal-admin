@@ -335,6 +335,12 @@ const USER = {
 			orderBy = 'createTime', order = 'desc'} = data
 		const body = {currentPage, pageSize, order, orderBy, phoneRegTimeFrom, phoneRegTimeTo, searchValue}
 		return remote.create({url, body})()
+	},
+	refreshWxUserInfo(domainId) {
+		return remoteBase.create({
+			url: '/admin/user/refreshWxUserInfo',
+			body: {domainId}
+		})()
 	}
 }
 const COUPON = {
