@@ -38,6 +38,8 @@ export default class Users extends React.Component{
 		userList = userList.map((u, index) => {
 			u.wxHeadImg = (<Avatar icon={u.wxHeadImg ? null : 'question'} shape='square' size='small' src={u.wxHeadImg}/>)
 			u.wxNickname = (<a onClick={this.handleRefreshWxUserInfo.bind(this, u.domainId)} title='点击刷新微信用户信息'>{u.wxNickname || <Button>{u.subscribed=='N' ? '未关注' : '点击获取'}</Button>}</a>)
+			u.headImg = (<Avatar icon={u.headImg ? null : 'question'} shape='square' size='small' src={u.headImg}/>)
+			
 			u.createTimeStr = moment(u.createTime).format('YYYY-MM-DD HH:mm')
 			u.phoneRegTimeStr = u.phoneRegTime ? moment(u.phoneRegTime).format('YYYY-MM-DD HH:mm') : '-'
 			u.totalFee = u.totalFee / 100
@@ -108,7 +110,7 @@ export default class Users extends React.Component{
 const USER_COLUMNS = [
 	{dataIndex: 'wxNickname', title: '微信昵称'},
 	{dataIndex: 'wxHeadImg', title: '微信头像'},
-
+	{dataIndex: 'headImg', title: '头像'},
 	{dataIndex: 'nick', title: '昵称'},
 	{dataIndex: 'phone', title: '手机号'},
 	{dataIndex: 'company', title: '公司'},

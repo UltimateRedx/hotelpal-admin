@@ -124,6 +124,7 @@ const COURSE_COLUMNS = [
 	{dataIndex: 'openTimeStr', title: '直播时间'},
 	{dataIndex: 'purchasedTimes', title: '购买次数'},
 	{dataIndex: 'freeEnrolledTimes', title: '免费预约数'},
+	{dataIndex: 'vipEnrolledTimes', title: '会员预约数'},
 	{dataIndex: 'totalPeople', title: '累计听课人次'},
 	{dataIndex: 'op', title: '操作'},
 ]

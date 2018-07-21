@@ -19,7 +19,7 @@ const getInitialState = (props) => {
 		validity: data.validity && moment(data.validity) || new moment(), 
 		validityDays: data.validityDays || '', 
 		apply: data.apply || APPLY_TYPE.ALL, 
-		applyToPrice: data.applyToPrice || '',
+		applyToPrice: data.applyToPrice ? data.applyToPrice/100 : '',
 		applyToCourse: data.applyToCourse || [],
 	}
 	return d
