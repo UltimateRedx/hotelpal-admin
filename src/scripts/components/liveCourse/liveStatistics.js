@@ -42,6 +42,7 @@ export default class LivecStatistics extends React.Component {
 				enrollOnlineRate: vo.enrollOnlineRate,
 				onlinePurchaseRate: vo.onlinePurchaseRate,
 				onlineEnrollRate: vo.onlineEnrollRate,
+				vipEnrolledTimes: vo.vipEnrolledTimes,
 			})
 		})
 	}
@@ -66,7 +67,7 @@ export default class LivecStatistics extends React.Component {
 	render() {
 		let {...rest} = this.props
 		let {freeEnrollTimes, purchaseEnrollTimes, tryFreeEnrollCount, purchasedFee, totalPeople, 
-			freeCompleteRate, totalEnrollCount, purchaseEnrollRate, enrollOnlineRate, onlinePurchaseRate, onlineEnrollRate} = this.state
+			freeCompleteRate, totalEnrollCount, purchaseEnrollRate, enrollOnlineRate, onlinePurchaseRate, onlineEnrollRate, vipEnrolledTimes} = this.state
 		let {onlineSum = []} = this.state
 		return (
 			<Modal
@@ -84,7 +85,7 @@ export default class LivecStatistics extends React.Component {
 				<div className='box default-box'>
 					<Row className="mb-8">
 						<Col span={8} className="form-group-item">
-							<div className="form-group-item-heading">免费报名人数:</div>
+							<div className="form-group-item-heading">免费报名发起人数:</div>
 							<div className="form-group-item-body">{tryFreeEnrollCount || '0'}</div>
 						</Col>
 						<Col span={8} className="form-group-item">
@@ -102,7 +103,7 @@ export default class LivecStatistics extends React.Component {
 							<div className="form-group-item-body">{purchaseEnrollTimes || '0'}</div>
 						</Col>
 						<Col span={8} className="form-group-item">
-							<div className="form-group-item-heading">购买/预约:</div>
+							<div className="form-group-item-heading">购买课程/完成预约:</div>
 							<div className="form-group-item-body">{purchaseEnrollRate.toFixed(2)}%</div>
 						</Col>
 						<Col span={8} className="form-group-item">
@@ -112,7 +113,11 @@ export default class LivecStatistics extends React.Component {
 					</Row>
 					<Row className="mb-8">
 						<Col span={8} className="form-group-item">
-							<div className="form-group-item-heading">预约总人数:</div>
+							<div className="form-group-item-heading">vip预约总人数:</div>
+							<div className="form-group-item-body">{vipEnrolledTimes || '0'}</div>
+						</Col>
+						<Col span={8} className="form-group-item">
+							<div className="form-group-item-heading">成功预约总人数:</div>
 							<div className="form-group-item-body">{totalEnrollCount || '0'}</div>
 						</Col>
 						<Col span={8} className="form-group-item">
@@ -124,11 +129,11 @@ export default class LivecStatistics extends React.Component {
 				<div className='box default-box'>
 					<Row className="mb-8">
 						<Col span={8} className="form-group-item">
-							<div className="form-group-item-heading">听课/预约:</div>
+							<div className="form-group-item-heading">实际听课/完成预约:</div>
 							<div className="form-group-item-body">{onlineEnrollRate.toFixed(2)}%</div>
 						</Col>
 						<Col span={8} className="form-group-item">
-							<div className="form-group-item-heading">购买/听课:</div>
+							<div className="form-group-item-heading">购买课程/实际听课:</div>
 							<div className="form-group-item-body">{onlinePurchaseRate.toFixed(2)}%</div>
 						</Col>
 					</Row>
