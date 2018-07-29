@@ -82,10 +82,14 @@ export default class Settings extends React.Component{
 					</Row>
 				</Card>
 				<div className='h-30 layout-bg'/>
-				<Card title='...'>
+				{/* <Card title='...'>
 					<Button onClick={this.authorize.bind(this)}>This is a magic button.</Button>
+				</Card> */}
+				<Card title={`图片1  （未完成）`}>
+					<img src='http://127.0.0.1:8080/hotelpal/image/staticImg1' onClick={this.updateImg.bind(this, 1)}/>
 				</Card>
-
+				<input type='file' className='display-none' ref='staticImgInput' accept='image/jpeg,image/png'
+							onChange={this.handleStaticFileChange.bind(this)}/>
 				{bannerModal &&
 					<Modal
 						visible={bannerModal}
@@ -223,6 +227,32 @@ export default class Settings extends React.Component{
 			let url = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid='+res.vo.componentAppId+'&pre_auth_code='+res.vo.preAuthCode+'&redirect_uri=http://hotelpal.cn/t/hotelpal/thirdParty/authorizerCallback&auth_type=3'
 			window.location.href=url
 		})
+	}
+	updateImg(index) {
+		this.setState({uploadingStaticImg: index}, () => {this.refs.staticImgInput.click()})
+	}
+	handleStaticFileChange(e) {
+		let files = this.refs.staticImgInput.files;
+		if (files) {
+			let file = files[0];
+			let formData = new FormData();
+			formData.append('imgFile', file);
+			CONTENT.uploadImg(formData).then(res => {
+				if (res.success) {
+					let {uploadingStaticImg} = this.state
+					SETTINGS.updateStaticImg(uploadingStaticImg, res.vo).then(res => {
+						if(res.success) {
+							window.location.reload()
+						} else {
+							NoticeError(res.messages)
+						}
+					})
+				} else {
+					NoticeError(res.messages)
+				}
+				this.refs.staticImgInput.value = null;
+			})
+		}
 	}
 }
 const BANNER_COLUMNS = [

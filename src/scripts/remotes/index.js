@@ -1,6 +1,6 @@
 const { remote, Remote } = require( 'beyond-remote' )
 
-const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + 'hotelpal'
+const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + '/hotelpal'
 // const apiBasePath = 'http://t.hotelpal.cn/hotelpal'
 const CONFIG = {
 	WS_ADDR: 'ws://' + location.hostname + ':8080',
@@ -47,11 +47,13 @@ remote.on('success', (e) => {
 	})
 })
 function postProcessXHR(res) {
-	res = JSON.parse(res)
-		if (res.code == 401) {
-			window.localStorage.setItem("loggedIn", 'N')
-			window.location.href='#/login'
-		}
+	try{
+		res = JSON.parse(res)
+	} catch(err){return}
+	if (res.code == 401) {
+		window.localStorage.setItem("loggedIn", 'N')
+		window.location.href='#/login'
+	}
 }
 const LOGIN = {
 	login: (auth) => {
@@ -85,8 +87,13 @@ const SETTINGS = {
 		return remote.create({
 			url: '/thirdParty/getAuthorizeParams'
 		})()
+	},
+	updateStaticImg: (index, url) => {
+		return remoteBase.create({
+			url: 'admin/content/updateStaticImg',
+			body: {index, url}
+		})()
 	}
-
 }
 const SPEAKER = {
 	getList: (data) => {
