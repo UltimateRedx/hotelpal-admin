@@ -37,6 +37,7 @@ export default class LiveControl extends React.Component {
 			let courseEnv = {}
 			res.voList.forEach(course => {
 				let env = {
+					id: course.id,
 					ongoing: course.status == 'ONGOING',
 					preparing: false,
 					currentMsg: '',
@@ -128,7 +129,7 @@ export default class LiveControl extends React.Component {
 	}
 	render() {
 		let {courseEnv, courseList, selectedCourseId = ''} = this.state
-		let {ongoing = false, preparing = false, assistantMsgList = [], userMsgList = [], couponShow = false, mockUserMsg = ''} = (courseEnv[selectedCourseId] || {})
+		let {ongoing = false, preparing = false, assistantMsgList = [], userMsgList = [], couponShow = false, mockUserMsg = '', id} = (courseEnv[selectedCourseId] || {})
 		let  list = courseList.map(c => {
 			return (
 				<Option key={c.id}>{c.title}</Option>
@@ -174,6 +175,7 @@ export default class LiveControl extends React.Component {
 						</div>
 					</Col>
 					<Col span={12}>
+						<div className='fs-18 f-bold mb-15'>推流地址： { id && `rtmp://video-center.alivecdn.com/app/${id}?vhost=lv.hotelpal.cn`}</div>
 						<div ref='userMsg' className='box default-box'>
 							{userMsgList}
 						</div>

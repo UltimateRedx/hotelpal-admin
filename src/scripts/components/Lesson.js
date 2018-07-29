@@ -19,7 +19,7 @@ export default class Lesson extends React.Component {
 			pageSize: 10,
 			voTotal: 0,
 			lessonData: {},
-			orderBy:'',
+			orderBy:'lessonOrder',
 			commentModal: false,
 		}
 	}

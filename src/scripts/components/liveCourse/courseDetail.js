@@ -82,7 +82,7 @@ export default class CourseDetail extends React.Component {
 	
 	render() {
 		let {...rest} = this.props
-		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, sysCouponList, sysCouponId } = this.state
+		let { title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, relaCourseId, publish, sysCouponList, sysCouponId, relaCourseCouponImg = '' } = this.state
 		let {uploading, courseList} = this.state
 		courseList = [<Option key='0'>无</Option>].concat(courseList.map(course => {
 			return (
@@ -218,6 +218,10 @@ export default class CourseDetail extends React.Component {
 						<div className="form-group-item-heading">海报</div>
 						<div className="form-group-item-body">
 							<Avatar icon={bannerImg ? null : 'plus-square-o'} shape='square' size='large' src={bannerImg ? bannerImg : null} onClick={this.handleSelectImg.bind(this, 'bannerImg')}/>
+						</div>
+						<div className="form-group-item-heading">关联课程优惠券图片</div>
+						<div className="form-group-item-body">
+							<Avatar icon={relaCourseCouponImg ? null : 'plus-square-o'} shape='square' size='large' src={relaCourseCouponImg ? relaCourseCouponImg : null} onClick={this.handleSelectImg.bind(this, 'relaCourseCouponImg')}/>
 						</div>
 						<div className="form-group-item-heading">邀请图片</div>
 						<div className="form-group-item-body">

@@ -25,7 +25,7 @@ export default class SpeakerModal extends React.Component{
 	}
 	componentDidMount() {
 		let {desc} = this.state
-		const elem = this.refs.editor
+		const e1 = this.refs.editor
 		const editor = Utils.createEditor(e1)
 		editor.customConfig.onchange = html => {
 			this.setState({desc: html})
