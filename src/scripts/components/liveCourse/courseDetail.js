@@ -26,7 +26,7 @@ const getInitialState = (props) => {
 		publish: course.publish || 'N',
 		sysCouponList:[],
 		sysCouponId: course.sysCouponId && (course.sysCouponId + '') || '0',
-
+		relaCourseCouponImg: course.relaCourseCouponImg || '', 
 		uploading: false,
 		uploadingFor: '',
 		courseList:[]

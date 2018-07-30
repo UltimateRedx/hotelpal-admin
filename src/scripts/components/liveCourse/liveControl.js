@@ -175,7 +175,10 @@ export default class LiveControl extends React.Component {
 						</div>
 					</Col>
 					<Col span={12}>
-						<div className='fs-18 f-bold mb-15'>推流地址： { id && `rtmp://video-center.alivecdn.com/app/${id}?vhost=lv.hotelpal.cn`}</div>
+						<div className='fs-18 f-bold mb-15'>推流地址:<br/>
+							第一行 url: { id && `rtmp://video-center.alivecdn.com/app`}<br/>
+							第二行 流名称: {id && `${id}?vhost=lv.hotelpal.cn`}
+						</div>
 						<div ref='userMsg' className='box default-box'>
 							{userMsgList}
 						</div>
