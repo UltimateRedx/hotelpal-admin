@@ -85,8 +85,12 @@ export default class Settings extends React.Component{
 				{/* <Card title='...'>
 					<Button onClick={this.authorize.bind(this)}>This is a magic button.</Button>
 				</Card> */}
-				<Card title={`图片1  （未完成）`}>
-					<img src='http://127.0.0.1:8080/hotelpal/image/staticImg1' onClick={this.updateImg.bind(this, 1)}/>
+				<Card title={`图片1 http://hotelpal.cn/admin/staticImg1.html`}>
+					<img src='http://hotelpal.cn/hotelpal/image/staticImg1' onClick={this.updateImg.bind(this, 1)}/>
+				</Card>
+				<div className='h-30 layout-bg'/>
+				<Card title={`图片2 http://hotelpal.cn/admin/staticImg2.html`}>
+					<img src='http://hotelpal.cn/hotelpal/image/staticImg2' onClick={this.updateImg.bind(this, 1)}/>
 				</Card>
 				<input type='file' className='display-none' ref='staticImgInput' accept='image/jpeg,image/png'
 							onChange={this.handleStaticFileChange.bind(this)}/>
