@@ -108,7 +108,7 @@ const ORDER_COLUMNS = [
 	{dataIndex: 'user.phone', title: '手机号码'},
 	{dataIndex: 'courseTitle', title: '课程'},
 	{dataIndex: 'payment', title: '金额'},
-	{dataIndex: 'purchaseLog.payMethod', title: '购买方式'},
+	{dataIndex: 'purchaseLog.payMethodName', title: '购买方式'},
 	{dataIndex: 'createTimeStr', title: '订单创建时间'},
 	{dataIndex: 'purchaseTimeStr', title: '购买时间'},
 ]

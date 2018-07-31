@@ -227,6 +227,11 @@ const CONTENT = {
 			url: '/admin/content/getStatisticsData',
 			body: data
 		})()
+	},
+	getDailySales: () => {
+		return remoteBase.create({
+			url: '/admin/content/getDailySales'
+		})()
 	}
 }
 const LIVE_COURSE = {

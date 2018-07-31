@@ -1,5 +1,6 @@
 import React from 'react'
 import{Card, Row, Col, Button, DatePicker} from 'antd'
+import { Chart, Axis, Geom, Tooltip } from 'bizcharts'
 import {CONTENT} from 'scripts/remotes/index'
 import { NoticeError } from 'scripts/utils/index';
 const {RangePicker} = DatePicker
@@ -16,6 +17,7 @@ export default class Statistics extends React.Component {
 	}
 	componentDidMount() {
 		this.getStatisticsData()
+		this.getDailySales()
 	}
 	getStatisticsData() {
 		let {from, to} = this.state
@@ -25,6 +27,11 @@ export default class Statistics extends React.Component {
 			} else {
 				NoticeError(res.messages)
 			}
+		})
+	}
+	getDailySales() {
+		CONTENT.getDailySales().then(res => {
+			this.setState({dailySales: res.vo.days})
 		})
 	}
 	render() {
@@ -51,6 +58,20 @@ export default class Statistics extends React.Component {
 						</Col>
 					</Row>
 				</Card>
+				<div className='h-30 layout-bg'/>
+				{dailySales.length > 0 &&
+					<div className='w-100p'>
+						<Chart forceFit height={250} padding={50}
+							data={dailySales}
+						>
+							<Axis name="date"/>
+							<Axis name="sales"/>
+							<Tooltip crosshairs={{type : "y"}} itemTpl={charts_template}/>
+							<Geom type='line' position='date*sales' size={2} />
+							<Geom type='point' position="date*sales" size={4} shape={'circle'}/>
+						</Chart>
+					</div>
+				}
 				<div className='h-30 layout-bg'/>
 				<Card title='分时段统计' extra={this.renderDateSelect()}>
 					<Row className='data-row'>
@@ -160,3 +181,8 @@ const DAY = 'DAY'
 const YDAY = 'YDAY'
 const WEEK = 'WEEK'
 const MONTH = 'MONTH'
+const charts_template=
+'<li data-index={index}>\
+	<span style="background-color:{color};width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;"></span>\
+	销售额: ￥ {value}\
+</li>'
