@@ -125,6 +125,13 @@ export default class LiveControl extends React.Component {
 				NoticeError(res.messages)
 				return
 			}
+			let {selectedCourseId} = this.state
+			let {userMsgList} = this.state.courseEnv[selectedCourseId]
+			let toBlockMsg = userMsgList.find((m) =>{return m.id == msg.id});
+			if (toBlockMsg) {
+				toBlockMsg.firseBlocked=true
+			}
+			this.setState({userMsgList})
 		})
 	}
 	render() {
@@ -144,9 +151,9 @@ export default class LiveControl extends React.Component {
 				</div>
 			)
 		})
-		userMsgList = userMsgList.map((msg, index) => {
+		let user_msg_list = userMsgList.map((msg, index) => {
 			return (
-				<div key={index} className={classNames('msgBlock', msg.blocked == 'Y' && 'blocked')}>
+				<div key={index} className={classNames('msgBlock', msg.blocked == 'Y' && 'blocked', msg.firseBlocked && 'grey')}>
 					<span className='f-bold ' className='pointer' onClick={this.handleBlockUser.bind(this, msg)}><img className='h-20' src={msg.headImg} /> {msg.nick}</span>
 					<div className='pl-30' dangerouslySetInnerHTML={{__html: msg.msg}}></div>
 				</div>
@@ -180,7 +187,7 @@ export default class LiveControl extends React.Component {
 							第二行 流名称: {id && `${id}?vhost=lv.hotelpal.cn`}
 						</div>
 						<div ref='userMsg' className='box default-box'>
-							{userMsgList}
+							{user_msg_list}
 						</div>
 						<h3 className="fs-14 f-bold bt-d mb-0">随机用户发言</h3>
 						<Input className='' value={mockUserMsg} onChange={this.handleMockUserMsgChange.bind(this)} onPressEnter={this.handleSendMockUserMsg.bind(this)}/>

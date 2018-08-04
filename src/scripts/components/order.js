@@ -29,7 +29,7 @@ export default class Orders extends React.Component{
 		this.getPageList()
 	}
 	getPageList() {
-		CONTENT.getOrderList(this.state).then(res =>{
+		CONTENT.getPurchaseOrderList(this.state).then(res =>{
 			if (!res.success){
 				NoticeError(res.messages)
 				return
@@ -39,10 +39,10 @@ export default class Orders extends React.Component{
 	}
 	render(){
 		let {orderList, voTotal, currentPage, pageSize, searchValue, courseType} = this.state
-		orderList = orderList.map((u, index) => {
-			u.payment = u.purchaseLog.payment / 100
-			u.createTimeStr = moment(u.createTime).format('YYYY-MM-DD HH:mm')
-			u.purchaseTimeStr = u.purchaseLog.createTime ? moment(u.purchaseLog.createTime).format('YYYY-MM-DD HH:mm') : '-'
+		let order_list = orderList.map((u, index) => {
+			u.payment = u.payment / 100 + (u.originalPrice != u.payment ? (' (优惠-' + (u.originalPrice - u.payment) / 100) + ')' : '')
+			u.couponValue = u.couponId ? u.couponValue / 100 : '-'
+			u.purchaseTimeStr = moment(u.createTime).format('YYYY-MM-DD HH:mm')
 			return u;
 		})
 		return (
@@ -67,7 +67,7 @@ export default class Orders extends React.Component{
 				<Table 
 					bordered={true}
 					columns={ORDER_COLUMNS}
-					dataSource={orderList}
+					dataSource={order_list}
 					pagination = {false}
 				/>
 				<div className='pagination'>
@@ -108,8 +108,8 @@ const ORDER_COLUMNS = [
 	{dataIndex: 'user.phone', title: '手机号码'},
 	{dataIndex: 'courseTitle', title: '课程'},
 	{dataIndex: 'payment', title: '金额'},
-	{dataIndex: 'purchaseLog.payMethodName', title: '购买方式'},
-	{dataIndex: 'createTimeStr', title: '订单创建时间'},
+	{dataIndex: 'payMethodName', title: '购买方式'},
+	{dataIndex: 'couponValue', title: '优惠券抵扣'},
 	{dataIndex: 'purchaseTimeStr', title: '购买时间'},
 ]
 const COURSE_TYPE = {

@@ -215,6 +215,12 @@ const CONTENT = {
 		const body = {currentPage,pageSize, orderBy, courseType, order, purchaseDateFrom, purchaseDateTo, searchValue}
 		return remote.create({url, body})();
 	},
+	getPurchaseOrderList: (data) => {
+		const url = '/admin/content/getPurchaseOrderList'
+		let {currentPage = '1',pageSize = '10', orderBy='createDate', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = ''} = data;
+		const body = {currentPage,pageSize, orderBy, classify: courseType, order, purchaseDateFrom, purchaseDateTo, searchValue}
+		return remote.create({url, body})();
+	},
 	getStatisticsData: (from, to) => {
 		let data = {ignored: true};
 		if (from) {
