@@ -217,7 +217,7 @@ const CONTENT = {
 	},
 	getPurchaseOrderList: (data) => {
 		const url = '/admin/content/getPurchaseOrderList'
-		let {currentPage = '1',pageSize = '10', orderBy='createDate', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = ''} = data;
+		let {currentPage = '1',pageSize = '10', orderBy='id', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = ''} = data;
 		const body = {currentPage,pageSize, orderBy, classify: courseType, order, purchaseDateFrom, purchaseDateTo, searchValue}
 		return remote.create({url, body})();
 	},
@@ -237,6 +237,18 @@ const CONTENT = {
 	getDailySales: () => {
 		return remoteBase.create({
 			url: '/admin/content/getDailySales'
+		})()
+	},
+	getUserByPhone(phoneList = []) {
+		return remote.create({
+			url: '/admin/content/getUserByPhone',
+			body: {phoneList}
+		})()
+	},
+	addCourse: (domainIdList=[], courseId='') => {
+		return remote.create({
+			url: 'admin/content/addCourse',
+			body: {domainIdList, courseId}
 		})()
 	}
 }

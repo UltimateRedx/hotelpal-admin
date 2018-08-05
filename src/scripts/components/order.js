@@ -92,7 +92,7 @@ export default class Orders extends React.Component{
 		)
 	}
 	handleChange(date, dateStr) {
-		this.setState({createTimeFrom: date[0], createTimeTO: date[1]}, this.getPageList)
+		this.setState({purchaseDateFrom: date[0], purchaseDateTo: date[1]}, this.getPageList)
 	}
 	handleSearch(value) {
 		this.setState({searchValue: value}, this.getPageList)

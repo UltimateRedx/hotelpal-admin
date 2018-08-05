@@ -22,6 +22,7 @@ export default class Navigation extends React.Component {
 					<Menu selectable={false}><Item><Link to='/hotelpal/liveCourse'>直播课程</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/ppt'>直播PPT</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/coupon'>优惠券</Link></Item></Menu>
+					<Menu selectable={false}><Item><Link to='/hotelpal/courseCourier'>添加课程</Link></Item></Menu>
 					
 				</Sider>
 				<Layout>
