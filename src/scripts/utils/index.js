@@ -58,7 +58,7 @@ const Utils = {
 	createEditor: (selector) => {
 		const editor = new E(selector)
 		editor.customConfig.showLinkImg = false
-		editor.customConfig.menus = ['bold', 'image', 'link']
+		editor.customConfig.menus = ['bold', 'image', 'link', 'fontSize', 'fontName', 'head']
 		editor.customConfig.customUploadImg = (files, insert) => {
 			if (files && files.length > 0) {
 				let file = files[0];
