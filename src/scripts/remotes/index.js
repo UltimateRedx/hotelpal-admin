@@ -1,6 +1,8 @@
 const { remote, Remote } = require( 'beyond-remote' )
 
-const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + 'hotelpal'
+// const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + '/hotelpal'
+const domain=window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin'))
+const apiBasePath = domain + (domain.endsWith("/") ? '' : '/') + 'hotelpal'
 // const apiBasePath = 'http://v2.hotelpal.cn/hotelpal'
 const CONFIG = {
 	WS_ADDR: 'ws://' + location.hostname + ':8080',
@@ -340,6 +342,12 @@ const LIVE_COURSE = {
 		const url = '/admin/liveCourse/removeLiveCourse'
 		const body = {id}
 		return remoteBase.create({url, body})()
+	},
+	configureBaseLine: (courseId, type, baseLine) => {
+		return remoteBase.create({
+			url: '/admin/liveCourse/configureBaseLine',
+			body: {courseId, type, baseLine}
+		})()
 	}
 	
 }

@@ -49,10 +49,6 @@ export default class Users extends React.Component{
 			<div className={prefix}>
 				<Card title={
 					<Row>
-						{/* <Col span={8}>
-							<RangePicker onChange={this.handleChange.bind(this)}/>
-						</Col> */}
-						{/* <Col span={1}></Col> */}
 						<Col span = {4}>
 							<Search onSearch={this.handleSearch.bind(this)} 
 								placeholder='昵称/手机号/公司' enterButton
@@ -63,7 +59,6 @@ export default class Users extends React.Component{
 						<Col span={4} className='text-right'><Button title='此操作从微信服务器刷新所有用户信息，时间较长，慎用。' onClick={this.handleRefreshWxUserInfo.bind(this, '')}>更新所有用户微信信息</Button></Col>
 					</Row>}
 				>
-				
 					<Table 
 						bordered={true}
 						columns={USER_COLUMNS}

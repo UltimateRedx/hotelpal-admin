@@ -2,6 +2,7 @@ import React from 'react'
 import {Tabs} from 'antd'
 import CourseList from './courseList'
 import LiveControl from './liveControl'
+import Present from './present'
 import VipMember from './vipMember'
 const TabPane = Tabs.TabPane
 
@@ -24,6 +25,7 @@ export default class LiveCourse extends React.Component {
 			>
 				<TabPane key={KEY_COURSE} tab='课程'><CourseList/></TabPane>
 				<TabPane key={KEY_LIVE_CONTROL} tab='直播控制'><LiveControl active={activeKey == KEY_LIVE_CONTROL}/></TabPane>
+				<TabPane key={KEY_LIVE_PRESENT} tab='人数显示'><Present active={activeKey == KEY_LIVE_PRESENT}/></TabPane>
 				<TabPane key={KEY_MEMBER} tab='会员'><VipMember/></TabPane>
 				
 			</Tabs>
@@ -35,4 +37,5 @@ export default class LiveCourse extends React.Component {
 }
 const KEY_COURSE = 'COURSE'
 const KEY_LIVE_CONTROL = 'LIVE_CONTROL'
+const KEY_LIVE_PRESENT = 'KEY_LIVE_PRESENT'
 const KEY_MEMBER = 'MEMBER'
