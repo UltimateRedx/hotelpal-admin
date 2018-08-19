@@ -20,13 +20,16 @@ export default class PPT extends React.Component {
 		let url = location.href
 		url = url.substring(url.lastIndexOf('/'))
 		let courseId = url.substring(1, url.indexOf('@'))
+		this.setState({courseId})
 		this.getLiveImgList(courseId)
 		this.joinChat(courseId)
 	}
 	joinChat(courseId) {
-		let {ws, WS_ADDR, WS_PPT} = CONFIG
-		ws = new WebSocket(WS_ADDR + WS_PPT + "/" + courseId);
+		let {ws, WS_ADDR, WS_URL} = CONFIG
+		ws = new WebSocket(WS_ADDR + WS_URL);
 		ws.onopen = (e) => {
+			let initMsg = {courseId: courseId, init: 'Y', clientType: 'CLIENT_PPT'}
+			ws.send(JSON.stringify(initMsg))
 			NoticeMsg('WebSocket opened...')
 		}
 		ws.onclose = (e) => {
@@ -73,11 +76,11 @@ export default class PPT extends React.Component {
 						<Avatar className='nextImg' shape='square' size='large' src={nextImg}/>
 					</div>
 				</div>
-				<div className='footer w-100p'>
+				<div className='footer'>
 					<div className='left inline-block'>
 						<Button icon='left' disabled={disablePre} onClick={this.handleShowPre.bind(this)}></Button>
 					</div>
-					<div className='inline-block'>{list}</div>
+					<div className='img-list inline-block'>{list}</div>
 					<div className='right inline-block'>
 						<Button icon='right' disabled={disableNext} onClick={this.handleShowNext.bind(this)}></Button>
 					</div>
@@ -108,11 +111,12 @@ export default class PPT extends React.Component {
 		}
 	}
 	handleSendSignal() {
-		let {ws, currentImg} = this.state
+		let {ws, currentImg, courseId} = this.state
 		if (ws.readyState != WebSocket.OPEN) {
 			NoticeError("通信连接没有打开")
 			return
 		}
-		ws.send(currentImg)
+		let msg = {courseId, msg: currentImg, clientType: 'CLIENT_PPT'}
+		ws.send(JSON.stringify(msg))
 	}
 }

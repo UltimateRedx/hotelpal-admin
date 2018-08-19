@@ -5,7 +5,7 @@ import {LIVE_COURSE, CONFIG} from 'scripts/remotes/index'
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
 import moment from 'moment'
 const Option = Select.Option
-
+const {ADMIN_TOKEN} = CONFIG
 const prefix = 'liveControl'
 export default class LiveControl extends React.Component {
 	constructor(props) {
@@ -81,8 +81,8 @@ export default class LiveControl extends React.Component {
 		})
 		let {courseEnv, selectedCourseId} = this.state
 		let {ws} = courseEnv[selectedCourseId]
-		let {WS_ADDR, WS_URL, ADMIN_TOKEN} = CONFIG
-		ws = new WebSocket(WS_ADDR + WS_URL + selectedCourseId + '/' + ADMIN_TOKEN);
+		let {WS_ADDR, WS_URL} = CONFIG
+		ws = new WebSocket(WS_ADDR + WS_URL);
 		ws.onmessage = (e) => {
 			let data = JSON.parse(e.data)
 			let {assistantMsgList, userMsgList} = courseEnv[selectedCourseId]
@@ -99,7 +99,10 @@ export default class LiveControl extends React.Component {
 			}
 		}
 		ws.onopen = (e) => {
+			let initMsg = {courseId: selectedCourseId, token: ADMIN_TOKEN, init: 'Y',  clientType: 'CLIENT_ADMIN'}
+			ws.send(JSON.stringify(initMsg))
 			NoticeMsg('WebSocket opened...')
+
 		}
 		ws.onclose = (e) => {
 			NoticeMsg('WebSocket closed...')
@@ -287,7 +290,8 @@ export default class LiveControl extends React.Component {
 			NoticeError("通信连接没有打开")
 			return
 		}
-		ws.send(currentMsg)
+		let msg = {courseId: selectedCourseId, token: ADMIN_TOKEN, msg: currentMsg, clientType: 'CLIENT_ADMIN'}
+		ws.send(JSON.stringify(msg))
 		editor.txt.html('')
 	}
 	handleRemoveMsg(msg) {

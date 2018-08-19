@@ -5,10 +5,14 @@ const domain=window.location.href.substring(window.location.href.indexOf(window.
 const apiBasePath = domain + (domain.endsWith("/") ? '' : '/') + 'hotelpal'
 // const apiBasePath = 'http://v2.hotelpal.cn/hotelpal'
 const CONFIG = {
-	WS_ADDR: 'ws://' + location.hostname + ':8080',
-	WS_URL: '/hotelpal/admin/live/chat/',
+	WS_ADDR: 'ws://' + location.hostname + ':8081',
+	// WS_URL: '/hotelpal/admin/live/chat/',
+
+	// WS_ADDR: 'ws://127.0.0.1:8081',
+	WS_URL: '/live/chat',
+	
 	ADMIN_TOKEN: 'guFvC1iN6cnFVV257dwDVbEqttQ40vcJUzvAWvBdw6k0H8Tqblk1xXs2wbO95INF',
-	WS_PPT: '/hotelpal/live/op',
+	// WS_PPT: '/hotelpal/live/op',
 }
 function parseRes( res ) {
 	return typeof res === 'string' ? JSON.parse( res ) : res;

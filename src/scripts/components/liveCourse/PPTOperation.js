@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Row, Col, Avatar, Select} from 'antd'
+import { Button, Row, Col, Avatar, Select, Popconfirm} from 'antd'
 import {CONTENT, LIVE_COURSE} from 'scripts/remotes/index'
 
 import {NoticeMsg,NoticeError, Utils} from 'scripts/utils/index'
@@ -84,21 +84,26 @@ export default class PPTOperation extends React.Component {
 		})
 		let list = imgList.map((img, index) => {
 			return (
-				<Avatar key={index} className='avatars p-15 pl-30 pr-0' shape='square' size='large' src={img} 
-					// draggable
-					// onDragStart={this.handleDragStart.bind(this, img, index)}
-					// onDragOver={this.handleDragOver.bind(this)}
-					// onDragEnter={this.handleDragEnter.bind(this, img, index)}
-					// onDragLeave={this.handleDragLeave.bind(this, img, index)}
-				/>
+				<div className='inline-block' key={index}>
+					<Popconfirm title='删除此页？' onConfirm={this.handleRemoveOne.bind(this, index)}>
+						<i className='anticon anticon-cross-circle f-r'/>
+					</Popconfirm>
+					<Avatar key={index} className='avatars p-15 pl-30 pr-0' shape='square' size='large' src={img} 
+						// draggable
+						// onDragStart={this.handleDragStart.bind(this, img, index)}
+						// onDragOver={this.handleDragOver.bind(this)}
+						// onDragEnter={this.handleDragEnter.bind(this, img, index)}
+						// onDragLeave={this.handleDragLeave.bind(this, img, index)}
+					/>
+				</div>
 			)
 		}).concat(<Avatar key={imgList.length} className='ml-30' icon='plus-square-o' shape='square' size='large' onClick={this.handleSelectImg.bind(this, 'bannerImg')}/>)
 		return (
 			<div className={prefix}>
-				<div>
+				<div className='ppt-list'>
 					{list}
 				</div>
-				<div className='footer w-100p'>
+				<div className='footer w-100p pl-15 mb-15 mt-30'>
 					<Select onChange={this.handleSelectChange.bind(this)} value={selectedCourseId}>
 						{courseList}
 					</Select>
@@ -143,5 +148,10 @@ export default class PPTOperation extends React.Component {
 				this.setState({uploading: false})
 			})
 		}
+	}
+	handleRemoveOne(index) {
+		let {imgList} = this.state
+		imgList.splice(index, 1)
+		this.setState({imgList})
 	}
 }
