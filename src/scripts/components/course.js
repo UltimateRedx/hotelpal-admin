@@ -82,7 +82,7 @@ export default class Course extends React.Component {
 			)
 			res.createTimeStr = moment(res.createTime).format('YYYY-MM-DD HH:mm')
 			res.openTimeStr = res.openTime && moment(res.openTime).format('YYYY-MM-DD HH:mm')
-			res.sales = res.sales ? res.sales / 100 : 0
+			res.salesStr = res.sales ? res.sales / 100 : 0
 			return res;
 		})
 		return (
@@ -132,7 +132,7 @@ const COURSE_COLUMNS = [
 	{dataIndex: 'publish', title: '上架状态'},
 	{dataIndex: 'openTimeStr', title: '开课时间'},
 	{dataIndex: 'sold', title: '销量'},
-	{dataIndex: 'sales', title: '销售额'},
+	{dataIndex: 'salesStr', title: '销售额'},
 	{dataIndex: 'pv', title: 'PV'},
 	{dataIndex: 'uv', title: 'UV'},
 	{dataIndex: 'op', title: '操作'},
