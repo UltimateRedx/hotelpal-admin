@@ -21,6 +21,8 @@ export default class Lesson extends React.Component {
 			lessonData: {},
 			orderBy:'lessonOrder',
 			commentModal: false,
+			from: '',
+			to: '',
 		}
 	}
 	

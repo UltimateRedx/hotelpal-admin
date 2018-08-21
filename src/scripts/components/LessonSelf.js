@@ -1,10 +1,11 @@
 import React from 'react'
-import {Table, Pagination, Row, Button, Icon,Avatar, message, Popconfirm, Divider, Layout} from 'antd'
+import {Table, Pagination, Button, Popconfirm, Divider, Card, DatePicker} from 'antd'
 import moment from 'moment'
 import {NoticeError} from 'scripts/utils/index'
 import {LESSON} from 'scripts/remotes/index'
 import LessonSelfModal from 'scripts/components/modal/LessonSelfModal'
 import CommentModal from 'scripts/components/modal/CommentModal'
+const {RangePicker} = DatePicker
 
 const prefix = 'lesson-self'
 export default class LessonSelf extends React.Component {
@@ -71,24 +72,24 @@ export default class LessonSelf extends React.Component {
 		})
 		return (
 			<div className={prefix}>
-				<Row className='mb-20 pt-10 pl-15'>
-					<Button icon='plus' onClick={this.handleAddLesson.bind(this)}>添加课时</Button>
-				</Row>
-				<Table 
-					columns={LESSON_COLUMNS}
-					dataSource={list}
-					pagination = {false}
-				/>
-				<div className='pagination'>
-					<Pagination 
-						size="small" 
-						total={voTotal} 
-						current={currentPage} 
-						onChange={this.onChangePage.bind(this)}
-						showTotal={this.paginationTotalRender.bind(this)}
+				<Card 
+				title={<Button icon='plus' onClick={this.handleAddLesson.bind(this)}>添加课时</Button>}
+				extra={<RangePicker onChange={this.handleRangeChange.bind(this)}/>}>
+					<Table 
+						columns={LESSON_COLUMNS}
+						dataSource={list}
+						pagination = {false}
 					/>
-				</div>
-
+					<div className='pagination'>
+						<Pagination 
+							size="small" 
+							total={voTotal} 
+							current={currentPage} 
+							onChange={this.onChangePage.bind(this)}
+							showTotal={this.paginationTotalRender.bind(this)}
+						/>
+					</div>
+				</Card>
 				{editModal &&
 					<LessonSelfModal
 						visible={editModal}
@@ -123,6 +124,9 @@ export default class LessonSelf extends React.Component {
 	}
 	handleShowCommentModal(res) {
 		this.setState({commentModal: true, lessonData: res})
+	}
+	handleRangeChange(date) {
+		this.setState({from: date[0], to: date[1]}, this.getPageList)
 	}
 }
 const LESSON_COLUMNS = [

@@ -163,8 +163,14 @@ const COURSE = {
 const LESSON = {
 	getLessonList: (data) => {
 		const url = '/admin/lesson/getPageList'
-		let {courseId = '', currentPage = '1',pageSize = '10', orderBy='lessonOrder', order = 'asc',type = 'NORMAL'} = data;
-		const body = {courseId, currentPage,pageSize, orderBy, type, order}
+		let {courseId = '', currentPage = '1',pageSize = '10', orderBy='lessonOrder', order = 'asc',type = 'NORMAL', from, to} = data;
+		let body = {courseId, currentPage,pageSize, orderBy, type, order}
+		if (from) {
+			body.statisticsDateFrom = from
+		}
+		if (to) {
+			body.statisticsDateTo = to
+		}
 		return remoteBase.create({url, body})();
 	},
 	updateLesson: (data) => {
