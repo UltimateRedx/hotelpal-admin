@@ -1,10 +1,9 @@
 import React from 'react'
-import {Table, Row, Col, Pagination, DatePicker, Input, Avatar, Card, Button } from 'antd'
+import {Table, Row, Col, Pagination, Input, Avatar, Card, Button } from 'antd'
 import moment from 'moment'
 import {USER} from 'scripts/remotes'
-import {NoticeError} from 'scripts/utils/index'
+import {NoticeError, isEmptyObject} from 'scripts/utils/index'
 
-const {RangePicker} = DatePicker
 const {Search} = Input
 const prefix = 'users'
 
@@ -19,6 +18,9 @@ export default class Users extends React.Component{
 			phoneRegTimeFrom: '',
 			phoneRegTimeTo: '',
 			searchValue: '',
+			orderBy: 'u.createTime',
+			order: 'desc',
+			tableColmns: USER_COLUMNS,
 		}
 	}
 	componentDidMount() {
@@ -34,8 +36,10 @@ export default class Users extends React.Component{
 		})
 	}
 	render(){
-		let {userList, voTotal, currentPage, pageSize, searchValue} = this.state
-		userList = userList.map((u, index) => {
+		let {userList, voTotal, currentPage, pageSize, tableColmns} = this.state
+		let user_list = userList.map((user, index) => {
+			let u = {}
+			Object.assign(u, user)
 			u.wxHeadImg = (<Avatar icon={u.wxHeadImg ? null : 'question'} shape='square' size='small' src={u.wxHeadImg}/>)
 			u.wxNickname = (<a onClick={this.handleRefreshWxUserInfo.bind(this, u.domainId)} title='点击刷新微信用户信息'>{u.wxNickname || <Button>{u.subscribed=='N' ? '未关注' : '点击获取'}</Button>}</a>)
 			u.headImg = (<Avatar icon={u.headImg ? null : 'question'} shape='square' size='small' src={u.headImg}/>)
@@ -61,9 +65,10 @@ export default class Users extends React.Component{
 				>
 					<Table 
 						bordered={true}
-						columns={USER_COLUMNS}
-						dataSource={userList}
+						columns={tableColmns}
+						dataSource={user_list}
 						pagination = {false}
+						onChange={this.handleTableChange.bind(this)}
 					/>
 					<div className='pagination'>
 						<Pagination 
@@ -100,9 +105,21 @@ export default class Users extends React.Component{
 			} else {NoticeErrorr(res.messages)}
 		})
 	}
+	handleTableChange(pagination, filters, sorter) {
+		if (!isEmptyObject(sorter)) {
+			if ('purchasedNormalCourseCount' === sorter.columnKey) {
+				sorter.column.sortOrder = sorter.order
+				this.setState({orderBy: 'purchaseCount', order: 'descend' === sorter.order ? 'desc' : 'asc'}, this.getPageList)
+			}
+			if ('totalFee' === sorter.columnKey) {
+				sorter.column.sortOrder = sorter.order
+				this.setState({orderBy: 'totalFee', order: 'descend' === sorter.order ? 'desc' : 'asc'}, this.getPageList)
+			}
+		}
+	}
 
 }
-const USER_COLUMNS = [
+let USER_COLUMNS = [
 	{dataIndex: 'wxNickname', title: '微信昵称'},
 	{dataIndex: 'wxHeadImg', title: '微信头像'},
 	{dataIndex: 'headImg', title: '头像'},
@@ -110,8 +127,7 @@ const USER_COLUMNS = [
 	{dataIndex: 'phone', title: '手机号'},
 	{dataIndex: 'company', title: '公司'},
 	{dataIndex: 'title', title: '职位'},
-	{dataIndex: 'purchasedNormalCourseCount', title: '课程订阅数'},
-	{dataIndex: 'totalFee', title: '消费总金额'},
-	{dataIndex: 'createTimeStr', title: '创建时间'},
+	{dataIndex: 'purchasedNormalCourseCount', title: '课程订阅数', sorter: true},
+	{dataIndex: 'totalFee', title: '消费金额', sorter: true, sortOrder: false},
 	{dataIndex: 'phoneRegTimeStr', title: '注册时间'},
 ]
