@@ -31,14 +31,14 @@ export default class Login extends React.Component {
 							<Divider type='vertical' className='bg-primary-red'/>
 							<h4 className='p-20 inline-block'>管理后台</h4>
 						</div>
-						{/* <div className='form-group-item mb-15'>
-							<div className="form-group-item-body">
-								<Input
-									value={user}
-									onChange={this.handleInputChange.bind(this,'user')}
-								/>
-							</div>
-						</div> */}
+						<div className='form-group-item mb-15'>
+							<Input
+								placeholder='请输入用户名'
+								value={user}
+								onChange={this.handleInputChange.bind(this,'user')}
+								onPressEnter={this.handleLogin.bind(this)}
+							/>
+						</div>
 						<div className='form-group-item mb-15'>
 							<Input
 								type='password'
@@ -60,12 +60,16 @@ export default class Login extends React.Component {
 		this.setState({[f]: e.target.value})
 	}
 	handleLogin() {
-		let {auth} = this.state
+		let {user, auth} = this.state
+		if (!user) {
+			NoticeMsg("请输入用户名")
+			return
+		}
 		if (!auth) {
 			NoticeMsg("请输入密码")
 			return
 		}
-		LOGIN.login(auth).then(res => {
+		LOGIN.login(user, auth).then(res => {
 			if (!res.success) {
 				NoticeError(res.messages)
 				return

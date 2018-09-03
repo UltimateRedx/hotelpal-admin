@@ -1,3 +1,4 @@
+import {notification} from 'antd'
 const { remote, Remote } = require( 'beyond-remote' )
 
 // const apiBasePath = window.location.href.substring(window.location.href.indexOf(window.location.host)+window.location.host.length, window.location.href.indexOf('admin')) + '/hotelpal'
@@ -47,10 +48,17 @@ remoteBase.on('success', (e) => {
 		postProcessXHR(res)
 	})
 })
+let heartBeatShow = false
+let loggedIn = false
 remote.on('success', (e) => {
-	e.data.clone().text().then((res)=> {
-		postProcessXHR(res)
-	})
+	let res = e.data.clone()
+	// if (!loggedIn) {
+		res.text().then(res => {
+			postProcessXHR(res)
+		})
+	// } else if (res.url.indexOf('heartBeat') >= 0) {
+
+	// }
 })
 function postProcessXHR(res) {
 	try{
@@ -59,13 +67,36 @@ function postProcessXHR(res) {
 	if (res.code == 401) {
 		window.localStorage.setItem("loggedIn", 'N')
 		window.location.href='#/login'
+		loggedIn = false
 	}
 }
+
+setInterval(() => {
+	remote.create({url:'/admin/heartBeat'})().then(res => {
+		// res = JSON.parse(res)
+		// if (res.code == 401)
+
+		// if (!heartBeatShow) {
+		// 	notification.warn({
+		// 		description: '当前会话不再可用，请将未保存的内容复制到其他位置', 
+		// 		message: '与服务器断开连接...', 
+		// 		duration: null, 
+		// 		key: 'heartBeat',
+		// 		onClose: () =>{heartBeatShow = false}}
+		// 		)
+		// 	heartBeatShow = true
+		// }
+		
+	})
+}, 5 * 60 * 1000);
 const LOGIN = {
-	login: (auth) => {
+	login: (user, auth) => {
 		const url = 'admin/login'
-		const body = {auth}
-		return remoteBase.create({url, body})()
+		const body = {user, auth}
+		return remoteBase.create({url, body})().then(res => {
+			loggedIn = true
+			return res
+		})
 	}
 }
 const SETTINGS = {
