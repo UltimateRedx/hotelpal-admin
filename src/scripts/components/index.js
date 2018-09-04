@@ -1,17 +1,25 @@
 import React from 'react'
-import {Link, Modal, Row, Col, Input} from 'react-router'
-import {Layout, Menu, Modal} from 'antd'
+import {Link} from 'react-router'
+import {Layout, Menu, Modal, Row, Col, Input, Icon, Button} from 'antd'
 const {Sider, Header} = Layout
 const {Item} = Menu
-import {NoticeMsg} from 'scripts/utils/index'
+import {NoticeMsg, NoticeError} from 'scripts/utils/index'
+import { LOGIN } from '../remotes';
 require('styles/index.less')
 const prefix = 'navigation'
 export default class Navigation extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			show: false
+		}
+	}
 	render() {
+		let {show} = this.state
 		return (
 			<Layout className={prefix}>
 				<Sider collapsible={true} className='sider'>
-					<Menu selectable={false}><Item></Item></Menu>
+					<Menu selectable={false}><Item><Icon type="user" onClick={this.handleUserClick.bind(this)}/></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/statistics'>数据统计</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/settings'>配置</Link></Item></Menu>
 					<Menu selectable={false}><Item><Link to='/hotelpal/speaker'>主讲人</Link></Item></Menu>
@@ -30,9 +38,13 @@ export default class Navigation extends React.Component {
 					<div className='container'>
 						{this.props.children}
 					</div>
+					<PWModal show={show}/>
 				</Layout>
 			</Layout>
 		)
+	}
+	handleUserClick() {
+		this.setState({show: true})
 	}
 }
 class PWModal extends React.Component {
@@ -40,18 +52,26 @@ class PWModal extends React.Component {
 		super(props)
 		this.state = {
 			old: '',
-			nova: ''
+			nova: '',
+			show: false
 		}
 	}
+	componentWillReceiveProps(nextProps) {
+        this.setState({show: nextProps.show})
+    }
 	render() {
-		let {show} = this.props
+		let {show} = this.state
 		return (
 			<Modal
 				visible={show}
 				title = '修改密码'
 				width = {800}
 				maskClosable = {false}
-				footer = {null}
+				onCancel={this.handleClose.bind(this)}
+				footer = {[
+					<Button key="back" className='btn-cancel' onClick={this.handleClose.bind(this)}>取消</Button>,
+					<Button key="ok" onClick={this.handleConfirm.bind(this)}>修改</Button>
+				]}
 			>
 				<Row>
 					<Col>原密码:</Col>
@@ -61,13 +81,12 @@ class PWModal extends React.Component {
 					<Col>新密码:</Col>
 					<Col><Input onChange={this.handleInputChange.bind(this, 'nova')}/></Col>
 				</Row>
-				<Row><Button onClick={this.handleConfirm.bind(this)}/></Row>
 			</Modal>
 
 		)
 	}
 	handleInputChange(f, e) {
-		this.setState([f], e.target.value)
+		this.setState({[f]: e.target.value})
 	}
 	handleConfirm() {
 		let {old, nova} = this.state
@@ -79,6 +98,15 @@ class PWModal extends React.Component {
 			NoticeMsg('请输入新密码')
 			return
 		}
-		
+		LOGIN.resetPW(old, nova).then(res => {
+			if (!res.success) {
+				NoticeError(res.messages)
+				return
+			}
+			NoticeMsg('修改密码成功')
+		})
+	}
+	handleClose() {
+		this.setState({old: '', nova: '', show: false})
 	}
 }

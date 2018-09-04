@@ -97,6 +97,12 @@ const LOGIN = {
 			loggedIn = true
 			return res
 		})
+	},
+	resetPW: (old, nova) => {
+		return remoteBase.create({
+			url: '/admin/resetPW',
+			body: {old, nova},
+		})()
 	}
 }
 const SETTINGS = {
