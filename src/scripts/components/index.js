@@ -38,13 +38,18 @@ export default class Navigation extends React.Component {
 					<div className='container'>
 						{this.props.children}
 					</div>
-					<PWModal show={show}/>
+					<PWModal show={show}
+						onClose={this.closeModal.bind(this)}
+					/>
 				</Layout>
 			</Layout>
 		)
 	}
 	handleUserClick() {
 		this.setState({show: true})
+	}
+	closeModal() {
+		this.setState({show: false})
 	}
 }
 class PWModal extends React.Component {
@@ -53,14 +58,13 @@ class PWModal extends React.Component {
 		this.state = {
 			old: '',
 			nova: '',
-			show: false
 		}
 	}
 	componentWillReceiveProps(nextProps) {
         this.setState({show: nextProps.show})
     }
 	render() {
-		let {show} = this.state
+		let {show, old, nova} = this.state
 		return (
 			<Modal
 				visible={show}
@@ -75,11 +79,11 @@ class PWModal extends React.Component {
 			>
 				<Row>
 					<Col>原密码:</Col>
-					<Col><Input onChange={this.handleInputChange.bind(this, 'old')}/></Col>
+					<Col><Input type='password' value={old} onChange={this.handleInputChange.bind(this, 'old')}/></Col>
 				</Row>
 				<Row>
 					<Col>新密码:</Col>
-					<Col><Input onChange={this.handleInputChange.bind(this, 'nova')}/></Col>
+					<Col><Input type='password' value={nova} onChange={this.handleInputChange.bind(this, 'nova')}/></Col>
 				</Row>
 			</Modal>
 
@@ -104,9 +108,13 @@ class PWModal extends React.Component {
 				return
 			}
 			NoticeMsg('修改密码成功')
+			this.handleClose()
 		})
 	}
 	handleClose() {
-		this.setState({old: '', nova: '', show: false})
+		this.setState({old: '', nova: ''}, () => {
+			let {onClose} = this.props
+			onClose()
+		})
 	}
 }
