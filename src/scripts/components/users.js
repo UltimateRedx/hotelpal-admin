@@ -101,7 +101,7 @@ export default class Users extends React.Component{
 	handleRefreshWxUserInfo(domainId) {
 		USER.refreshWxUserInfo(domainId).then(res => {
 			if (res.success) {
-				setTimeout(() =>{this.getPageList();}, 1000)
+				setTimeout(() =>{this.getPageList();}, 500)
 			} else {NoticeErrorr(res.messages)}
 		})
 	}

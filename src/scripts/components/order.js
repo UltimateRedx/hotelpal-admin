@@ -39,7 +39,9 @@ export default class Orders extends React.Component{
 	}
 	render(){
 		let {orderList, voTotal, currentPage, pageSize, searchValue, courseType} = this.state
-		let order_list = orderList.map((u, index) => {
+		let order_list = orderList.map((user, index) => {
+			let u = {}
+			Object.assign(u, user)
 			u.payment = u.payment / 100 + (u.originalPrice != u.payment ? (' (优惠-' + (u.originalPrice - u.payment) / 100) + ')' : '')
 			u.couponValue = u.couponId ? u.couponValue / 100 : '-'
 			u.purchaseTimeStr = moment(u.createTime).format('YYYY-MM-DD HH:mm')
