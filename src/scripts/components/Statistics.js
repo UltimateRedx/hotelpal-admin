@@ -111,11 +111,11 @@ export default class Statistics extends React.Component {
 							</Row>
 							<Row>
 								<Col span={12} className='t-center'>
-									<label className='block-i f-bold fs-30'>{vo.normalCoursePv || '0'}</label>
+									<label className='block-i f-bold fs-30'>{vo.selfCoursePv || '0'}</label>
 									<label className='block-i f-bold'>浏览次数</label>
 								</Col>
 								<Col span={12} className='t-center'>
-									<label className='block-i f-bold fs-30'>{vo.normalCourseUv || '0'}</label>
+									<label className='block-i f-bold fs-30'>{vo.selfCourseUv || '0'}</label>
 									<label className='block-i f-bold'>独立访客</label>
 								</Col>
 							</Row>
@@ -129,11 +129,11 @@ export default class Statistics extends React.Component {
 							</Row>
 							<Row>
 								<Col span={12} className='t-center'>
-									<label className='block-i f-bold fs-30'>{vo.selfCoursePv || '0'}</label>
+									<label className='block-i f-bold fs-30'>{vo.normalCoursePv || '0'}</label>
 									<label className='block-i f-bold'>浏览次数</label>
 								</Col>
 								<Col span={12} className='t-center'>
-									<label className='block-i f-bold fs-30'>{vo.selfCourseUv || '0'}</label>
+									<label className='block-i f-bold fs-30'>{vo.normalCourseUv || '0'}</label>
 									<label className='block-i f-bold'>独立访客</label>
 								</Col>
 							</Row>
