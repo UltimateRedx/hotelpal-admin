@@ -6,7 +6,7 @@ const domain=window.location.href.substring(window.location.href.indexOf(window.
 const apiBasePath = domain + (domain.endsWith("/") ? '' : '/') + 'hotelpal'
 // const apiBasePath = 'http://v2.hotelpal.cn/hotelpal'
 const CONFIG = {
-	WS_ADDR: 'ws://' + location.hostname + ':8081',
+	WS_ADDR: ('https:' == location.protocol ? 'wss:': 'ws:') + '//' + location.hostname,
 	// WS_URL: '/hotelpal/admin/live/chat/',
 
 	// WS_ADDR: 'ws://127.0.0.1:8081',
