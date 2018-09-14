@@ -10,7 +10,7 @@ const Option = Select.Option
 
 const prefix = 'courseModal'
 const getInitialState = (props) => {
-	let {data} = props
+	let data = Object.assign({}, props.data)
 	let d = data || {}
 	Object.assign(d, {openTime: data.openTime ? new moment(data.openTime) : new moment(), price: data.price ? data.price / 100 : '0',
 			courseContent: data.courseContent || {introduce: '', crowd: '', gain: '', subscribe:''}})
