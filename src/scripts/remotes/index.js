@@ -70,31 +70,41 @@ function postProcessXHR(res) {
 		loggedIn = false
 	}
 }
-
-setInterval(() => {
-	remote.create({url:'/admin/heartBeat'})().then(res => {
-		// res = JSON.parse(res)
-		// if (res.code == 401)
-
-		// if (!heartBeatShow) {
-		// 	notification.warn({
-		// 		description: '当前会话不再可用，请将未保存的内容复制到其他位置', 
-		// 		message: '与服务器断开连接...', 
-		// 		duration: null, 
-		// 		key: 'heartBeat',
-		// 		onClose: () =>{heartBeatShow = false}}
-		// 		)
-		// 	heartBeatShow = true
-		// }
-		
-	})
-}, 5 * 60 * 1000);
+var beating = false
+function beat() {
+	if (beating) {
+		return
+	}
+	beating = true
+	var timeIntervalId = setInterval(() => {
+		remote.create({url:'/admin/heartBeat'})().then(res => {
+			if (res.code == 401){
+				clearInterval(timeIntervalId)
+				beating = false
+			}
+	
+			// if (!heartBeatShow) {
+			// 	notification.warn({
+			// 		description: '当前会话不再可用，请将未保存的内容复制到其他位置', 
+			// 		message: '与服务器断开连接...', 
+			// 		duration: null, 
+			// 		key: 'heartBeat',
+			// 		onClose: () =>{heartBeatShow = false}}
+			// 		)
+			// 	heartBeatShow = true
+			// }
+			
+		})
+	}, 5 * 60 * 1000);
+}
+beat()
 const LOGIN = {
 	login: (user, auth) => {
 		const url = 'admin/login'
 		const body = {user, auth}
 		return remoteBase.create({url, body})().then(res => {
 			loggedIn = true
+			beat()
 			return res
 		})
 	},

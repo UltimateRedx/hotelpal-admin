@@ -76,6 +76,7 @@ export default class Login extends React.Component {
 			}
 			window.localStorage.setItem("loggedIn", 'Y')
 			window.location.href = '#/hotelpal'
+			window.sessionStorage.setItem("grantedMenu", JSON.stringify(new Set(res.vo)));
 		})
 	}
 }
