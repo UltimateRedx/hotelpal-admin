@@ -74,9 +74,28 @@ export default class Login extends React.Component {
 				NoticeError(res.messages)
 				return
 			}
+			window.sessionStorage.clear()
 			window.localStorage.setItem("loggedIn", 'Y')
-			window.location.href = '#/hotelpal'
 			window.sessionStorage.setItem("grantedMenu", JSON.stringify(new Set(res.vo)));
+			let grantedLink = this.getGrantedLinks()
+			if (grantedLink.length > 0) {
+				window.location.href = '#' + grantedLink[0]
+			}
 		})
+	}
+	getGrantedLinks() {
+		let grantedMenuStr = window.sessionStorage.getItem('grantedMenu')
+		let grantedMenu = new Set(JSON.parse(grantedMenuStr))
+		let links = []
+		if (grantedMenu.has('MENU_HOME')) links.push('/hotelpal/statistics')
+		if (grantedMenu.has('MENU_SYS_CONFIGURATION')) links.push('/hotelpal/settings')
+		if (grantedMenu.has('MENU_SPEAKER')) links.push('/hotelpal/speaker')
+		if (grantedMenu.has('MENU_COURSE')) links.push('/hotelpal/course')
+		if (grantedMenu.has('MENU_USER')) links.push('/hotelpal/user')
+		if (grantedMenu.has('MENU_ORDER')) links.push('/hotelpal/order')
+		if (grantedMenu.has('MENU_LIVE')) links.push('/hotelpal/liveCourse')
+		if (grantedMenu.has('MENU_COUPON')) links.push('/hotelpal/coupon')
+		if (grantedMenu.has('MENU_COURSE_ADD')) links.push('/hotelpal/courseCourier')
+		return links
 	}
 }

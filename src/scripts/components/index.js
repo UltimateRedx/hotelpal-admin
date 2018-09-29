@@ -13,7 +13,8 @@ export default class Navigation extends React.Component {
 		let grantedMenuStr = window.sessionStorage.getItem('grantedMenu')
 		this.state = {
 			show: false,
-			grantedMenu: new Set(JSON.parse(grantedMenuStr)) 
+			grantedMenu: new Set(JSON.parse(grantedMenuStr)),
+			grantedLink:[],
 		}
 	}
 	render() {
@@ -22,17 +23,17 @@ export default class Navigation extends React.Component {
 			<Layout className={prefix}>
 				<Sider collapsible={true} className='sider'>
 					<Menu selectable={false}><Item><Icon type="user" onClick={this.handleUserClick.bind(this)}/></Item></Menu>
-					{grantedMenu.has() && this.renderMenu('/hotelpal/statistics', '数据统计')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/settings', '配置')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/speaker', '主讲人')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/course', '订阅专栏')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/lessonSelf', '成长专栏')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/user', '用户管理')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/order', '订单管理')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/liveCourse', '直播课程')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/ppt', '直播PPT')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/coupon', '优惠券')}
-					{grantedMenu.has() && this.renderMenu('/hotelpal/courseCourier', '添加课程')}
+					{grantedMenu.has('MENU_HOME') && this.renderMenu('/hotelpal/statistics', '数据统计')}
+					{grantedMenu.has('MENU_SYS_CONFIGURATION') && this.renderMenu('/hotelpal/settings', '配置')}
+					{grantedMenu.has('MENU_SPEAKER') && this.renderMenu('/hotelpal/speaker', '主讲人')}
+					{grantedMenu.has('MENU_COURSE') && this.renderMenu('/hotelpal/course', '订阅专栏')}
+					{grantedMenu.has('MENU_COURSE') && this.renderMenu('/hotelpal/lessonSelf', '成长专栏')}
+					{grantedMenu.has('MENU_USER') && this.renderMenu('/hotelpal/user', '用户管理')}
+					{grantedMenu.has('MENU_ORDER') && this.renderMenu('/hotelpal/order', '订单管理')}
+					{grantedMenu.has('MENU_LIVE') && this.renderMenu('/hotelpal/liveCourse', '直播课程')}
+					{grantedMenu.has('MENU_LIVE') && this.renderMenu('/hotelpal/ppt', '直播PPT')}
+					{grantedMenu.has('MENU_COUPON') && this.renderMenu('/hotelpal/coupon', '优惠券')}
+					{grantedMenu.has('MENU_COURSE_ADD') && this.renderMenu('/hotelpal/courseCourier', '添加课程')}
 					
 					 
 
@@ -68,10 +69,13 @@ export default class Navigation extends React.Component {
 		this.setState({show: false})
 	}
 	renderMenu(to, text) {
+		let {grantedLink} = this.state
+		grantedLink.push(to);
+		this.state.grantedLink = grantedLink
+		window.sessionStorage.setItem('grantedLink', JSON.stringify(grantedLink))
 		return (
 			<Menu selectable={false}><Item><Link to={to}>{text}</Link></Item></Menu>
 		)
-		
 	}
 }
 class PWModal extends React.Component {
