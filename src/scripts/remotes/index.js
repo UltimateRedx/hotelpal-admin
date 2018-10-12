@@ -113,7 +113,17 @@ const LOGIN = {
 			url: '/admin/resetPW',
 			body: {old, nova},
 		})()
-	}
+	},
+}
+const ADMIN = {
+	getAdminAuth: () => {
+		return remoteBase.create({
+			url: '/admin/getAdminAuth',
+		})()
+	},
+	authorizeMenu: (uid, menu) => {
+		return remoteBase.create({url: '/admin/authorizeMenu', body: {uid, menu}})()
+	},
 }
 const SETTINGS = {
 	getBannerList: () => {
@@ -459,5 +469,5 @@ const COUPON = {
 		return remoteBase.create({url, body})()
 	}
 }
-export {LOGIN, SETTINGS, SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
+export {LOGIN, ADMIN, SETTINGS, SPEAKER, CONTENT, COURSE, LESSON, COMMENT, USER,
 	LIVE_COURSE, CONFIG, COUPON}

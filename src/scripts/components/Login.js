@@ -89,6 +89,7 @@ export default class Login extends React.Component {
 		let links = []
 		if (grantedMenu.has('MENU_HOME')) links.push('/hotelpal/statistics')
 		if (grantedMenu.has('MENU_SYS_CONFIGURATION')) links.push('/hotelpal/settings')
+		if (grantedMenu.has('MENU_AUTH_MANAGER')) links.push('/hotelpal/auth')
 		if (grantedMenu.has('MENU_SPEAKER')) links.push('/hotelpal/speaker')
 		if (grantedMenu.has('MENU_COURSE')) links.push('/hotelpal/course')
 		if (grantedMenu.has('MENU_USER')) links.push('/hotelpal/user')

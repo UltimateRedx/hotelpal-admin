@@ -25,6 +25,7 @@ export default class Navigation extends React.Component {
 					<Menu selectable={false}><Item><Icon type="user" onClick={this.handleUserClick.bind(this)}/></Item></Menu>
 					{grantedMenu.has('MENU_HOME') && this.renderMenu('/hotelpal/statistics', '数据统计')}
 					{grantedMenu.has('MENU_SYS_CONFIGURATION') && this.renderMenu('/hotelpal/settings', '配置')}
+					{grantedMenu.has('MENU_AUTH_MANAGER') && this.renderMenu('/hotelpal/auth', '权限配置')}
 					{grantedMenu.has('MENU_SPEAKER') && this.renderMenu('/hotelpal/speaker', '主讲人')}
 					{grantedMenu.has('MENU_COURSE') && this.renderMenu('/hotelpal/course', '订阅专栏')}
 					{grantedMenu.has('MENU_COURSE') && this.renderMenu('/hotelpal/lessonSelf', '成长专栏')}
