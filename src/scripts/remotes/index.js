@@ -121,9 +121,15 @@ const ADMIN = {
 			url: '/admin/getAdminAuth',
 		})()
 	},
-	authorizeMenu: (uid, menu) => {
-		return remoteBase.create({url: '/admin/authorizeMenu', body: {uid, menu}})()
+	authorizeMenu: (uid, menu, authorize) => {
+		return remoteBase.create({url: '/admin/authorizeMenu', body: {uid, menu, authorize}})()
 	},
+	deleteUser: (uid) => {
+		return remoteBase.create({url:'/admin/deleteUser', body: {uid}})()
+	},
+	createAdminUser: (user, name) => {
+		return remoteBase.create({url: '/admin/createAdminUser', body: {user, name}})()
+	} 
 }
 const SETTINGS = {
 	getBannerList: () => {

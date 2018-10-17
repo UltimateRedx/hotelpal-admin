@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Checkbox, notification} from 'antd'
+import {Card, Checkbox, notification, Button, Popconfirm, Modal, Row, Col, Input} from 'antd'
 import {ADMIN} from 'scripts/remotes'
 import { NoticeError } from 'scripts/utils/index';
 
@@ -11,10 +11,15 @@ export default class AuthManager extends React.Component {
 		super(props)
 		this.state = {
 			adminList:[],
+			modal: false,
 		}
 	}
 
 	componentDidMount() {
+		this.updateAuthComponent()
+	}
+
+	updateAuthComponent() {
 		//get auth
 		ADMIN.getAdminAuth().then(res => {
 			if (res.success) {
@@ -28,7 +33,7 @@ export default class AuthManager extends React.Component {
 		let list = adminList.map(one => {return this.renderOne(one)})
 		return (
 			<div className={prefix}>
-				<Card title='后台用户权限管理'>
+				<Card title='后台用户权限管理' extra={<Button onClick={this.handleModalShow.bind(this)}>添加用户</Button>}>
 					{list}
 				</Card>
 			</div>
@@ -41,7 +46,12 @@ export default class AuthManager extends React.Component {
 			return (<Checkbox key={index} checked={accessibleMenu.has(item.menu)} onChange={this.handleCheckBoxChange.bind(this, user.id, item.menu, uuid())}>{item.name}</Checkbox>)
 		})
 		return (
-			<Card className='mb-15' title={user.user} key={user.id}>
+			<Card className='mb-15' title={user.name || user.user} key={user.id} 
+				extra={
+					<Popconfirm title={'确认删除：' + (user.name || user.user) + ' ?'} 
+						onConfirm = {this.handleDelete.bind(this, user.id)} >
+							<Button>删除</Button>
+					</Popconfirm>}>
 				{optionList}
 			</Card>
 		)
@@ -51,15 +61,111 @@ export default class AuthManager extends React.Component {
 	handleCheckBoxChange(userId, authMenu, uuid, e) {
 		notificationOperation.DESTROY(uuid)
 		notificationOperation.CRATE(uuid)
-		ADMIN.authorizeMenu(userId, authMenu).then(res => {
+		ADMIN.authorizeMenu(userId, authMenu, e.target.checked?'Y':'N').then(res => {
 			if (!res.success) {
 				NoticeError(res.message)
 			}
+			this.updateAuthComponent()
 			notificationOperation.UPDATE(uuid, res.success)
 		})
 	}
 
+	handleDelete(userId) {
+		ADMIN.deleteUser(userId).then(res => {
+			if (res.success) {
+				this.updateAuthComponent()
+			} else {
+				NoticeError(res.messages)
+			}
+		})
+	}
+
+	handleModalShow() {
+		this.setState({modal: true})
+	}
+
 }
+class NewAdminUserModal extends React.Component {
+	constructor(props) {
+		super(props) 
+		this.state = {
+			user: '',
+			name: '',
+		}
+	}
+
+	handleCloseModal() {
+		this.state = {}
+		let {onClose} = this.props
+		onClose()
+	}
+
+	confirmHandler() {
+		let {user, name} = this.state
+		let {onClose} = this.props
+		ADMIN.createAdminUser(user, name).then(res => {
+			if (res.success) {
+				onClose(true)
+			} else {
+				NoticeError(res.messages)
+			}
+		})
+	}
+
+	render() {
+		let {show} = this.props
+		let {user, name} = this.state
+		return (
+			<Modal 
+				visible={show}
+				title = '添加后台用户'
+				width = {400}
+				onCancel={this.handleCloseModal.bind(this)}
+				maskClosable = {false}
+				footer = {
+					[
+						<Button key="back" className='btn-cancel' onClick={this.handleCloseModal.bind(this)}>取消</Button>,
+						<Button key="submit" className='button-green white' onClick={this.confirmHandler.bind(this)}>确认</Button>
+					]
+				}
+			>
+				<Row className='mb-8'>
+					<Col className="form-group-item">
+						<div className="form-group-item-heading">用户名</div>
+						<div className="form-group-item-body">
+							<Input value={user} onChange={this.inputHandler.bind(this, 'user')}/>
+						</div>
+					</Col>
+				</Row>
+				<Row>
+					<Col className="form-group-item">
+						<div className="form-group-item-heading">姓名/昵称</div>
+						<div className="form-group-item-body">
+							<Input value={name} onChange={this.inputHandler.bind(this, 'name')}  placeholder='选填'/>
+						</div>
+					</Col>
+				</Row>
+			</Modal>
+		)
+	}
+	
+	inputHandler(f, e) {
+		this.setState({[f] : e.target.value})
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 const key = 'updatable';
 const UUID = 'thisisuuid'
 const AUTH_ITEM_LIST = [
