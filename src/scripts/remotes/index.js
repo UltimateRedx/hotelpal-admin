@@ -114,6 +114,9 @@ const LOGIN = {
 			body: {old, nova},
 		})()
 	},
+	logout: () => {
+		return remoteBase.create({url:'/admin/logout'})()
+	}
 }
 const ADMIN = {
 	getAdminAuth: () => {
@@ -127,7 +130,7 @@ const ADMIN = {
 	deleteUser: (uid) => {
 		return remoteBase.create({url:'/admin/deleteUser', body: {uid}})()
 	},
-	createAdminUser: (user, name) => {
+	createAdminUser: (user = '', name = '') => {
 		return remoteBase.create({url: '/admin/createAdminUser', body: {user, name}})()
 	} 
 }

@@ -29,13 +29,14 @@ export default class AuthManager extends React.Component {
 	}
 
 	render() {
-		let {adminList} = this.state
+		let {adminList, modal} = this.state
 		let list = adminList.map(one => {return this.renderOne(one)})
 		return (
 			<div className={prefix}>
 				<Card title='后台用户权限管理' extra={<Button onClick={this.handleModalShow.bind(this)}>添加用户</Button>}>
 					{list}
 				</Card>
+				<NewAdminUserModal show={modal} onClose={this.modalCloseHandler.bind(this)}/>
 			</div>
 		)
 	}
@@ -65,8 +66,8 @@ export default class AuthManager extends React.Component {
 			if (!res.success) {
 				NoticeError(res.message)
 			}
-			this.updateAuthComponent()
 			notificationOperation.UPDATE(uuid, res.success)
+			this.updateAuthComponent()
 		})
 	}
 
@@ -82,6 +83,12 @@ export default class AuthManager extends React.Component {
 
 	handleModalShow() {
 		this.setState({modal: true})
+	}
+	modalCloseHandler(update) {
+		this.setState({modal: false})
+		if (update) {
+			this.updateAuthComponent()
+		}
 	}
 
 }
@@ -154,20 +161,6 @@ class NewAdminUserModal extends React.Component {
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-const key = 'updatable';
-const UUID = 'thisisuuid'
 const AUTH_ITEM_LIST = [
 	{menu: 'MENU_HOME', name: '数据统计'},
 	{menu: 'MENU_SYS_CONFIGURATION',name: '配置'},

@@ -69,6 +69,7 @@ export default class Coupon extends React.Component{
 					</Popconfirm>
 				</div>
 			)
+			coupon.spentStr = (<div>{coupon.spent}<br/><div className='primary-blue' title='已使用数量'>{coupon.used}</div></div>)
 			return coupon
 		})
 		return (
@@ -124,7 +125,7 @@ const COUPON_COLUMN = [
 	{dataIndex: 'name', title: '优惠券名称'},
 	{dataIndex: 'value', title: '面额'},
 	{dataIndex: 'total', title: '数量'},
-	{dataIndex: 'spent', title: '已领数量'},
+	{dataIndex: 'spentStr', title: '已领数量'},
 	{dataIndex: 'createTimeStr', title: '创建时间'},
 	{dataIndex: 'validityStr', title: '有效期至'},
 	{dataIndex: 'link', title: '链接'},

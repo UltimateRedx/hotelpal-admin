@@ -22,7 +22,12 @@ export default class Navigation extends React.Component {
 		return (
 			<Layout className={prefix}>
 				<Sider collapsible={true} className='sider'>
-					<Menu selectable={false}><Item><Icon type="user" onClick={this.handleUserClick.bind(this)}/></Item></Menu>
+					<Menu selectable={false}>
+						<Item>
+							<Icon type="user" onClick={this.handleUserClick.bind(this)} />
+							<Icon type="logout" theme="outlined" onClick={this.logoutHandler.bind(this)} style={{marginLeft: 15}}/>
+						</Item>
+					</Menu>
 					{grantedMenu.has('MENU_HOME') && this.renderMenu('/hotelpal/statistics', '数据统计')}
 					{grantedMenu.has('MENU_SYS_CONFIGURATION') && this.renderMenu('/hotelpal/settings', '配置')}
 					{grantedMenu.has('MENU_AUTH_MANAGER') && this.renderMenu('/hotelpal/auth', '权限配置')}
@@ -77,6 +82,13 @@ export default class Navigation extends React.Component {
 		return (
 			<Menu selectable={false}><Item><Link to={to}>{text}</Link></Item></Menu>
 		)
+	}
+	logoutHandler() {
+		LOGIN.logout().then(res => {
+			if (res.success) {
+				window.location.reload()
+			}
+		})
 	}
 }
 class PWModal extends React.Component {
