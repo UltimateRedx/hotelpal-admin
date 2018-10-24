@@ -74,9 +74,9 @@ export default class Login extends React.Component {
 				NoticeError(res.messages)
 				return
 			}
-			window.sessionStorage.clear()
+			window.localStorage.clear()
 			window.localStorage.setItem("loggedIn", 'Y')
-			window.sessionStorage.setItem("grantedMenu", JSON.stringify(new Set(res.vo)));
+			window.localStorage.setItem("grantedMenu", JSON.stringify(new Set(res.vo)));
 			let grantedLink = this.getGrantedLinks()
 			if (grantedLink.length > 0) {
 				window.location.href = '#' + grantedLink[0]
@@ -84,7 +84,7 @@ export default class Login extends React.Component {
 		})
 	}
 	getGrantedLinks() {
-		let grantedMenuStr = window.sessionStorage.getItem('grantedMenu')
+		let grantedMenuStr = window.localStorage.getItem('grantedMenu')
 		let grantedMenu = new Set(JSON.parse(grantedMenuStr))
 		let links = []
 		if (grantedMenu.has('MENU_HOME')) links.push('/hotelpal/statistics')

@@ -10,7 +10,7 @@ const prefix = 'navigation'
 export default class Navigation extends React.Component {
 	constructor(props) {
 		super(props)
-		let grantedMenuStr = window.sessionStorage.getItem('grantedMenu')
+		let grantedMenuStr = window.localStorage.getItem('grantedMenu')
 		this.state = {
 			show: false,
 			grantedMenu: new Set(JSON.parse(grantedMenuStr)),
@@ -78,7 +78,7 @@ export default class Navigation extends React.Component {
 		let {grantedLink} = this.state
 		grantedLink.push(to);
 		this.state.grantedLink = grantedLink
-		window.sessionStorage.setItem('grantedLink', JSON.stringify(grantedLink))
+		window.localStorage.setItem('grantedLink', JSON.stringify(grantedLink))
 		return (
 			<Menu selectable={false}><Item><Link to={to}>{text}</Link></Item></Menu>
 		)
@@ -86,6 +86,7 @@ export default class Navigation extends React.Component {
 	logoutHandler() {
 		LOGIN.logout().then(res => {
 			if (res.success) {
+				window.localStorage.clear()
 				window.location.reload()
 			}
 		})
