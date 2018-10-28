@@ -120,6 +120,7 @@ export default class CourseModal extends React.Component{
 											disabled={validityType != VALIDITY_TYPE.FIXED}
 											value={(validityType === VALIDITY_TYPE.FIXED && validity) ? validity : new moment()}
 											onChange={this.handleDateChange.bind(this)}
+											disabledDate={this.disableOldTime.bind(this)}
 										/>
 									</Radio>
 									<Radio className='mb-8 block-i' value={VALIDITY_TYPE.FIXED_DAYS}>
@@ -192,6 +193,10 @@ export default class CourseModal extends React.Component{
 	handleCourseChange(value) {
 		this.setState({applyToCourse: value})
 	}
+	disableOldTime(date) {
+		return date && date < moment().subtract(1, 'day').endOf('day');
+	}
+	
 }
 const VALIDITY_TYPE = {
 	FIXED: 'FIXED',
