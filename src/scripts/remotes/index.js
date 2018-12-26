@@ -207,7 +207,7 @@ const COURSE = {
 	updateCourse: (data) => {
 		const url = '/admin/course/updateCourse'
 		let {id,status, speakerId, lessonNum, title, openTime, publish, price, courseOrder, subTitle, bannerImg, tag, courseContent} = data
-		const body = {id,status, speakerId, lessonNum, title, openTime, publish, price: price ? price * 100 : 0, courseOrder, subTitle, bannerImg, tag, 
+		const body = {id,status, speakerId, lessonNum, title, openTime, publish, price: price ? price : 0, courseOrder, subTitle, bannerImg, tag, 
 			introduce:courseContent.introduce,
 			crowd:courseContent.crowd,
 			gain:courseContent.gain,
@@ -334,7 +334,7 @@ const LIVE_COURSE = {
 	updateLiveCourse: (data) => {
 		const url = '/admin/liveCourse/updateLiveCourse'
 		let {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, content, relaCourseId, publish, sysCouponId, relaCourseCouponImg} = data
-		const body = {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price: price * 100, inviteRequire, inviteImg, introduce: content, 
+		const body = {id, title, subTitle, speakerNick, speakerTitle, openTime, bannerImg, price, inviteRequire, inviteImg, introduce: content, 
 			relaCourseId: (relaCourseId && relaCourseId > '0') ? relaCourseId : '', publish, 
 			sysCouponId: (sysCouponId && sysCouponId > '0') ? sysCouponId : '',
 			relaCourseCouponImg}
@@ -469,7 +469,7 @@ const COUPON = {
 	updateSysCoupon: (data) => {
 		const url = '/admin/coupon/updateSysCoupon'
 		let {id = '', name, value = '0', total, validityType, validity, validityDays, apply, applyToPrice = '0', applyToCourse} = data
-		const body = {id, name, value: parseInt(value * 100), total, validityType, validity, validityDays, apply, applyToPrice: parseInt(applyToPrice * 100), applyToCourse}
+		const body = {id, name, value, total, validityType, validity, validityDays, apply, applyToPrice, applyToCourse}
 		return remote.create({url, body})()
 	},
 	deleteSysCoupon: (id = '') => {
