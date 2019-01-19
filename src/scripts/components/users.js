@@ -52,14 +52,14 @@ export default class Users extends React.Component{
 		return (
 			<div className={prefix}>
 				<Card title={
-					<Row>
-						<Col span = {4}>
+					<Row className='w-100p'>
+						<Col span = {8}>
 							<Search onSearch={this.handleSearch.bind(this)} 
 								placeholder='昵称/手机号/公司' enterButton
 							/>
 						</Col>
-						<Col span = {9}></Col>
-						<Col span={7} className='pl-30'>提示: 更新所有用户用时较长，请耐心等待。<br/>用户没有关注公众号，则获取不到昵称等信息</Col>
+						<Col span = {4}></Col>
+						<Col span={8} className='pl-30'>提示: 更新所有用户用时较长，请耐心等待。<br/>用户没有关注公众号，则获取不到昵称等信息</Col>
 						<Col span={4} className='text-right'><Button title='此操作从微信服务器刷新所有用户信息，时间较长，慎用。' onClick={this.handleRefreshWxUserInfo.bind(this, '')}>更新所有用户微信信息</Button></Col>
 					</Row>}
 				>
