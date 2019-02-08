@@ -22,6 +22,7 @@ export default class Orders extends React.Component{
 			purchaseDateFrom: '',
 			purchaseDateTo: '',
 			searchValue: '',
+			searchValueCourse: '',
 			courseType: COURSE_TYPE.NORMAL,
 		}
 	}
@@ -65,6 +66,12 @@ export default class Orders extends React.Component{
 							placeholder='昵称/手机号/公司' enterButton
 						/>
 					</Col>
+					<Col span={1}></Col>
+					<Col span = {4}>
+						<Search onSearch={this.handleSearchByCourse.bind(this)} 
+							placeholder='课程名称' enterButton
+						/>
+					</Col>
 				</Row>
 				<Table 
 					bordered={true}
@@ -98,6 +105,9 @@ export default class Orders extends React.Component{
 	}
 	handleSearch(value) {
 		this.setState({searchValue: value}, this.getPageList)
+	}
+	handleSearchByCourse(value) {
+		this.setState({searchValueCourse: value}, this.getPageList)
 	}
 	handleSelectChange(value) {
 		this.setState({courseType: value}, this.getPageList)

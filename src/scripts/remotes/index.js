@@ -295,8 +295,8 @@ const CONTENT = {
 	},
 	getPurchaseOrderList: (data) => {
 		const url = '/admin/content/getPurchaseOrderList'
-		let {currentPage = '1',pageSize = '10', orderBy='id', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = ''} = data;
-		const body = {currentPage,pageSize, orderBy, classify: courseType, order, purchaseDateFrom, purchaseDateTo, searchValue}
+		let {currentPage = '1',pageSize = '10', orderBy='id', order = 'desc' ,courseType = 'NORMAL', purchaseDateTo = '', purchaseDateFrom = '', searchValue = '', searchValueCourse = ''} = data;
+		const body = {currentPage,pageSize, orderBy, classify: courseType, order, purchaseDateFrom, purchaseDateTo, searchValue, searchValueCourse}
 		return remote.create({url, body})();
 	},
 	getStatisticsData: (from, to) => {
@@ -454,6 +454,12 @@ const USER = {
 	refreshWxUserInfo(domainId) {
 		return remoteBase.create({
 			url: '/admin/user/refreshWxUserInfo',
+			body: {domainId}
+		})()
+	},
+	getUserListenLog(domainId) {
+		return remoteBase.create({
+			url: '/admin/user/getUserListenLog',
 			body: {domainId}
 		})()
 	}
